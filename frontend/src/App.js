@@ -2,6 +2,7 @@ import React from "react";
 import "@/App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
+import { I18nProvider } from "@/context/I18nContext";
 import Layout from "@/components/Layout";
 import Home from "@/pages/Home";
 import Product from "@/pages/Product";
@@ -42,9 +43,11 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <div className="App">
-      <CartProvider>
-        <RouterProvider router={router} />
-      </CartProvider>
+      <I18nProvider>
+        <CartProvider>
+          <RouterProvider router={router} />
+        </CartProvider>
+      </I18nProvider>
     </div>
   );
 }

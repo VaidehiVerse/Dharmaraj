@@ -37,11 +37,12 @@ export default function FAQ() {
 
   return (
     <div data-testid="faq-page" className="bg-[var(--drj-bg)] min-h-screen">
-      <section className="bg-obsidian text-white relative grain">
+      <section className="bg-cream relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
         <div className="container-drj py-24 lg:py-32 relative">
           <div className="text-overline text-gold mb-3">Frequently Asked</div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight">Curious minds, answered.</h1>
-          <p className="text-white/60 mt-5 max-w-xl font-light text-lg">Everything you need to know about our products, shipping, payments and returns.</p>
+          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">Curious minds, answered.</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Everything you need to know about our products, shipping, payments and returns.</p>
         </div>
       </section>
 
@@ -81,10 +82,11 @@ export default function FAQ() {
         )}
       </section>
 
-      <section className="bg-forest text-white">
+      <section className="bg-forest text-white relative overflow-hidden">
+        <div className="absolute -top-20 right-20 w-96 h-96 bg-[var(--drj-gold)] opacity-10 rounded-full blur-3xl"/>
         <div className="container-drj py-16 grid lg:grid-cols-2 gap-6 items-center">
           <div>
-            <div className="text-overline text-gold mb-3">Still curious?</div>
+            <div className="text-overline text-[var(--drj-gold-bright)] mb-3">Still curious?</div>
             <h2 className="font-serif text-3xl lg:text-4xl">Speak to our wellness desk.</h2>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">

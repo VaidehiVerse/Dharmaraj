@@ -40,7 +40,7 @@ export default function Cart() {
   }
 
   return (
-    <div data-testid="cart-page" className="bg-[var(--drj-bg)] min-h-screen">
+    <div data-testid="cart-page" className="bg-cream min-h-screen">
       <div className="container-drj py-12 lg:py-20">
         <div className="text-overline text-gold mb-2">Your Cart</div>
         <h1 className="font-serif text-5xl text-forest tracking-tight">Ritual Selection</h1>

@@ -187,10 +187,10 @@ VAJRA_PRODUCT = {
     "price": 1299,
     "mrp": 1499,
     "images": [
+        "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/qj5h59j2_image.png",
+        "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
         "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
         "https://images.unsplash.com/photo-1716816211590-c15a328a5ff0?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
-        "https://images.unsplash.com/photo-1506368249639-73a05d6f6488?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
-        "https://images.pexels.com/photos/37589314/pexels-photo-37589314.jpeg?auto=compress&cs=tinysrgb&w=1200",
     ],
     "ingredients": [
         {"name": "Ashwagandha", "botanical": "Withania somnifera", "qty": "300 mg", "std": "5% Withanolides", "benefit": "Stamina & stress balance"},

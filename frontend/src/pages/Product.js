@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Star, Plus, Minus, ShieldCheck, Truck, Leaf, Award, ArrowRight } from "lucide-react";
+import { Star, Plus, Minus, ShieldCheck, Truck, Leaf, Award, ArrowRight, Sparkles, FlaskConical, Beaker, Sun } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { apiClient, inr } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
-import { whatsappLink } from "@/lib/brand";
+import { whatsappLink, BRAND } from "@/lib/brand";
 import { toast } from "sonner";
+import RadialBenefits from "@/components/RadialBenefits";
+import TrustStrip from "@/components/TrustStrip";
+
+const HOW_IT_WORKS = [
+  { icon: Beaker, title: "Standardized Extracts", desc: "We use HPLC-verified extracts (5% Withanolides, 95% Curcuminoids) instead of raw powders — guaranteeing precise potency in every capsule." },
+  { icon: FlaskConical, title: "Synergistic Blending", desc: "Trikatu (Ginger + Piper) is paired with Ashwagandha & Shatavari to multiply absorption (up to 2000% via piperine) and balance Vata-Pitta-Kapha." },
+  { icon: Sun, title: "Daily Rasayana Ritual", desc: "Two capsules with warm milk activate dormant Ojas. Over 30 days, immunity, stamina and clarity build quietly from within." },
+];
 
 export default function Product() {
   const { slug } = useParams();
@@ -45,17 +53,20 @@ export default function Product() {
   };
 
   return (
-    <div data-testid="product-page" className="bg-[var(--drj-bg)]">
+    <div data-testid="product-page" className="bg-white">
       <div className="container-drj py-6 text-xs text-[var(--drj-ink-muted)]">
         <Link to="/" className="hover:text-forest">Home</Link> <span className="mx-2">/</span>
         <Link to="/shop" className="hover:text-forest">Shop</Link> <span className="mx-2">/</span>
         <span className="text-forest">{product.name}</span>
       </div>
 
-      <section className="bg-white border-y border-[var(--drj-line)]">
-        <div className="container-drj py-10 lg:py-14 grid lg:grid-cols-2 gap-12">
+      {/* HERO PRODUCT */}
+      <section className="bg-cream relative overflow-hidden">
+        <div className="absolute top-10 right-10 w-72 h-72 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
+        <div className="container-drj py-10 lg:py-16 grid lg:grid-cols-2 gap-12 relative">
           <div>
-            <div className="bg-obsidian aspect-square overflow-hidden relative" data-testid="product-main-image">
+            <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center overflow-hidden" data-testid="product-main-image">
+              <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-40" />
               <motion.img
                 key={active}
                 initial={{ opacity: 0, scale: 1.04 }}
@@ -63,19 +74,20 @@ export default function Product() {
                 transition={{ duration: 0.4 }}
                 src={product.images[active]}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="relative z-10 max-h-[78%] max-w-[78%] object-contain"
+                style={{ filter: "drop-shadow(0 28px 50px rgba(212,175,55,0.4))" }}
               />
-              <span className="absolute top-5 left-5 bg-gold text-obsidian px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold">Flagship</span>
+              <span className="absolute top-5 left-5 bg-gold text-white px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold z-20">Flagship</span>
             </div>
             <div className="grid grid-cols-4 gap-3 mt-4">
               {product.images.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className={`aspect-square overflow-hidden border ${active === i ? "border-gold" : "border-[var(--drj-line)]"}`}
+                  className={`aspect-square overflow-hidden border ${active === i ? "border-gold" : "border-[var(--drj-line)]"} bg-cream`}
                   data-testid={`product-thumb-${i}`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <img src={img} alt="" className="w-full h-full object-contain p-2" />
                 </button>
               ))}
             </div>
@@ -99,14 +111,14 @@ export default function Product() {
               {product.mrp > product.price && (
                 <span className="text-lg line-through text-[var(--drj-ink-muted)]">{inr(product.mrp)}</span>
               )}
-              <span className="text-xs px-2 py-1 bg-[var(--drj-gold)]/20 text-forest">
+              <span className="text-xs px-2 py-1 bg-[var(--drj-gold-soft)] text-forest border border-[var(--drj-gold)]">
                 SAVE {Math.round((1 - product.price / product.mrp) * 100)}%
               </span>
             </div>
             <div className="text-xs text-[var(--drj-ink-muted)] mt-1">Inclusive of all taxes · {product.pack_size}</div>
 
             <div className="mt-8 flex items-center gap-4">
-              <div className="flex items-center border border-[var(--drj-line)]">
+              <div className="flex items-center border border-[var(--drj-line-strong)] bg-white">
                 <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-4 py-3 text-forest" data-testid="qty-decrease"><Minus size={14}/></button>
                 <span className="px-5 text-sm" data-testid="qty-value">{qty}</span>
                 <button onClick={() => setQty(qty + 1)} className="px-4 py-3 text-forest" data-testid="qty-increase"><Plus size={14}/></button>
@@ -135,8 +147,8 @@ export default function Product() {
                 { icon: ShieldCheck, label: "30-Day Money-Back" },
                 { icon: Truck, label: "Free shipping over ₹999" },
               ].map((t) => (
-                <div key={t.label} className="flex items-center gap-3 text-[var(--drj-ink)]" data-testid={`assurance-${t.label.toLowerCase().replace(/\s|·/g, "-")}`}>
-                  <t.icon size={18} className="text-forest"/>
+                <div key={t.label} className="flex items-center gap-3 text-[var(--drj-ink)]">
+                  <t.icon size={18} className="text-gold"/>
                   <span>{t.label}</span>
                 </div>
               ))}
@@ -145,7 +157,69 @@ export default function Product() {
         </div>
       </section>
 
-      <section className="bg-[var(--drj-bg)]">
+      <TrustStrip />
+
+      {/* PRODUCT STORY — large bottle with description around */}
+      <section className="section bg-sand relative overflow-hidden" data-testid="product-story-section">
+        <div className="container-drj">
+          <div className="text-center mb-12">
+            <div className="drj-divider text-overline mb-4">The Vajra Story</div>
+            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">A formula whispered through generations.</h2>
+          </div>
+          <div className="grid lg:grid-cols-3 gap-8 items-center">
+            <div className="space-y-8 lg:text-right">
+              <Highlight title="Ashwagandha 300mg" body="The classical adaptogen. Standardized to 5% Withanolides, it gently lowers cortisol and rebuilds stamina." align="right" />
+              <Highlight title="White Musli 200mg" body="Saponin-rich Chlorophytum revered as the 'divine ginseng' of India — for vitality and endurance." align="right" />
+              <Highlight title="Giloy 150mg" body="Tinospora's bitter wisdom — kindles immunity at the cellular level." align="right" />
+            </div>
+            <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center order-first lg:order-none">
+              <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-50" />
+              <div className="absolute inset-4 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-40 animate-[ringRotate_60s_linear_infinite]" />
+              <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 max-h-[70%]" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.45))" }} />
+            </div>
+            <div className="space-y-8">
+              <Highlight title="Shatavari 150mg" body="The 'queen of herbs' — nourishment, hormonal balance, and feminine vitality." align="left" />
+              <Highlight title="Curcumin 50mg" body="95% standardized Curcuminoids paired with Piperine for joint mobility and anti-oxidation." align="left" />
+              <Highlight title="Trikatu 50mg" body="Ginger, Black Pepper, Long Pepper — Ayurveda's classical fire for digestion and absorption." align="left" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="section bg-cream" data-testid="how-it-works-section">
+        <div className="container-drj">
+          <div className="text-center mb-12">
+            <div className="drj-divider text-overline mb-4">How It Works</div>
+            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">From classical text to your daily ritual.</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {HOW_IT_WORKS.map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-white border border-[var(--drj-line)] p-8 hover:border-gold transition"
+              >
+                <div className="w-12 h-12 flex items-center justify-center bg-[var(--drj-gold-soft)] border border-[var(--drj-gold)] text-gold">
+                  <s.icon size={20} />
+                </div>
+                <div className="font-serif text-2xl text-forest mt-5">Step {String(i+1).padStart(2,'0')}</div>
+                <h3 className="font-serif text-xl text-forest mt-2">{s.title}</h3>
+                <p className="text-sm text-[var(--drj-ink-muted)] mt-3 font-light leading-relaxed">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* RADIAL BENEFITS */}
+      <RadialBenefits />
+
+      {/* TABS */}
+      <section className="bg-white border-t border-[var(--drj-line)]">
         <div className="container-drj py-16 lg:py-24">
           <div className="flex gap-8 border-b border-[var(--drj-line)] overflow-x-auto no-scrollbar">
             {[
@@ -167,12 +241,7 @@ export default function Product() {
           </div>
 
           <div className="py-12 max-w-4xl">
-            {tab === "description" && (
-              <div className="prose max-w-none">
-                <p className="text-lg text-[var(--drj-ink)] leading-relaxed font-light">{product.description}</p>
-              </div>
-            )}
-
+            {tab === "description" && (<p className="text-lg text-[var(--drj-ink)] leading-relaxed font-light">{product.description}</p>)}
             {tab === "ingredients" && (
               <div className="grid sm:grid-cols-2 gap-6">
                 {product.ingredients.map((ing) => (
@@ -188,41 +257,23 @@ export default function Product() {
                 ))}
               </div>
             )}
-
             {tab === "dosage" && (
               <div className="space-y-6 text-[var(--drj-ink)]">
-                <div>
-                  <div className="text-overline text-gold mb-2">Recommended Usage</div>
-                  <p className="text-lg font-light">{product.dosage}</p>
-                </div>
-                <div>
-                  <div className="text-overline text-gold mb-2">Storage</div>
-                  <p className="font-light">{product.storage}</p>
-                </div>
-                <div>
-                  <div className="text-overline text-gold mb-2">Caution</div>
-                  <p className="font-light text-sm text-[var(--drj-ink-muted)]">
-                    Pregnant or lactating women, children, or people with medical conditions must
-                    consult a healthcare professional before use. Keep out of reach of children.
-                  </p>
-                </div>
+                <div><div className="text-overline text-gold mb-2">Recommended Usage</div><p className="text-lg font-light">{product.dosage}</p></div>
+                <div><div className="text-overline text-gold mb-2">Storage</div><p className="font-light">{product.storage}</p></div>
+                <div><div className="text-overline text-gold mb-2">Caution</div><p className="font-light text-sm text-[var(--drj-ink-muted)]">Pregnant or lactating women, children, or people with medical conditions must consult a healthcare professional before use. Keep out of reach of children.</p></div>
               </div>
             )}
-
             {tab === "benefits" && (
               <ul className="grid sm:grid-cols-2 gap-4">
                 {product.benefits.map((b) => (
-                  <li key={b} className="flex gap-3 items-start">
-                    <span className="text-gold text-xl leading-none">✦</span>
-                    <span className="text-[var(--drj-ink)] font-light">{b}</span>
-                  </li>
+                  <li key={b} className="flex gap-3 items-start"><span className="text-gold text-xl leading-none">✦</span><span className="text-[var(--drj-ink)] font-light">{b}</span></li>
                 ))}
               </ul>
             )}
-
             {tab === "reviews" && (
               <div className="space-y-10">
-                <form onSubmit={submitReview} className="border border-[var(--drj-line)] bg-white p-8" data-testid="review-form">
+                <form onSubmit={submitReview} className="border border-[var(--drj-line)] bg-cream p-8" data-testid="review-form">
                   <h3 className="font-serif text-2xl text-forest">Share your experience</h3>
                   <div className="grid md:grid-cols-2 gap-6 mt-6">
                     <input className="input-luxe" required placeholder="Your name" value={reviewForm.name} onChange={(e)=>setReviewForm({...reviewForm, name: e.target.value})} data-testid="review-name"/>
@@ -231,17 +282,12 @@ export default function Product() {
                   <div className="mt-6">
                     <div className="text-overline text-[var(--drj-ink-muted)] mb-2">Your rating</div>
                     <div className="flex gap-1" data-testid="review-rating">
-                      {[1,2,3,4,5].map((s) => (
-                        <button type="button" key={s} onClick={()=>setReviewForm({...reviewForm, rating: s})}>
-                          <Star size={22} className={s <= reviewForm.rating ? "fill-gold text-gold" : "text-[var(--drj-line)]"} />
-                        </button>
-                      ))}
+                      {[1,2,3,4,5].map((s) => (<button type="button" key={s} onClick={()=>setReviewForm({...reviewForm, rating: s})}><Star size={22} className={s <= reviewForm.rating ? "fill-gold text-gold" : "text-[var(--drj-line-strong)]"} /></button>))}
                     </div>
                   </div>
                   <textarea required rows={4} className="input-luxe mt-6" placeholder="Tell us about your experience..." value={reviewForm.comment} onChange={(e)=>setReviewForm({...reviewForm, comment: e.target.value})} data-testid="review-comment"/>
                   <button className="btn-primary mt-6" data-testid="submit-review">Submit Review</button>
                 </form>
-
                 <div className="space-y-6" data-testid="reviews-list">
                   {reviews.map((r) => (
                     <div key={r.id} className="border-b border-[var(--drj-line)] pb-6">
@@ -266,7 +312,7 @@ export default function Product() {
         </div>
       </section>
 
-      <section className="bg-white border-t border-[var(--drj-line)]">
+      <section className="bg-cream">
         <div className="container-drj py-16">
           <h2 className="font-serif text-3xl text-forest mb-8 text-center">Frequently Asked</h2>
           <div className="max-w-3xl mx-auto">
@@ -289,3 +335,16 @@ export default function Product() {
     </div>
   );
 }
+
+const Highlight = ({ title, body, align }) => (
+  <motion.div
+    initial={{ opacity: 0, x: align === "right" ? 24 : -24 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6 }}
+    className={`bg-white border border-[var(--drj-line)] p-6 ${align === "right" ? "lg:border-r-4 lg:border-r-[var(--drj-gold)]" : "lg:border-l-4 lg:border-l-[var(--drj-gold)]"}`}
+  >
+    <div className="font-serif text-xl text-forest">{title}</div>
+    <p className="text-sm text-[var(--drj-ink-muted)] mt-2 font-light leading-relaxed">{body}</p>
+  </motion.div>
+);

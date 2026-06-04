@@ -14,12 +14,13 @@ export default function Blog() {
   }, [cat]);
 
   return (
-    <div data-testid="blog-page" className="bg-[var(--drj-bg)] min-h-screen">
-      <section className="bg-obsidian text-white relative grain">
+    <div data-testid="blog-page" className="bg-white min-h-screen">
+      <section className="bg-cream relative overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
         <div className="container-drj py-24 lg:py-32 relative">
           <div className="text-overline text-gold mb-3">Journal</div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight">Ayurveda, Unfiltered.</h1>
-          <p className="text-white/60 mt-5 max-w-xl font-light text-lg">Field-notes from Vaidyas, herbalists and modern practitioners — translated into rituals you can use this week.</p>
+          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">Ayurveda, Unfiltered.</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Field-notes from Vaidyas, herbalists and modern practitioners — translated into rituals you can use this week.</p>
         </div>
       </section>
 

@@ -69,7 +69,7 @@ export default function Checkout() {
   };
 
   return (
-    <div data-testid="checkout-page" className="bg-[var(--drj-bg)] min-h-screen">
+    <div data-testid="checkout-page" className="bg-cream min-h-screen">
       <div className="container-drj py-12 lg:py-20">
         <div className="text-overline text-gold mb-2">Step 02</div>
         <h1 className="font-serif text-5xl text-forest tracking-tight">Checkout</h1>

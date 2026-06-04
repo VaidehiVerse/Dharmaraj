@@ -62,12 +62,13 @@ export default function Policies() {
   if (!policy) return <Navigate to="/" replace />;
 
   return (
-    <div data-testid={`policy-${kind}`} className="bg-[var(--drj-bg)] min-h-screen">
-      <section className="bg-forest text-white relative grain">
+    <div data-testid={`policy-${kind}`} className="bg-white min-h-screen">
+      <section className="bg-cream relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
         <div className="container-drj py-20 lg:py-28 relative">
           <div className="text-overline text-gold mb-3">Legal</div>
-          <h1 className="font-serif text-5xl lg:text-6xl tracking-tight">{policy.title}</h1>
-          <p className="text-white/70 mt-4 max-w-2xl font-light text-lg">{policy.subtitle}</p>
+          <h1 className="font-serif text-5xl lg:text-6xl tracking-tight text-forest">{policy.title}</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-2xl font-light text-lg">{policy.subtitle}</p>
         </div>
       </section>
 

@@ -46,12 +46,13 @@ export default function Shop() {
   }, [items, filter, sort, q]);
 
   return (
-    <div data-testid="shop-page" className="bg-[var(--drj-bg)] min-h-screen">
-      <section className="bg-forest text-white relative grain overflow-hidden">
+    <div data-testid="shop-page" className="bg-white min-h-screen">
+      <section className="bg-cream text-forest relative overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
         <div className="container-drj py-20 lg:py-28 relative">
           <div className="text-overline text-gold">The Apothecary</div>
           <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">Shop</h1>
-          <p className="text-white/70 mt-4 max-w-xl font-light">Curated formulations rooted in classical Ayurveda — each crafted with reverence.</p>
+          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">Curated formulations rooted in classical Ayurveda — each crafted with reverence.</p>
         </div>
       </section>
 

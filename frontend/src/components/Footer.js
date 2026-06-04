@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Instagram, Phone, Mail, MapPin, Send } from "lucide-react";
+import { Instagram, Phone, Mail, MapPin, Send, BadgeCheck } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { apiClient } from "@/lib/api";
 import { toast } from "sonner";
@@ -25,39 +25,41 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-obsidian text-[var(--drj-bg)] mt-0" data-testid="site-footer">
+    <footer className="bg-cream border-t-2 border-[var(--drj-gold)] text-[var(--drj-ink)]" data-testid="site-footer">
       <div className="container-drj py-20 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-4 mb-6">
-              <img src={BRAND.logo} alt="Dharmaraj Ayurveda" className="h-16 w-16 object-contain bg-white/5 p-1" />
+              <img src={BRAND.logo} alt="Dharmaraj Ayurveda" className="h-16 w-16 object-contain" />
               <div>
-                <h3 className="font-serif text-3xl">Dharmaraj</h3>
+                <h3 className="font-serif text-3xl text-forest">Dharmaraj</h3>
                 <div className="text-overline text-gold">{BRAND.motto}</div>
               </div>
             </div>
-            <p className="text-white/60 max-w-md leading-relaxed font-light">
+            <p className="text-[var(--drj-ink-muted)] max-w-md leading-relaxed font-light">
               Pure Ayurvedic formulations crafted in the heart of Gujarat. Every capsule is a quiet act
               of reverence to a 5,000-year-old science of wellness.
             </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {["FSSAI", "GMP", "ISO", "100% Botanical"].map((b) => (
+                <span key={b} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-[var(--drj-gold)] text-xs text-forest">
+                  <BadgeCheck size={12} className="text-gold" /> {b}
+                </span>
+              ))}
+            </div>
             <form onSubmit={subscribe} className="mt-8 max-w-md" data-testid="newsletter-form">
               <div className="text-overline text-gold mb-3">Join the Dharmaraj Circle</div>
-              <div className="flex items-end gap-3 border-b border-white/15">
+              <div className="flex items-end gap-3 border-b border-[var(--drj-line-strong)]">
                 <input
                   type="email"
                   required
                   placeholder="Your email"
-                  className="input-luxe-dark flex-1"
+                  className="input-luxe flex-1"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   data-testid="newsletter-email-input"
                 />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="text-gold hover:text-[var(--drj-gold-bright)] pb-3 transition"
-                  data-testid="newsletter-submit-button"
-                >
+                <button type="submit" disabled={loading} className="text-gold hover:text-[var(--drj-forest)] pb-3 transition" data-testid="newsletter-submit-button">
                   <Send size={18} />
                 </button>
               </div>
@@ -66,7 +68,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <div className="text-overline text-gold mb-5">Discover</div>
-            <ul className="space-y-3 text-sm text-white/70">
+            <ul className="space-y-3 text-sm text-[var(--drj-ink-muted)]">
               <li><Link to="/shop" data-testid="footer-shop-link" className="hover:text-gold transition">Shop</Link></li>
               <li><Link to="/product/1-vajra" data-testid="footer-vajra-link" className="hover:text-gold transition">1 Vajra</Link></li>
               <li><Link to="/about" data-testid="footer-about-link" className="hover:text-gold transition">Our Story</Link></li>
@@ -77,7 +79,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <div className="text-overline text-gold mb-5">Care</div>
-            <ul className="space-y-3 text-sm text-white/70">
+            <ul className="space-y-3 text-sm text-[var(--drj-ink-muted)]">
               <li><Link to="/contact" data-testid="footer-contact-link" className="hover:text-gold transition">Contact</Link></li>
               <li><Link to="/faq" data-testid="footer-faq-link" className="hover:text-gold transition">FAQs</Link></li>
               <li><Link to="/policy/shipping" data-testid="footer-shipping-link" className="hover:text-gold transition">Shipping</Link></li>
@@ -89,16 +91,16 @@ export default function Footer() {
 
           <div className="lg:col-span-3">
             <div className="text-overline text-gold mb-5">Visit</div>
-            <ul className="space-y-4 text-sm text-white/70">
+            <ul className="space-y-4 text-sm text-[var(--drj-ink-muted)]">
               <li className="flex gap-3"><MapPin size={16} className="text-gold mt-0.5 shrink-0" /><span>{BRAND.address}</span></li>
-              <li className="flex gap-3"><Phone size={16} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${BRAND.phone}`} className="hover:text-gold transition">{BRAND.phone}</a></li>
+              <li className="flex gap-3"><Phone size={16} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${BRAND.phone}`} className="hover:text-gold transition" data-testid="footer-phone">{BRAND.phone}</a></li>
               <li className="flex gap-3"><Mail size={16} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${BRAND.email}`} className="hover:text-gold transition">{BRAND.email}</a></li>
             </ul>
             <a
               href={BRAND.instagram}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 mt-6 text-gold hover:text-[var(--drj-gold-bright)] transition"
+              className="inline-flex items-center gap-2 mt-6 text-gold hover:text-forest transition"
               data-testid="footer-instagram-link"
             >
               <Instagram size={18} /> @dharmarajayurveda
@@ -106,8 +108,8 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="container-drj py-6 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-white/40">
+      <div className="border-t border-[var(--drj-line)] bg-white">
+        <div className="container-drj py-5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-[var(--drj-ink-muted)]">
           <div>© {new Date().getFullYear()} Dharmaraj Ayurveda™ · All rights reserved.</div>
           <div className="flex items-center gap-4">
             <span>FSSAI · ISO · GMP Certified</span>

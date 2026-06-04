@@ -8,7 +8,7 @@ export default function OrderConfirmation() {
   const mobile = state?.mobile;
 
   return (
-    <div data-testid="order-confirmation-page" className="bg-[var(--drj-bg)] min-h-screen">
+    <div data-testid="order-confirmation-page" className="bg-cream min-h-screen">
       <div className="container-drj section text-center max-w-2xl">
         <CheckCircle2 size={80} className="mx-auto text-gold" />
         <div className="drj-divider text-overline mt-8 mb-4">Order Confirmed</div>
