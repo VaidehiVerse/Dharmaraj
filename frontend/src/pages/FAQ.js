@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Search } from "lucide-react";
 import { whatsappLink } from "@/lib/brand";
+import { useI18n } from "@/context/I18nContext";
 
 const FAQS = [
   { cat: "Product", q: "How long until I feel the benefits of 1 Vajra?", a: "Most customers report noticeable energy and digestion improvements within 14–21 days. For deeper Rasayana effects, we recommend a continuous 60–90 day cycle." },
@@ -22,6 +23,7 @@ const FAQS = [
 const CATS = ["All", "Product", "Delivery", "Payments", "Refunds", "Returns"];
 
 export default function FAQ() {
+  const { t } = useI18n();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
 
@@ -50,7 +52,7 @@ export default function FAQ() {
         <div className="flex flex-col md:flex-row md:items-center gap-6 mb-10">
           <div className="flex items-center gap-2 border-b border-[var(--drj-line)] flex-1">
             <Search size={16} className="text-[var(--drj-ink-muted)]"/>
-            <input className="input-luxe border-0 py-3" placeholder="Search the FAQs..." value={q} onChange={(e) => setQ(e.target.value)} data-testid="faq-search"/>
+            <input className="input-luxe border-0 py-3 flex-1" placeholder={t.faq.search} value={q} onChange={(e) => setQ(e.target.value)} data-testid="faq-search"/>
           </div>
           <div className="flex flex-wrap gap-2" data-testid="faq-cats">
             {CATS.map((c) => (
@@ -60,7 +62,7 @@ export default function FAQ() {
                 className={`text-xs uppercase tracking-[0.18em] px-4 py-2 border transition ${cat === c ? "bg-forest text-white border-forest" : "border-[var(--drj-line)] text-[var(--drj-ink-muted)] hover:border-forest hover:text-forest"}`}
                 data-testid={`faq-cat-${c.toLowerCase()}`}
               >
-                {c}
+                {t.faq.categories[c] || c}
               </button>
             ))}
           </div>
@@ -86,8 +88,8 @@ export default function FAQ() {
         <div className="absolute -top-20 right-20 w-96 h-96 bg-[var(--drj-gold)] opacity-10 rounded-full blur-3xl"/>
         <div className="container-drj py-16 grid lg:grid-cols-2 gap-6 items-center">
           <div>
-            <div className="text-overline text-[var(--drj-gold-bright)] mb-3">Still curious?</div>
-            <h2 className="font-serif text-3xl lg:text-4xl">Speak to our wellness desk.</h2>
+            <div className="text-overline text-[var(--drj-gold-bright)] mb-3">{t.faq.cta_title}</div>
+            <h2 className="font-serif text-3xl lg:text-4xl">{t.faq.cta_desc}</h2>
           </div>
           <div className="flex flex-wrap gap-4 lg:justify-end">
             <a href={whatsappLink()} target="_blank" rel="noreferrer" className="btn-gold" data-testid="faq-whatsapp"><i className="fa-brands fa-whatsapp"></i> WhatsApp Us</a>

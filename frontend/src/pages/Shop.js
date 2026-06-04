@@ -2,21 +2,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { apiClient } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
-
-const FILTERS = [
-  { id: "all", label: "All" },
-  { id: "available", label: "Available" },
-  { id: "coming-soon", label: "Coming Soon" },
-];
-
-const SORTS = [
-  { id: "featured", label: "Featured" },
-  { id: "price-asc", label: "Price · Low to High" },
-  { id: "price-desc", label: "Price · High to Low" },
-  { id: "name", label: "Name · A → Z" },
-];
+import { useI18n } from "@/context/I18nContext";
 
 export default function Shop() {
+  const { t } = useI18n();
+  const FILTERS = [
+    { id: "all", label: t.shop.filters.all },
+    { id: "available", label: t.shop.filters.available },
+    { id: "coming-soon", label: t.shop.filters.coming_soon },
+  ];
+  const SORTS = [
+    { id: "featured", label: t.shop.sort.featured },
+    { id: "price-asc", label: t.shop.sort.price_asc },
+    { id: "price-desc", label: t.shop.sort.price_desc },
+    { id: "name", label: t.shop.sort.name },
+  ];
+
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("featured");
@@ -50,9 +51,9 @@ export default function Shop() {
       <section className="bg-cream text-forest relative overflow-hidden">
         <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
         <div className="container-drj py-20 lg:py-28 relative">
-          <div className="text-overline text-gold">The Apothecary</div>
-          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">Shop</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">Curated formulations rooted in classical Ayurveda — each crafted with reverence.</p>
+          <div className="text-overline text-gold">{t.shop.eyebrow}</div>
+          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
         </div>
       </section>
 
@@ -61,7 +62,7 @@ export default function Shop() {
           <div className="flex items-center gap-2 border-b border-[var(--drj-line)] flex-1 max-w-md">
             <Search size={16} className="text-[var(--drj-ink-muted)]" />
             <input
-              placeholder="Search ingredients, names, benefits..."
+              placeholder={t.shop.search}
               value={q}
               onChange={(e) => setQ(e.target.value)}
               className="input-luxe border-0 py-3"
@@ -94,9 +95,9 @@ export default function Shop() {
       </section>
 
       <section className="container-drj py-12 lg:py-16">
-        <div className="text-overline text-[var(--drj-ink-muted)] mb-6" data-testid="shop-count">{filtered.length} products</div>
+        <div className="text-overline text-[var(--drj-ink-muted)] mb-6" data-testid="shop-count">{filtered.length} {t.shop.products}</div>
         {filtered.length === 0 ? (
-          <div className="text-center py-20 font-light text-[var(--drj-ink-muted)]">No products match your search.</div>
+          <div className="text-center py-20 font-light text-[var(--drj-ink-muted)]">{t.shop.no_results}</div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" data-testid="shop-grid">
             {filtered.map((p, i) => (<ProductCard key={p.id} product={p} index={i}/>))}

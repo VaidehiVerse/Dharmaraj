@@ -3,7 +3,9 @@ import "@/App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { I18nProvider } from "@/context/I18nContext";
+import { AuthProvider } from "@/context/AuthContext";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Home from "@/pages/Home";
 import Product from "@/pages/Product";
 import Shop from "@/pages/Shop";
@@ -17,6 +19,10 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import FAQ from "@/pages/FAQ";
 import Policies from "@/pages/Policies";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import Account from "@/pages/Account";
+import Admin from "@/pages/Admin";
 
 const router = createBrowserRouter([
   {
@@ -36,17 +42,23 @@ const router = createBrowserRouter([
       { path: "blog/:slug", element: <BlogPost /> },
       { path: "faq", element: <FAQ /> },
       { path: "policy/:kind", element: <Policies /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "account", element: <ProtectedRoute><Account /></ProtectedRoute> },
     ],
   },
+  { path: "/admin", element: <ProtectedRoute adminOnly><Admin /></ProtectedRoute> },
 ]);
 
 export default function App() {
   return (
     <div className="App">
       <I18nProvider>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <RouterProvider router={router} />
+          </CartProvider>
+        </AuthProvider>
       </I18nProvider>
     </div>
   );

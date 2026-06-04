@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiClient } from "@/lib/api";
 import { ArrowRight } from "lucide-react";
+import { useI18n } from "@/context/I18nContext";
 
 const CATEGORIES = ["All", "Ayurveda", "Immunity", "Digestion", "Fitness", "Herbal Medicine", "Lifestyle"];
 
 export default function Blog() {
+  const { t } = useI18n();
   const [posts, setPosts] = useState([]);
   const [cat, setCat] = useState("All");
 
@@ -18,9 +20,9 @@ export default function Blog() {
       <section className="bg-cream relative overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
         <div className="container-drj py-24 lg:py-32 relative">
-          <div className="text-overline text-gold mb-3">Journal</div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">Ayurveda, Unfiltered.</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Field-notes from Vaidyas, herbalists and modern practitioners — translated into rituals you can use this week.</p>
+          <div className="text-overline text-gold mb-3">{t.blog.eyebrow}</div>
+          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">{t.blog.title}</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">{t.blog.desc}</p>
         </div>
       </section>
 
@@ -35,7 +37,7 @@ export default function Blog() {
               }`}
               data-testid={`blog-cat-${c.toLowerCase().replace(/\s/g, "-")}`}
             >
-              {c}
+              {t.blog.categories[c] || c}
             </button>
           ))}
         </div>
@@ -43,7 +45,7 @@ export default function Blog() {
 
       <section className="container-drj py-12 lg:py-20">
         {posts.length === 0 ? (
-          <div className="text-center py-20 text-[var(--drj-ink-muted)] font-light">No articles in this category yet.</div>
+          <div className="text-center py-20 text-[var(--drj-ink-muted)] font-light">{t.blog.no_articles}</div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="blog-grid">
             {posts.map((p) => (
@@ -55,7 +57,7 @@ export default function Blog() {
                   <div className="text-overline text-gold">{p.category} · {p.read_minutes} min read</div>
                   <h2 className="font-serif text-2xl text-forest mt-3 leading-tight group-hover:text-gold transition-colors">{p.title}</h2>
                   <p className="text-sm text-[var(--drj-ink-muted)] mt-3 font-light line-clamp-3">{p.excerpt}</p>
-                  <div className="mt-5 text-overline text-forest flex items-center gap-2">Read article <ArrowRight size={14}/></div>
+                  <div className="mt-5 text-overline text-forest flex items-center gap-2">{t.blog.read_article} <ArrowRight size={14}/></div>
                 </div>
               </Link>
             ))}

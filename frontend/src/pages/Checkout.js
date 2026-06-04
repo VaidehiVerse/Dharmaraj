@@ -4,6 +4,7 @@ import { CreditCard, Smartphone, Wallet, Banknote, Building2, ArrowRight, Shield
 import { useCart } from "@/context/CartContext";
 import { apiClient, inr } from "@/lib/api";
 import { toast } from "sonner";
+import { useI18n } from "@/context/I18nContext";
 
 const PAYMENT_METHODS = [
   { id: "upi", label: "UPI", icon: Smartphone, note: "GPay · PhonePe · Paytm" },
@@ -17,6 +18,7 @@ const STATES = ["Gujarat","Maharashtra","Karnataka","Tamil Nadu","Delhi","Uttar 
 
 export default function Checkout() {
   const { items, subtotal, clear } = useCart();
+  const { t } = useI18n();
   const [address, setAddress] = useState({ full_name: "", mobile: "", email: "", address: "", landmark: "", city: "", state: "Gujarat", pincode: "" });
   const [payment, setPayment] = useState("upi");
   const [coupon, setCoupon] = useState("");
@@ -71,23 +73,23 @@ export default function Checkout() {
   return (
     <div data-testid="checkout-page" className="bg-cream min-h-screen">
       <div className="container-drj py-12 lg:py-20">
-        <div className="text-overline text-gold mb-2">Step 02</div>
-        <h1 className="font-serif text-5xl text-forest tracking-tight">Checkout</h1>
+        <div className="text-overline text-gold mb-2">{t.checkout.eyebrow}</div>
+        <h1 className="font-serif text-5xl text-forest tracking-tight">{t.checkout.title}</h1>
 
         <form onSubmit={placeOrder} className="grid lg:grid-cols-3 gap-10 mt-12">
           <div className="lg:col-span-2 space-y-12">
             <section className="bg-white border border-[var(--drj-line)] p-8">
-              <h2 className="font-serif text-2xl text-forest">Delivery Information</h2>
+              <h2 className="font-serif text-2xl text-forest">{t.checkout.delivery}</h2>
               <div className="grid sm:grid-cols-2 gap-6 mt-8">
-                <Field label="Full Name" value={address.full_name} onChange={(v) => setAddress({...address, full_name: v})} testId="checkout-name"/>
-                <Field label="Mobile Number" value={address.mobile} onChange={(v) => setAddress({...address, mobile: v})} testId="checkout-mobile"/>
-                <Field label="Email" type="email" value={address.email} onChange={(v) => setAddress({...address, email: v})} testId="checkout-email"/>
-                <Field label="Pincode" value={address.pincode} onChange={(v) => setAddress({...address, pincode: v})} testId="checkout-pincode"/>
-                <Field label="Address" wide value={address.address} onChange={(v) => setAddress({...address, address: v})} testId="checkout-address"/>
-                <Field label="Landmark (optional)" required={false} wide value={address.landmark} onChange={(v) => setAddress({...address, landmark: v})} testId="checkout-landmark"/>
-                <Field label="City" value={address.city} onChange={(v) => setAddress({...address, city: v})} testId="checkout-city"/>
+                <Field label={t.checkout.fields.name} value={address.full_name} onChange={(v) => setAddress({...address, full_name: v})} testId="checkout-name"/>
+                <Field label={t.checkout.fields.mobile} value={address.mobile} onChange={(v) => setAddress({...address, mobile: v})} testId="checkout-mobile"/>
+                <Field label={t.checkout.fields.email} type="email" value={address.email} onChange={(v) => setAddress({...address, email: v})} testId="checkout-email"/>
+                <Field label={t.checkout.fields.pincode} value={address.pincode} onChange={(v) => setAddress({...address, pincode: v})} testId="checkout-pincode"/>
+                <Field label={t.checkout.fields.address} wide value={address.address} onChange={(v) => setAddress({...address, address: v})} testId="checkout-address"/>
+                <Field label={t.checkout.fields.landmark} required={false} wide value={address.landmark} onChange={(v) => setAddress({...address, landmark: v})} testId="checkout-landmark"/>
+                <Field label={t.checkout.fields.city} value={address.city} onChange={(v) => setAddress({...address, city: v})} testId="checkout-city"/>
                 <div>
-                  <div className="text-overline text-[var(--drj-ink-muted)] mb-1">State</div>
+                  <div className="text-overline text-[var(--drj-ink-muted)] mb-1">{t.checkout.fields.state}</div>
                   <select className="input-luxe" required value={address.state} onChange={(e) => setAddress({...address, state: e.target.value})} data-testid="checkout-state">
                     {STATES.map((s) => (<option key={s}>{s}</option>))}
                   </select>
@@ -122,7 +124,7 @@ export default function Checkout() {
 
           <div className="space-y-6">
             <div className="bg-white border border-[var(--drj-line)] p-7 sticky top-32">
-              <h3 className="font-serif text-2xl text-forest">Order Summary</h3>
+              <h3 className="font-serif text-2xl text-forest">{t.checkout.summary}</h3>
               <div className="space-y-3 mt-6 max-h-44 overflow-y-auto pr-2">
                 {items.map((it) => (
                   <div key={it.product_id} className="flex justify-between text-sm">
@@ -147,9 +149,9 @@ export default function Checkout() {
                 <span className="font-serif text-3xl text-forest" data-testid="checkout-total">{inr(totals.total)}</span>
               </div>
               <button type="submit" disabled={placing} className="btn-primary w-full justify-center mt-6" data-testid="place-order-button">
-                {placing ? "Placing..." : "Place Order"} <ArrowRight size={16}/>
+                {placing ? "Placing..." : t.checkout.place_order} <ArrowRight size={16}/>
               </button>
-              <p className="text-[10px] text-[var(--drj-ink-muted)] text-center mt-3">By placing this order you agree to our Terms & Refund Policy.</p>
+              <p className="text-[10px] text-[var(--drj-ink-muted)] text-center mt-3">{t.checkout.terms}</p>
             </div>
           </div>
         </form>

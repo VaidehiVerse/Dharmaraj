@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { ShoppingBag, Menu, X, Search, Phone } from "lucide-react";
+import { ShoppingBag, Menu, X, Search, Phone, User, LogOut, LayoutDashboard } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
+import { useAuth } from "@/context/AuthContext";
 import LangSwitcher from "@/components/LangSwitcher";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   const { count, setDrawerOpen } = useCart();
   const { t } = useI18n();
+  const { user, logout, isAdmin } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -81,6 +86,27 @@ export default function Header() {
             <Link to="/shop" className="hidden sm:flex h-9 w-9 items-center justify-center text-forest hover:text-gold transition" data-testid="search-shop-button">
               <Search size={18} />
             </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="h-9 w-9 flex items-center justify-center text-forest hover:text-gold transition" data-testid="user-menu-trigger" aria-label="Account">
+                  <User size={18} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-white border border-[var(--drj-line)]">
+                  <DropdownMenuLabel className="text-overline text-gold">{user.name?.split(" ")[0]}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild data-testid="user-menu-account"><Link to="/account" className="cursor-pointer w-full">{t.auth.account}</Link></DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild data-testid="user-menu-admin"><Link to="/admin" className="cursor-pointer flex items-center gap-2 w-full"><LayoutDashboard size={14}/> {t.nav.admin}</Link></DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-700" data-testid="user-menu-logout"><LogOut size={14} className="mr-2"/> {t.auth.logout}</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/login" className="hidden sm:inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.16em] text-forest hover:text-gold px-2" data-testid="header-login-link">
+                <User size={14}/> {t.nav.login}
+              </Link>
+            )}
             <button
               onClick={() => setDrawerOpen(true)}
               className="relative h-9 w-9 flex items-center justify-center text-forest hover:text-gold transition"
@@ -130,6 +156,25 @@ export default function Header() {
               >
                 <Phone size={14} /> {BRAND.phone}
               </a>
+              {!user ? (
+                <Link to="/login" className="py-3 text-sm text-forest font-medium flex items-center gap-2 border-t border-[var(--drj-line)]" data-testid="mobile-login-link">
+                  <User size={14}/> {t.nav.login}
+                </Link>
+              ) : (
+                <>
+                  <Link to="/account" className="py-3 text-sm text-forest font-medium flex items-center gap-2 border-t border-[var(--drj-line)]" data-testid="mobile-account-link">
+                    <User size={14}/> {t.auth.account}
+                  </Link>
+                  {isAdmin && (
+                    <Link to="/admin" className="py-3 text-sm text-gold font-medium flex items-center gap-2" data-testid="mobile-admin-link">
+                      <LayoutDashboard size={14}/> {t.nav.admin}
+                    </Link>
+                  )}
+                  <button onClick={logout} className="py-3 text-sm text-red-700 flex items-center gap-2 text-left" data-testid="mobile-logout">
+                    <LogOut size={14}/> {t.auth.logout}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}

@@ -3,7 +3,7 @@
 Provides products, reviews, coupons, orders, order tracking, newsletter,
 contact form, and blog endpoints for the storefront. MongoDB-backed.
 """
-from fastapi import FastAPI, APIRouter, HTTPException, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -24,6 +24,11 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ["DB_NAME"]]
+
+from auth import get_auth_dependencies
+from admin_routes import build_admin_router
+
+auth_router, get_current_user, get_optional_user, require_admin, seed_admin = get_auth_dependencies(db)
 
 app = FastAPI(title="Dharmaraj Ayurveda API")
 api_router = APIRouter(prefix="/api")
@@ -478,7 +483,7 @@ async def validate_coupon(payload: CouponCheck):
 
 
 @api_router.post("/orders", response_model=Order)
-async def create_order(payload: OrderCreate):
+async def create_order(payload: OrderCreate, user: Optional[dict] = Depends(get_optional_user)):
     subtotal = sum(it.price * it.quantity for it in payload.items)
     discount = 0
     if payload.coupon_code:
@@ -513,6 +518,8 @@ async def create_order(payload: OrderCreate):
         timeline=timeline,
     )
     doc = order.model_dump()
+    if user:
+        doc["user_id"] = user["id"]
     # serialize address & items already plain dicts via pydantic
     await db.orders.insert_one(doc)
     return order
@@ -563,8 +570,8 @@ async def get_blog(slug: str):
 
 
 @api_router.post("/admin/reseed")
-async def reseed():
-    """Dev convenience: drop and reseed."""
+async def reseed(_admin: dict = Depends(require_admin)):
+    """Admin convenience: drop and reseed core catalog data."""
     await db.products.delete_many({})
     await db.reviews.delete_many({})
     await db.blogs.delete_many({})
@@ -573,10 +580,44 @@ async def reseed():
     return {"ok": True}
 
 
+# ---------- Authenticated customer endpoints ----------
+@api_router.get("/me/orders")
+async def my_orders(user: dict = Depends(get_current_user)):
+    docs = await db.orders.find({"user_id": user["id"]}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return docs
+
+
+@api_router.get("/me/wishlist")
+async def my_wishlist(user: dict = Depends(get_current_user)):
+    slugs = user.get("wishlist", []) or []
+    if not slugs:
+        return []
+    docs = await db.products.find({"slug": {"$in": slugs}}, {"_id": 0}).to_list(100)
+    return docs
+
+
+@api_router.post("/me/wishlist/{slug}")
+async def add_wishlist(slug: str, user: dict = Depends(get_current_user)):
+    if not await db.products.find_one({"slug": slug}):
+        raise HTTPException(404, "Product not found")
+    await db.users.update_one({"id": user["id"]}, {"$addToSet": {"wishlist": slug}})
+    return {"ok": True}
+
+
+@api_router.delete("/me/wishlist/{slug}")
+async def remove_wishlist(slug: str, user: dict = Depends(get_current_user)):
+    await db.users.update_one({"id": user["id"]}, {"$pull": {"wishlist": slug}})
+    return {"ok": True}
+
+
 # ---------- Startup ----------
 @app.on_event("startup")
 async def on_startup():
+    await db.users.create_index("email", unique=True)
+    await db.login_attempts.create_index("identifier")
+    await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)
     await ensure_seed()
+    await seed_admin()
     logger.info("Dharmaraj Ayurveda API ready.")
 
 
@@ -585,11 +626,13 @@ async def on_shutdown():
     client.close()
 
 
+api_router.include_router(auth_router)
+api_router.include_router(build_admin_router(db, require_admin))
 app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origins=[os.environ.get("FRONTEND_URL", "http://localhost:3000")],
     allow_methods=["*"],
     allow_headers=["*"],
 )

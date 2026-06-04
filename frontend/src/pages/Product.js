@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Star, Plus, Minus, ShieldCheck, Truck, Leaf, Award, ArrowRight, Sparkles, FlaskConical, Beaker, Sun } from "lucide-react";
+import { Star, Plus, Minus, ShieldCheck, Truck, Leaf, Award, ArrowRight, Sparkles, FlaskConical, Beaker, Sun, Heart } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { apiClient, inr } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { whatsappLink, BRAND } from "@/lib/brand";
 import { toast } from "sonner";
 import RadialBenefits from "@/components/RadialBenefits";
@@ -25,6 +26,28 @@ export default function Product() {
   const [tab, setTab] = useState("description");
   const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, title: "", comment: "" });
   const { addItem, setDrawerOpen } = useCart();
+  const { user } = useAuth();
+  const [inWishlist, setInWishlist] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    apiClient.get("/me/wishlist").then((r) => setInWishlist(r.data.some((p) => p.slug === slug))).catch(() => {});
+  }, [user, slug]);
+
+  const toggleWishlist = async () => {
+    if (!user) { toast.info("Sign in to save favourites"); return; }
+    try {
+      if (inWishlist) {
+        await apiClient.delete(`/me/wishlist/${slug}`);
+        setInWishlist(false);
+        toast.success("Removed from wishlist");
+      } else {
+        await apiClient.post(`/me/wishlist/${slug}`);
+        setInWishlist(true);
+        toast.success("Added to wishlist");
+      }
+    } catch { toast.error("Could not update wishlist"); }
+  };
 
   useEffect(() => {
     apiClient.get(`/products/${slug}`).then((r) => {
@@ -125,6 +148,14 @@ export default function Product() {
               </div>
               <button onClick={handleAdd} className="btn-primary flex-1 justify-center" data-testid="add-to-cart-button">
                 Add to Cart
+              </button>
+              <button
+                onClick={toggleWishlist}
+                className={`h-12 w-12 flex items-center justify-center border transition ${inWishlist ? "bg-[var(--drj-gold)] text-white border-[var(--drj-gold)]" : "border-[var(--drj-line-strong)] text-forest hover:border-[var(--drj-gold)]"}`}
+                data-testid="wishlist-toggle"
+                aria-label="Toggle wishlist"
+              >
+                <Heart size={18} fill={inWishlist ? "currentColor" : "none"}/>
               </button>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
