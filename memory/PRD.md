@@ -97,3 +97,22 @@ Build a premium, trustworthy, conversion-focused Ayurvedic e-commerce site for "
 ### Updated Backlog
 **P1**: Translate inner pages (Product, About, Cart, Checkout, Shop, Blog, FAQ) into HI/GU · Real Razorpay integration · User auth · Admin dashboard
 **P2**: Per-language JSON splitting · Externalize GST/shipping config · Aggregation-pipeline review averages · Protect /api/admin/reseed with env token
+
+## v1.2 Update (Feb 4, 2026) — Auth + Admin + Account + i18n
+
+### What's Been Implemented
+- **JWT Auth (`auth.py`)** — bcrypt password hashing, JWT in httpOnly cookies (SameSite=none, Secure=true, axios `withCredentials`). Brute-force lockout (5 fails → 15-min). Idempotent admin seeding from `ADMIN_EMAIL`/`ADMIN_PASSWORD`. Endpoints: register, login, logout, me, refresh, forgot-password (logs reset link), reset-password.
+- **Admin Dashboard (`/admin`)** — sidebar with 7 tabs. Live stats (orders, revenue, customers, products), 14-day revenue chart (custom SVG bars), status breakdown, recent orders. Full CRUD for Products, Coupons, Blogs. View Orders + change status (appends timeline event), Customers list, Inbox (Contacts + Newsletter).
+- **Customer Account (`/account`)** — Orders tab (linked to /track), Wishlist tab (toggle heart on Product page), Profile tab. Logout + protected routes.
+- **Translations extended** — Hindi & Gujarati for Shop hero+filters+sort, Cart summary, Checkout headings, Blog/FAQ headers + categories, Login/Register/Account labels. Persists via localStorage.
+- **Authenticated order tracking** — orders placed while logged-in are linked to user_id and appear in `/account`.
+
+### Testing (iteration_3.json)
+- Backend: **45/45 pytest passing** (22 new auth+admin + 23 regression)
+- Frontend: **100% on all critical flows** verified by browser automation
+- Zero bugs
+
+### Updated Backlog
+**P0** — DONE (auth shipped)
+**P1**: Real Razorpay integration (when keys available) · Forgot-password email (Resend/SendGrid) · Translate remaining static body copy on About/Home/Founder
+**P2**: OTP login via Twilio/MSG91 · Inventory deduction on order placement · Bulk product import via CSV · Order invoice PDF · Per-language JSON splits for translator handoff
