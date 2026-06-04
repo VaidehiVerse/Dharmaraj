@@ -75,3 +75,25 @@ Build a premium, trustworthy, conversion-focused Ayurvedic e-commerce site for "
 - **MOCKED: OTP auth** — guest checkout only
 - **MOCKED: Newsletter delivery** — saves email to MongoDB, no welcome email sent
 - **MOCKED: SMS/email notifications** — order confirmations are screen-only
+
+## v1.1 Update (Feb 4, 2026) — Premium Redesign + Founder + i18n
+
+### What's Been Implemented
+- **Founder Section**: Dedicated `FounderCard` component on Home + About. Photo of Jignesh Mehta in gold-frame, signature message, trust badges (Family-Owned · GMP · FSSAI · ISO), Surat location tag. Hero mini-badge with founder photo + CTA.
+- **Multi-Language Switcher**: English / हिंदी / ગુજરાતી in header. Dropdown via shadcn DropdownMenu (`data-testid='lang-switcher-trigger'`). Persists via localStorage key `drj_lang_v1`. Translations cover Home (nav, hero, trust, benefits, founder, CTAs). Inner pages remain English (P1 backlog).
+- **Phone Update**: `+91 95129 51226` everywhere — header (desktop & mobile menu), footer, contact page, WhatsApp FAB (wa.me/919512951226). Old number completely removed.
+- **New Product Images**: White-bottle VAJRA (qj5h59j2) is now images[0]. Chakra-infographic (ytzrcecm) is images[1]. Old black-bottle is downgraded to images[2].
+- **Radial Benefits Showcase**: White bottle at center, 10 benefit pods orbiting (Immunity, Energy, Stamina, Strength, Digestion, Gut, Brain, Heart, Lung, Overall). Animated rings, framer-motion entrance. Mobile fallback = 2-col grid with bottle above.
+- **Premium Product Page Layout**: Large bottle in `product-story-section` with 6 ingredient highlight cards arranged around it. New `how-it-works-section` with 3 steps (Standardized Extracts · Synergistic Blending · Daily Rasayana Ritual). Radial Benefits embedded.
+- **Light Luxury Theme**: White + Cream + Gold + Forest Green replaces dark/obsidian. Hero has animated sun glow, sun rays (12 spokes), green Himalayan mountain SVG, flowing blue water wave, 4 floating leaves, 10 gold particles. All page heroes (Shop, Blog, FAQ, Track, Contact, Policies) switched from obsidian to cream-with-gold-glow.
+- **Trust Strip Redesign**: 6 cards (100% Ayurvedic, Premium Ingredients, Made in India, Secure Payments, Fast Delivery, Customer Support) — white cards with gold-soft icon backgrounds.
+- **Decorative Art**: Tulsi sprig SVG ornament, gold lotus divider, gold-frame photo treatment, dashed rotating rings around bottles.
+
+### Testing (iteration_2.json)
+- Backend: 23/23 passing — no regressions
+- Frontend: 100% on all delta scenarios; full e-commerce flow intact
+- No bugs detected
+
+### Updated Backlog
+**P1**: Translate inner pages (Product, About, Cart, Checkout, Shop, Blog, FAQ) into HI/GU · Real Razorpay integration · User auth · Admin dashboard
+**P2**: Per-language JSON splitting · Externalize GST/shipping config · Aggregation-pipeline review averages · Protect /api/admin/reseed with env token
