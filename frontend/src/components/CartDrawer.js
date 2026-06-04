@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useCart } from "@/context/CartContext";
 import { inr } from "@/lib/api";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
@@ -18,9 +18,9 @@ export default function CartDrawer() {
       >
         <SheetHeader className="px-6 pt-6 pb-4 border-b border-[var(--drj-line)]">
           <SheetTitle className="font-serif text-2xl text-forest">Your Ritual Cart</SheetTitle>
-          <p className="text-xs text-[var(--drj-ink-muted)]">
+          <SheetDescription className="text-xs text-[var(--drj-ink-muted)]">
             {items.length === 0 ? "Empty for now" : `${items.length} item${items.length > 1 ? "s" : ""}`}
-          </p>
+          </SheetDescription>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 max-h-[55vh]">
