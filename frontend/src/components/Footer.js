@@ -41,7 +41,7 @@ export default function Footer() {
               of reverence to a 5,000-year-old science of wellness.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {["FSSAI", "GMP", "ISO", "100% Botanical"].map((b) => (
+              {["Udyam Certification", "FSSAI Licensed", "ISO Certified", "GST Registered"].map((b) => (
                 <span key={b} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-[var(--drj-gold)] text-xs text-forest">
                   <BadgeCheck size={12} className="text-gold" /> {b}
                 </span>
@@ -112,7 +112,7 @@ export default function Footer() {
         <div className="container-drj py-5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-[var(--drj-ink-muted)]">
           <div>© {new Date().getFullYear()} Dharmaraj Ayurveda™ · All rights reserved.</div>
           <div className="flex items-center gap-4">
-            <span>FSSAI · ISO · GMP Certified</span>
+           
             <span className="opacity-30">|</span>
             <span>Made with reverence in Surat, India</span>
           </div>

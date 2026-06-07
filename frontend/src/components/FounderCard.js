@@ -70,10 +70,10 @@ export default function FounderCard({ compact = false }) {
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-3 max-w-md">
-              <Badge icon={BadgeCheck} text="Family-Owned" />
-              <Badge icon={BadgeCheck} text="GMP Certified" />
+              <Badge icon={BadgeCheck} text="Udyam Certified" />
               <Badge icon={BadgeCheck} text="FSSAI Licensed" />
-              <Badge icon={BadgeCheck} text="ISO Standards" />
+              <Badge icon={BadgeCheck} text="ISO Certified" />
+              <Badge icon={BadgeCheck} text="GST Registered" />
             </div>
 
             {!compact && (

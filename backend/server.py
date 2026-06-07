@@ -189,10 +189,10 @@ VAJRA_PRODUCT = {
         "Designed for the modern adult, 1 Vajra supports natural immunity, sustainable energy, "
         "stamina, digestion, joint mobility, and overall well-being — without stimulants or synthetics."
     ),
-    "price": 1299,
+    "price": 999,
     "mrp": 1499,
     "images": [
-        "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/qj5h59j2_image.png",
+        "/images/vajra-bottle-transparent.png",
         "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
         "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
         "https://images.unsplash.com/photo-1716816211590-c15a328a5ff0?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85",
@@ -390,7 +390,7 @@ SEED_BLOGS = [
 SEED_COUPONS = [
     {"code": "WELCOME10", "type": "percent", "value": 10, "min_subtotal": 0, "description": "10% off your first order"},
     {"code": "VAJRA20", "type": "percent", "value": 20, "min_subtotal": 1999, "description": "20% off on orders above ₹1,999"},
-    {"code": "FLAT200", "type": "flat", "value": 200, "min_subtotal": 1299, "description": "₹200 off"},
+    {"code": "FLAT200", "type": "flat", "value": 200, "min_subtotal": 999, "description": "₹200 off"},
 ]
 
 
@@ -425,7 +425,7 @@ async def ensure_seed():
 # ---------- Routes ----------
 @api_router.get("/")
 async def root():
-    return {"message": "Dharmaraj Ayurveda API live", "tagline": "Ancient Ayurveda, Modern Wellness"}
+    return {"message": "Dharmaraj Ayurveda API live"}
 
 
 @api_router.get("/products", response_model=List[Product])

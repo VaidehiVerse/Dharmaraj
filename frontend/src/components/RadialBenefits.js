@@ -9,16 +9,16 @@ import { useI18n } from "@/context/I18nContext";
  * Positions are pre-computed for desktop. On mobile we fall back to a 2-col grid.
  */
 const POD_POSITIONS = [
-  { top: "4%", left: "50%", transform: "translate(-50%, 0)" },        // top
-  { top: "14%", right: "4%", transform: "translate(0, 0)" },          // top-right
-  { top: "40%", right: "-2%", transform: "translate(0, -50%)" },       // right
-  { top: "66%", right: "4%", transform: "translate(0, 0)" },           // bottom-right
-  { bottom: "4%", left: "50%", transform: "translate(-50%, 0)" },     // bottom
-  { bottom: "10%", left: "6%", transform: "translate(0, 0)" },         // bottom-left
-  { top: "40%", left: "-2%", transform: "translate(0, -50%)" },        // left
-  { top: "14%", left: "4%", transform: "translate(0, 0)" },            // top-left
-  { top: "26%", left: "32%", transform: "translate(-50%, -50%)" },     // upper-inner-left
-  { top: "26%", right: "32%", transform: "translate(50%, -50%)" },     // upper-inner-right
+  { top: "9%", left: "50%", transform: "translate(-50%, -50%)" },
+  { top: "16.8%", left: "74.1%", transform: "translate(-50%, -50%)" },
+  { top: "37.3%", left: "89%", transform: "translate(-50%, -50%)" },
+  { top: "62.7%", left: "89%", transform: "translate(-50%, -50%)" },
+  { top: "83.2%", left: "74.1%", transform: "translate(-50%, -50%)" },
+  { top: "91%", left: "50%", transform: "translate(-50%, -50%)" },
+  { top: "83.2%", left: "25.9%", transform: "translate(-50%, -50%)" },
+  { top: "62.7%", left: "11%", transform: "translate(-50%, -50%)" },
+  { top: "37.3%", left: "11%", transform: "translate(-50%, -50%)" },
+  { top: "16.8%", left: "25.9%", transform: "translate(-50%, -50%)" },
 ];
 
 export default function RadialBenefits() {
@@ -53,24 +53,28 @@ export default function RadialBenefits() {
             <div className="radial-ring" />
             <div className="radial-ring-inner" />
             <div className="radial-center" data-testid="radial-bottle">
-              <img src={BRAND.productImage} alt="1 Vajra" loading="lazy" />
+              <img src={BRAND.productImage} alt="1 Vajra" loading="lazy" style={{ width: '85%', height: 'auto', margin: '0 auto' }} />
             </div>
             {benefits.map((b, i) => (
-              <motion.div
+              <div
                 key={b.key}
-                initial={{ opacity: 0, scale: 0.85 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: i * 0.07 }}
-                className="benefit-pod"
+                className="absolute"
                 style={POD_POSITIONS[i]}
-                data-testid={`benefit-pod-${b.key}`}
               >
-                <span className="icon-wrap">
-                  <b.icon size={16} />
-                </span>
-                <span className="label">{t.benefits[b.key]}</span>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.5, delay: i * 0.07 }}
+                  className="benefit-pod !relative !top-auto !left-auto !right-auto !bottom-auto !transform-none"
+                  data-testid={`benefit-pod-${b.key}`}
+                >
+                  <span className="icon-wrap">
+                    <b.icon size={16} />
+                  </span>
+                  <span className="label">{t.benefits[b.key]}</span>
+                </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -78,7 +82,7 @@ export default function RadialBenefits() {
         {/* MOBILE / TABLET GRID with bottle on top */}
         <div className="lg:hidden">
           <div className="flex justify-center mb-10">
-            <img src={BRAND.productImage} alt="1 Vajra" className="w-48 h-auto" style={{ filter: "drop-shadow(0 18px 40px rgba(212,175,55,0.35))" }} />
+            <img src={BRAND.productImage} alt="1 Vajra" className="w-36 h-auto" style={{ filter: "drop-shadow(0 18px 40px rgba(212,175,55,0.35))" }} />
           </div>
           <div className="grid grid-cols-2 gap-3" data-testid="radial-benefits-mobile">
             {benefits.map((b) => (

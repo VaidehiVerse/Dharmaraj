@@ -44,7 +44,7 @@ export default function Home() {
         <FloatingLeaf className="float-leaf-4" color="#a8c89b" size={40} rotate={15} />
         <GoldParticles />
 
-        <div className="container-drj relative grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-16 lg:py-28">
+        <div className="container-drj home-hero-inner relative grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative z-10">
             <div className="flex items-center gap-3 mb-6">
               <TulsiSprig size={36} />
@@ -68,8 +68,8 @@ export default function Home() {
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-[var(--drj-ink-muted)] uppercase tracking-[0.2em]">
               <span className="flex items-center gap-2 text-forest"><Star size={14} className="fill-gold text-gold" /> {t.hero.reviews}</span>
-              <span className="flex items-center gap-1.5"><BadgeCheck size={14} className="text-gold" /> FSSAI · ISO · GMP</span>
-              <span>60 Veg Capsules</span>
+              
+              
             </div>
 
             {/* Founder mini badge */}
@@ -84,13 +84,19 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.15 }} className="relative z-10">
-            <div className="relative aspect-square max-w-md mx-auto flex items-center justify-center">
-              <div className="absolute inset-8 rounded-full bg-gradient-to-br from-[var(--drj-gold-soft)] to-white opacity-90" />
-              <div className="absolute inset-12 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-60 animate-[ringRotate_60s_linear_infinite]" />
-              <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 w-3/4 h-auto" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.4))" }} />
+            <div className="relative aspect-square max-w-lg mx-auto flex items-center justify-center">
+  
+  <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--drj-gold-soft)] to-transparent opacity-70" />
+  <div className="absolute inset-6 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-60 animate-[ringRotate_60s_linear_infinite]" />
+
+  <img
+    src={BRAND.heroProductImage}
+    alt="Dharmaraj Ayurveda Vajra health supplement bottle"
+    className="relative z-10 max-h-[80%] w-auto object-contain mx-auto drop-shadow-xl"
+  />
               <div className="absolute -bottom-4 -right-4 bg-white border border-[var(--drj-gold)] p-5 shadow-xl">
                 <div className="text-overline text-gold">From</div>
-                <div className="font-serif text-3xl text-forest leading-none mt-1">₹1,299</div>
+                <div className="font-serif text-3xl text-forest leading-none mt-1">₹999</div>
                 <div className="text-xs text-[var(--drj-ink-muted)] mt-1">60 caps · 30 days</div>
               </div>
             </div>
@@ -125,8 +131,8 @@ export default function Home() {
             </p>
             <div className="grid sm:grid-cols-3 gap-6 mt-10">
               {[
-                { num: "9", label: "Standardized Herbs" },
                 { num: "60", label: "Veg Capsules" },
+                { num: "2 Daily ", label: "(1 Morning, 1 Night)" },
                 { num: "30-Day", label: "Wellness Cycle" },
               ].map((s) => (
                 <div key={s.label} className="border-l-2 border-gold pl-4">
@@ -269,21 +275,28 @@ export default function Home() {
 
       {/* INSTAGRAM */}
       <section className="section bg-white border-t border-[var(--drj-line)]">
-        <div className="container-drj text-center mb-12">
+        <div className="container-drj text-center mb-16">
           <div className="drj-divider text-overline mb-4">Follow the Journey</div>
           <h2 className="font-serif text-4xl text-forest">@dharmarajayurveda</h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-[var(--drj-line)]" data-testid="instagram-feed">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6 px-4 py-4 bg-[var(--drj-line)]" data-testid="instagram-feed">
           {[
-            "https://images.unsplash.com/photo-1716816211590-c15a328a5ff0?w=600&q=85",
-            "https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=600&q=85",
-            "https://images.unsplash.com/photo-1506452305024-9d3f02d1c9b5?w=600&q=85",
-            "https://images.unsplash.com/photo-1612703508477-00e02a9b170c?w=600&q=85",
-            "https://images.unsplash.com/photo-1524863479829-916d8e77f114?w=600&q=85",
-            "https://images.pexels.com/photos/37589314/pexels-photo-37589314.jpeg?auto=compress&cs=tinysrgb&w=600",
-          ].map((src, i) => (
-            <a key={i} href={BRAND.instagram} target="_blank" rel="noreferrer" className="block aspect-square overflow-hidden relative group bg-white" data-testid={`ig-tile-${i}`}>
-              <img src={src} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+            { type: "video", src: "/images/journey-video-1.mp4" },
+            { type: "video", src: "/images/journey-video-2.mp4" },
+            { type: "video", src: "/images/journey-video-3.mp4" },
+            { type: "video", src: "/images/journey-video-4.mp4" },
+            { type: "video", src: "/images/journey-video-5.mp4" },
+            { type: "video", src: "/images/journey-video-6.mp4" },
+          ].slice(0, 6).map((item, i) => (
+            <a key={i} href={BRAND.instagram} target="_blank" rel="noreferrer" className="block aspect-[9/16] overflow-hidden relative group bg-white" data-testid={`ig-tile-${i}`}>
+              <video
+                src={item.src}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
               <div className="absolute inset-0 bg-forest/0 group-hover:bg-forest/40 transition-colors flex items-center justify-center">
                 <i className="fa-brands fa-instagram text-2xl text-white opacity-0 group-hover:opacity-100 transition-opacity"></i>
               </div>

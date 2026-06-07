@@ -174,7 +174,7 @@ export default function Product() {
             <div className="grid grid-cols-2 gap-4 mt-10 pt-8 border-t border-[var(--drj-line)] text-xs">
               {[
                 { icon: Leaf, label: "100% Botanical Formula" },
-                { icon: Award, label: "FSSAI · ISO · GMP" },
+                { icon: Award, label: "UDYAM Certified" },
                 { icon: ShieldCheck, label: "30-Day Money-Back" },
                 { icon: Truck, label: "Free shipping over ₹999" },
               ].map((t) => (

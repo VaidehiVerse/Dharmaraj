@@ -35,7 +35,7 @@ class TestProducts:
         assert r.status_code == 200
         p = r.json()
         assert p["name"] == "1 Vajra"
-        assert p["price"] == 1299
+        assert p["price"] == 999
         assert p["mrp"] == 1499
         assert len(p["ingredients"]) == 9
         names = [i["name"] for i in p["ingredients"]]
@@ -81,14 +81,14 @@ class TestReviews:
 # ----- Coupons -----
 class TestCoupons:
     def test_welcome10(self, session):
-        r = session.post(f"{API}/coupons/validate", json={"code": "WELCOME10", "subtotal": 1299})
+        r = session.post(f"{API}/coupons/validate", json={"code": "WELCOME10", "subtotal": 999})
         assert r.status_code == 200, r.text
         d = r.json()
         assert d["code"] == "WELCOME10"
-        assert d["discount"] == 129
+        assert d["discount"] == 99
 
     def test_vajra20_min_subtotal_fails(self, session):
-        r = session.post(f"{API}/coupons/validate", json={"code": "VAJRA20", "subtotal": 1299})
+        r = session.post(f"{API}/coupons/validate", json={"code": "VAJRA20", "subtotal": 999})
         assert r.status_code == 400
 
     def test_vajra20_passes(self, session):
@@ -97,16 +97,16 @@ class TestCoupons:
         assert r.json()["discount"] == int(1999 * 0.20)
 
     def test_flat200(self, session):
-        r = session.post(f"{API}/coupons/validate", json={"code": "FLAT200", "subtotal": 1299})
+        r = session.post(f"{API}/coupons/validate", json={"code": "FLAT200", "subtotal": 999})
         assert r.status_code == 200
         assert r.json()["discount"] == 200
 
     def test_invalid_code(self, session):
-        r = session.post(f"{API}/coupons/validate", json={"code": "NOPE", "subtotal": 1299})
+        r = session.post(f"{API}/coupons/validate", json={"code": "NOPE", "subtotal": 999})
         assert r.status_code == 404
 
     def test_case_insensitive(self, session):
-        r = session.post(f"{API}/coupons/validate", json={"code": "welcome10", "subtotal": 1299})
+        r = session.post(f"{API}/coupons/validate", json={"code": "welcome10", "subtotal": 999})
         assert r.status_code == 200
 
 
@@ -141,11 +141,11 @@ class TestOrders:
 
     def test_order_created(self, order):
         assert order["order_id"].startswith("DRJ")
-        assert order["discount"] == 129
+        assert order["discount"] == 99
         assert order["payment_status"] == "paid"
         assert order["status"] == "confirmed"
-        # 1299 subtotal, -129 discount = 1170 taxable, tax 5%=58.5->59, shipping 0
-        assert order["subtotal"] == 1299
+        # 999 subtotal, -99 discount = 900 taxable, tax 5%=45, shipping 0
+        assert order["subtotal"] == 999
         assert order["shipping"] == 0
         assert order["total"] == order["subtotal"] - order["discount"] + order["shipping"] + order["tax"]
 

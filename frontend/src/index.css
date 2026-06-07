@@ -20,6 +20,14 @@
   --drj-gold-bright: #e8c357;
   --drj-gold-soft: #f7ecc6;
   --drj-shadow-warm: 0 24px 50px -24px rgba(212, 175, 55, 0.25);
+
+  /* Home page vertical rhythm — change these to tighten or loosen section gaps */
+  --home-section-py: 4rem;       /* 64px between major blocks (mobile/tablet) */
+  --home-section-py-lg: 6rem;    /* 96px on large screens */
+  --home-hero-py: 4rem;          /* hero top/bottom (was py-16) */
+  --home-hero-py-lg: 6.5rem;     /* hero on desktop (was py-28 / 7rem) */
+  --home-trust-py: 2rem;         /* trust strip vertical padding (was py-10) */
+  --home-trust-gap: 1rem;        /* gap between trust cards (was gap-5) */
 }
 
 @layer base {
@@ -200,6 +208,33 @@ h1, h2, h3, h4, .font-serif {
   .section { padding: 120px 0; }
 }
 
+/* Home-only: overrides .section for blocks inside [data-testid="home-page"] */
+[data-testid="home-page"] .section {
+  padding: var(--home-section-py) 0;
+}
+@media (min-width: 1024px) {
+  [data-testid="home-page"] .section {
+    padding: var(--home-section-py-lg) 0;
+  }
+}
+
+[data-testid="home-page"] .home-hero-inner {
+  padding-top: var(--home-hero-py);
+  padding-bottom: var(--home-hero-py);
+}
+@media (min-width: 1024px) {
+  [data-testid="home-page"] .home-hero-inner {
+    padding-top: var(--home-hero-py-lg);
+    padding-bottom: var(--home-hero-py-lg);
+  }
+}
+
+[data-testid="home-page"] [data-testid="trust-strip"] .container-drj {
+  padding-top: var(--home-trust-py);
+  padding-bottom: var(--home-trust-py);
+  gap: var(--home-trust-gap);
+}
+
 .container-drj {
   max-width: 1280px;
   margin: 0 auto;
@@ -216,6 +251,14 @@ h1, h2, h3, h4, .font-serif {
 .text-gold { color: var(--drj-gold); }
 .text-forest { color: var(--drj-forest); }
 .border-gold { border-color: var(--drj-gold); }
+
+/* Home hero — transparent PNG bottle (no blend hacks) */
+.hero-bottle-photo {
+  width: min(78%, 280px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 48px rgba(45, 94, 62, 0.22));
+}
 
 /* HERO ANIMATIONS */
 .hero-sun {

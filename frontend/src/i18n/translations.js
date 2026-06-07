@@ -15,7 +15,7 @@ export const TRANSLATIONS = {
       shop: "Shop",
       product: "1 Vajra",
       about: "About",
-      blog: "Journal",
+      blog: "Blog",
       track: "Track Order",
       contact: "Contact",
       account: "Account",
@@ -25,9 +25,7 @@ export const TRANSLATIONS = {
       admin: "Admin",
     },
     announce: {
-      shipping: "Free shipping over ₹999",
-      cert: "100% Botanical · FSSAI · GMP · ISO",
-      city: "Crafted in Surat, Gujarat",
+      shipping: "Free Shipping Across India"
     },
     hero: {
       eyebrow: "Est. Surat · Gujarat",
@@ -191,7 +189,7 @@ export const TRANSLATIONS = {
     label: "हिं",
     name: "हिंदी",
     nav: { home: "होम", shop: "स्टोर", product: "1 वज्र", about: "हमारे बारे में", blog: "ब्लॉग", track: "ऑर्डर ट्रैक", contact: "संपर्क", account: "खाता", login: "लॉगिन", register: "रजिस्टर", logout: "लॉगआउट", admin: "एडमिन" },
-    announce: { shipping: "₹999 से अधिक पर मुफ्त शिपिंग", cert: "100% हर्बल · FSSAI · GMP · ISO", city: "सूरत, गुजरात में निर्मित" },
+    announce: { shipping: "₹999 से अधिक पर मुफ्त शिपिंग", cert: "100% हर्बल · शुद्ध अर्क", city: "सूरत, गुजरात में निर्मित" },
     hero: { eyebrow: "स्थापित · सूरत · गुजरात", title_1: "प्राचीन आयुर्वेद,", title_2: "आधुनिक स्वास्थ्य।", desc: "1 वज्र से मिलिए — नौ मानकीकृत जड़ी-बूटी अर्क का 100% वनस्पति सूत्र, जो रोग प्रतिरोधक क्षमता, ऊर्जा और जीवन शक्ति को जगाता है।", buy: "1 वज्र खरीदें", explore: "लाभ देखें", reviews: "4.9 · 247+ समीक्षाएं" },
     trust: { ayurvedic: "100% आयुर्वेदिक", premium: "श्रेष्ठ सामग्री", made_in_india: "मेड इन इंडिया", secure: "सुरक्षित भुगतान", delivery: "तेज़ डिलीवरी", support: "ग्राहक सहायता" },
     founder: { eyebrow: "संस्थापक से मिलिए", title: "विश्वास पर बना घर।", cta: "हमारी कहानी पढ़ें" },
@@ -212,7 +210,7 @@ export const TRANSLATIONS = {
     label: "ગુ",
     name: "ગુજરાતી",
     nav: { home: "હોમ", shop: "સ્ટોર", product: "1 વજ્ર", about: "અમારા વિશે", blog: "બ્લોગ", track: "ઓર્ડર ટ્રેક", contact: "સંપર્ક", account: "ખાતું", login: "લોગિન", register: "નોંધણી", logout: "લોગઆઉટ", admin: "એડમિન" },
-    announce: { shipping: "₹999 ઉપર મફત શિપિંગ", cert: "100% હર્બલ · FSSAI · GMP · ISO", city: "સુરત, ગુજરાતમાં બનાવેલ" },
+    announce: { shipping: "₹999 ઉપર મફત શિપિંગ", cert: "100% હર્બલ · શુદ્ધ અર્ક", city: "સુરત, ગુજરાતમાં બનાવેલ" },
     hero: { eyebrow: "સ્થાપિત · સુરત · ગુજરાત", title_1: "પ્રાચીન આયુર્વેદ,", title_2: "આધુનિક સ્વાસ્થ્ય.", desc: "1 વજ્ર સાથે મળો — નવ માનક જડીબુટ્ટી અર્કનું 100% વનસ્પતિ સૂત્ર, જે રોગપ્રતિકારક શક્તિ, ઊર્જા અને જીવનશક્તિ જગાડે છે.", buy: "1 વજ્ર ખરીદો", explore: "લાભો જુઓ", reviews: "4.9 · 247+ સમીક્ષાઓ" },
     trust: { ayurvedic: "100% આયુર્વેદિક", premium: "શ્રેષ્ઠ ઘટકો", made_in_india: "મેડ ઇન ઈન્ડિયા", secure: "સુરક્ષિત ચુકવણી", delivery: "ઝડપી ડિલિવરી", support: "ગ્રાહક સહાય" },
     founder: { eyebrow: "સ્થાપકને મળો", title: "વિશ્વાસ પર બંધાયેલું ઘર.", cta: "અમારી વાર્તા વાંચો" },
