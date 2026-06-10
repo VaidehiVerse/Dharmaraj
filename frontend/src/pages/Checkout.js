@@ -6,6 +6,8 @@ import { apiClient, inr } from "@/lib/api";
 import { toast } from "sonner";
 import { useI18n } from "@/context/I18nContext";
 
+const RAZORPAY_CHECKOUT_URL = "https://checkout.razorpay.com/v1/checkout.js";
+
 const PAYMENT_METHODS = [
   { id: "upi", label: "UPI", icon: Smartphone, note: "GPay · PhonePe · Paytm" },
   { id: "card", label: "Credit / Debit Card", icon: CreditCard, note: "Visa · Mastercard · RuPay" },
@@ -54,15 +56,81 @@ export default function Checkout() {
     }
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve, reject) => {
+      if (window.Razorpay) {
+        return resolve(true);
+      }
+      const script = document.createElement("script");
+      script.src = RAZORPAY_CHECKOUT_URL;
+      script.onload = () => resolve(true);
+      script.onerror = () => reject(new Error("Could not load Razorpay SDK"));
+      document.body.appendChild(script);
+    });
+  };
+
   const placeOrder = async (e) => {
     e.preventDefault();
     setPlacing(true);
     try {
-      const { data } = await apiClient.post("/orders", {
-        items, address, coupon_code: appliedCoupon?.code, payment_method: payment, notes: "",
+      if (payment === "cod") {
+        const { data } = await apiClient.post("/orders", {
+          items,
+          address,
+          coupon_code: appliedCoupon?.code,
+          payment_method: payment,
+          notes: "",
+        });
+        clear();
+        navigate(`/order-confirmation/${data.order_id}`, { state: { mobile: address.mobile } });
+        return;
+      }
+
+      const { data: razorpayOrder } = await apiClient.post("/razorpay/create-order", {
+        items,
+        address,
+        coupon_code: appliedCoupon?.code,
+        payment_method: payment,
+        notes: "",
       });
-      clear();
-      navigate(`/order-confirmation/${data.order_id}`, { state: { mobile: address.mobile } });
+
+      await loadRazorpayScript();
+
+      const options = {
+        key: razorpayOrder.key_id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        name: razorpayOrder.name,
+        description: razorpayOrder.description,
+        order_id: razorpayOrder.razorpay_order_id,
+        prefill: {
+          name: address.full_name,
+          email: address.email,
+          contact: address.mobile,
+        },
+        handler: async (response) => {
+          try {
+            const { data: verification } = await apiClient.post("/razorpay/verify-payment", {
+              app_order_id: razorpayOrder.app_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            clear();
+            toast.success("Payment successful!");
+            navigate(`/order-confirmation/${verification.order_id}`, { state: { mobile: address.mobile } });
+          } catch (verifyError) {
+            toast.error(verifyError?.response?.data?.detail || "Payment verification failed");
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            toast.error("Payment cancelled");
+          },
+        },
+      };
+
+      new window.Razorpay(options).open();
     } catch (e) {
       toast.error(e?.response?.data?.detail || "Could not place order");
     } finally {

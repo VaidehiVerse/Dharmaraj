@@ -11,11 +11,14 @@ import os
 import logging
 import random
 import string
+import hmac
+import hashlib
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from typing import List, Optional, Literal
 import uuid
 from datetime import datetime, timezone
+import razorpay
 
 
 ROOT_DIR = Path(__file__).parent
@@ -24,6 +27,10 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ["DB_NAME"]]
+
+razorpay_key_id = os.environ.get("RAZORPAY_KEY_ID", "")
+razorpay_key_secret = os.environ.get("RAZORPAY_KEY_SECRET", "")
+razorpay_client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
 
 from auth import get_auth_dependencies
 from admin_routes import build_admin_router
@@ -134,6 +141,9 @@ class Order(BaseModel):
     address: Address
     payment_method: str
     payment_status: str = "pending"
+    razorpay_order_id: Optional[str] = None
+    razorpay_payment_id: Optional[str] = None
+    razorpay_status: Optional[str] = None
     coupon_code: Optional[str] = None
     discount: int = 0
     subtotal: int
@@ -143,6 +153,21 @@ class Order(BaseModel):
     status: str = "confirmed"
     timeline: List[OrderStatusEvent]
     created_at: str = Field(default_factory=now_iso)
+
+
+class RazorpayOrderCreate(BaseModel):
+    items: List[CartLine]
+    address: Address
+    coupon_code: Optional[str] = None
+    payment_method: Literal["card", "netbanking", "wallet", "upi"]
+    notes: Optional[str] = None
+
+
+class RazorpayVerifyIn(BaseModel):
+    app_order_id: str
+    razorpay_payment_id: str
+    razorpay_order_id: str
+    razorpay_signature: str
 
 
 class CouponCheck(BaseModel):
@@ -480,6 +505,143 @@ async def validate_coupon(payload: CouponCheck):
     else:
         discount = int(coupon["value"])
     return {"code": coupon["code"], "discount": discount, "description": coupon.get("description", "")}
+
+
+async def compute_coupon_discount(subtotal: int, coupon_code: Optional[str]) -> int:
+    if not coupon_code:
+        return 0
+    coupon = await db.coupons.find_one({"code": coupon_code.upper()}, {"_id": 0})
+    if not coupon or subtotal < coupon.get("min_subtotal", 0):
+        return 0
+    return int(subtotal * coupon["value"] / 100) if coupon["type"] == "percent" else int(coupon["value"])
+
+
+def compute_totals(subtotal: int, discount: int) -> dict:
+    shipping = 0 if subtotal >= 999 else 49
+    taxable = max(subtotal - discount, 0)
+    tax = int(round(taxable * 0.05))
+    return {"shipping": shipping, "tax": tax, "total": taxable + shipping + tax}
+
+
+@api_router.post("/razorpay/create-order")
+async def create_razorpay_order(payload: RazorpayOrderCreate, user: Optional[dict] = Depends(get_optional_user)):
+    subtotal = sum(it.price * it.quantity for it in payload.items)
+    discount = await compute_coupon_discount(subtotal, payload.coupon_code)
+    totals = compute_totals(subtotal, discount)
+
+    timeline = [
+        OrderStatusEvent(status="pending_payment", note="Razorpay payment pending.", at=now_iso()),
+    ]
+
+    order = Order(
+        items=payload.items,
+        address=payload.address,
+        payment_method=payload.payment_method,
+        payment_status="pending",
+        coupon_code=payload.coupon_code,
+        discount=discount,
+        subtotal=subtotal,
+        shipping=totals["shipping"],
+        tax=totals["tax"],
+        total=totals["total"],
+        status="pending_payment",
+        timeline=timeline,
+    )
+    doc = order.model_dump()
+    if user:
+        doc["user_id"] = user["id"]
+    await db.orders.insert_one(doc)
+
+    try:
+        razorpay_order = razorpay_client.order.create({
+            "amount": totals["total"] * 100,
+            "currency": "INR",
+            "receipt": order.order_id,
+            "payment_capture": 1,
+            "notes": {"order_id": order.order_id},
+        })
+    except Exception as exc:
+        await db.orders.delete_one({"order_id": order.order_id})
+        raise HTTPException(500, "Failed to create Razorpay order") from exc
+
+    await db.orders.update_one(
+        {"order_id": order.order_id},
+        {"$set": {
+            "razorpay_order_id": razorpay_order["id"],
+            "razorpay_status": "created",
+        }},
+    )
+
+    return {
+        "app_order_id": order.order_id,
+        "razorpay_order_id": razorpay_order["id"],
+        "amount": razorpay_order["amount"],
+        "currency": razorpay_order["currency"],
+        "key_id": razorpay_key_id,
+        "name": "Dharmaraj Ayurveda",
+        "description": "Order payment",
+    }
+
+
+@api_router.post("/razorpay/verify-payment")
+async def verify_razorpay_payment(payload: RazorpayVerifyIn):
+    order_doc = await db.orders.find_one({"order_id": payload.app_order_id})
+    if not order_doc:
+        raise HTTPException(404, "Order not found")
+
+    body = f"{payload.razorpay_order_id}|{payload.razorpay_payment_id}".encode("utf-8")
+    expected_signature = hmac.new(
+        razorpay_key_secret.encode("utf-8"),
+        body,
+        hashlib.sha256,
+    ).hexdigest()
+
+    if not hmac.compare_digest(expected_signature, payload.razorpay_signature):
+        await db.orders.update_one(
+            {"order_id": payload.app_order_id},
+            {
+                "$set": {"razorpay_status": "failed", "payment_status": "failed"},
+                "$push": {"timeline": {"status": "payment_failed", "note": "Razorpay signature verification failed.", "at": now_iso()}},
+            },
+        )
+        raise HTTPException(400, "Payment signature verification failed")
+
+    fetched_payment = razorpay_client.payment.fetch(payload.razorpay_payment_id)
+    if not fetched_payment:
+        await db.orders.update_one(
+            {"order_id": payload.app_order_id},
+            {"$set": {"razorpay_status": "failed", "payment_status": "failed"}},
+        )
+        raise HTTPException(400, "Razorpay payment not found")
+
+    if fetched_payment.get("status") not in {"captured", "authorized"}:
+        await db.orders.update_one(
+            {"order_id": payload.app_order_id},
+            {"$set": {"razorpay_status": "failed", "payment_status": "failed"}},
+        )
+        raise HTTPException(400, "Payment not completed")
+
+    if int(fetched_payment.get("amount", 0)) != int(order_doc["total"] * 100):
+        await db.orders.update_one(
+            {"order_id": payload.app_order_id},
+            {"$set": {"razorpay_status": "failed", "payment_status": "failed"}},
+        )
+        raise HTTPException(400, "Payment amount mismatch")
+
+    await db.orders.update_one(
+        {"order_id": payload.app_order_id},
+        {
+            "$set": {
+                "payment_status": "paid",
+                "status": "confirmed",
+                "razorpay_payment_id": payload.razorpay_payment_id,
+                "razorpay_status": "paid",
+            },
+            "$push": {"timeline": {"status": "payment_received", "note": "Payment verified via Razorpay test mode.", "at": now_iso()}},
+        },
+    )
+    updated = await db.orders.find_one({"order_id": payload.app_order_id}, {"_id": 0})
+    return updated
 
 
 @api_router.post("/orders", response_model=Order)
