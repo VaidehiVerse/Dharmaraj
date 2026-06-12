@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { apiClient } from "@/lib/api";
+import { apiClient, setAccessToken, clearAccessToken, getAccessToken } from "@/lib/api";
 
 const AuthContext = createContext(null);
 
@@ -8,11 +8,21 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
+    const token = getAccessToken();
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return null;
+    }
+
     try {
       const { data } = await apiClient.get("/auth/me");
       setUser(data);
+      return data;
     } catch {
+      clearAccessToken();
       setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -24,13 +34,21 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await apiClient.post("/auth/login", { email, password });
-    setUser(data);
+    if (data?.access_token) {
+      setAccessToken(data.access_token);
+      const refreshedUser = await refresh();
+      return refreshedUser || data;
+    }
     return data;
   };
 
   const register = async ({ email, password, name, mobile }) => {
     const { data } = await apiClient.post("/auth/register", { email, password, name, mobile });
-    setUser(data);
+    if (data?.access_token) {
+      setAccessToken(data.access_token);
+      const refreshedUser = await refresh();
+      return refreshedUser || data;
+    }
     return data;
   };
 
@@ -40,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // ignore
     }
+    clearAccessToken();
     setUser(null);
   };
 

@@ -15,8 +15,6 @@ import OrderConfirmation from "@/pages/OrderConfirmation";
 import OrderTracking from "@/pages/OrderTracking";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
-import Blog from "@/pages/Blog";
-import BlogPost from "@/pages/BlogPost";
 import FAQ from "@/pages/FAQ";
 import Policies from "@/pages/Policies";
 import Login from "@/pages/Login";
@@ -38,8 +36,6 @@ const router = createBrowserRouter([
       { path: "track", element: <OrderTracking /> },
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
-      { path: "blog", element: <Blog /> },
-      { path: "blog/:slug", element: <BlogPost /> },
       { path: "faq", element: <FAQ /> },
       { path: "policy/:kind", element: <Policies /> },
       { path: "login", element: <Login /> },

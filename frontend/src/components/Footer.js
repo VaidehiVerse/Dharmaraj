@@ -72,7 +72,6 @@ export default function Footer() {
               <li><Link to="/shop" data-testid="footer-shop-link" className="hover:text-gold transition">Shop</Link></li>
               <li><Link to="/product/1-vajra" data-testid="footer-vajra-link" className="hover:text-gold transition">1 Vajra</Link></li>
               <li><Link to="/about" data-testid="footer-about-link" className="hover:text-gold transition">Our Story</Link></li>
-              <li><Link to="/blog" data-testid="footer-blog-link" className="hover:text-gold transition">Ayurveda Journal</Link></li>
               <li><Link to="/track" data-testid="footer-track-link" className="hover:text-gold transition">Track Order</Link></li>
             </ul>
           </div>

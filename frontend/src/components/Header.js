@@ -23,7 +23,6 @@ export default function Header() {
     { to: "/shop", label: t.nav.shop, key: "shop" },
     { to: "/product/1-vajra", label: t.nav.product, key: "vajra" },
     { to: "/about", label: t.nav.about, key: "about" },
-    { to: "/blog", label: t.nav.blog, key: "blog" },
     { to: "/track", label: t.nav.track, key: "track" },
     { to: "/contact", label: t.nav.contact, key: "contact" },
   ];

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiClient, inr } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-import { LayoutDashboard, ShoppingBag, Package, Tag, FileText, Users, Mail, LogOut, RefreshCw, Plus, Trash2, Edit, ArrowUpRight } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Package, Tag, Users, Mail, LogOut, RefreshCw, Plus, Trash2, Edit, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/brand";
 
@@ -41,7 +41,6 @@ export default function Admin() {
             <NavTab id="orders" icon={ShoppingBag} label="Orders" tab={tab} setTab={setTab}/>
             <NavTab id="products" icon={Package} label="Products" tab={tab} setTab={setTab}/>
             <NavTab id="coupons" icon={Tag} label="Coupons" tab={tab} setTab={setTab}/>
-            <NavTab id="blogs" icon={FileText} label="Blogs" tab={tab} setTab={setTab}/>
             <NavTab id="customers" icon={Users} label="Customers" tab={tab} setTab={setTab}/>
             <NavTab id="inbox" icon={Mail} label="Inbox" tab={tab} setTab={setTab}/>
           </nav>
@@ -52,7 +51,6 @@ export default function Admin() {
           {tab === "orders" && <Orders/>}
           {tab === "products" && <Products/>}
           {tab === "coupons" && <Coupons/>}
-          {tab === "blogs" && <Blogs/>}
           {tab === "customers" && <Customers/>}
           {tab === "inbox" && <Inbox/>}
         </main>
@@ -360,78 +358,6 @@ const Coupons = () => {
         </table>
         {coupons.length === 0 && <div className="p-8 text-center text-[var(--drj-ink-muted)]">No coupons yet.</div>}
       </div>
-    </div>
-  );
-};
-
-// ---------------- BLOGS ----------------
-const Blogs = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [editing, setEditing] = useState(null);
-  const load = () => apiClient.get("/admin/blogs").then((r) => setBlogs(r.data));
-  useEffect(() => { load(); }, []);
-  const blank = { slug: "", title: "", excerpt: "", content: "", category: "Ayurveda", author: "", cover_image: "", read_minutes: 5 };
-  const save = async (data) => {
-    try {
-      if (editing?.id) await apiClient.put(`/admin/blogs/${editing.id}`, data);
-      else await apiClient.post("/admin/blogs", data);
-      toast.success("Saved"); setEditing(null); load();
-    } catch (e) { toast.error(e.response?.data?.detail || "Save failed"); }
-  };
-  const del = async (id) => { if (!window.confirm("Delete?")) return; await apiClient.delete(`/admin/blogs/${id}`); toast.success("Deleted"); load(); };
-  return (
-    <div className="space-y-4" data-testid="admin-blogs">
-      <div className="flex justify-between items-center">
-        <h1 className="font-serif text-4xl text-forest tracking-tight">Blogs</h1>
-        <button onClick={() => setEditing(blank)} className="btn-primary" data-testid="admin-new-blog"><Plus size={14}/> New Article</button>
-      </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {blogs.map((b) => (
-          <div key={b.id} className="bg-white border border-[var(--drj-line)]" data-testid={`admin-blog-${b.slug}`}>
-            <div className="aspect-[16/10] bg-cream overflow-hidden">{b.cover_image && <img src={b.cover_image} alt={b.title} className="w-full h-full object-cover"/>}</div>
-            <div className="p-4">
-              <div className="text-overline text-gold">{b.category} · {b.read_minutes} min</div>
-              <h3 className="font-serif text-lg text-forest mt-2 leading-tight line-clamp-2">{b.title}</h3>
-              <div className="mt-3 flex gap-3">
-                <button onClick={() => setEditing(b)} className="text-overline text-forest hover:text-gold" data-testid={`blog-edit-${b.slug}`}><Edit size={12} className="inline"/> Edit</button>
-                <button onClick={() => del(b.id)} className="text-overline text-red-700 ml-auto" data-testid={`blog-delete-${b.slug}`}><Trash2 size={12} className="inline"/> Delete</button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {editing && <BlogForm initial={editing} onSave={save} onClose={() => setEditing(null)}/>}
-    </div>
-  );
-};
-
-const BlogForm = ({ initial, onSave, onClose }) => {
-  const [form, setForm] = useState(initial);
-  const submit = (e) => { e.preventDefault(); onSave({ ...form, read_minutes: Number(form.read_minutes) }); };
-  return (
-    <div className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center p-4 overflow-y-auto" onClick={onClose}>
-      <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className="bg-white max-w-2xl w-full p-6 mt-12" data-testid="admin-blog-form">
-        <h2 className="font-serif text-2xl text-forest mb-6">{initial.id ? "Edit Article" : "New Article"}</h2>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <In label="Slug" v={form.slug} on={(v) => setForm({...form, slug: v})} testId="bf-slug"/>
-          <In label="Title" v={form.title} on={(v) => setForm({...form, title: v})} wide testId="bf-title"/>
-          <In label="Author" v={form.author} on={(v) => setForm({...form, author: v})} testId="bf-author"/>
-          <div>
-            <div className="text-overline text-[var(--drj-ink-muted)] mb-1">Category</div>
-            <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="input-luxe" data-testid="bf-category">
-              {["Ayurveda","Immunity","Digestion","Fitness","Herbal Medicine","Lifestyle"].map(c => (<option key={c}>{c}</option>))}
-            </select>
-          </div>
-          <In label="Cover Image URL" v={form.cover_image} on={(v) => setForm({...form, cover_image: v})} wide testId="bf-cover"/>
-          <In label="Read minutes" type="number" v={form.read_minutes} on={(v) => setForm({...form, read_minutes: v})} testId="bf-read"/>
-          <Ta label="Excerpt" v={form.excerpt} on={(v) => setForm({...form, excerpt: v})} testId="bf-excerpt"/>
-          <Ta label="Content" v={form.content} on={(v) => setForm({...form, content: v})} testId="bf-content"/>
-        </div>
-        <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="btn-outline" data-testid="bf-cancel">Cancel</button>
-          <button className="btn-primary" data-testid="bf-save">Save</button>
-        </div>
-      </form>
     </div>
   );
 };
