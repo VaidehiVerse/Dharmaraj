@@ -7,26 +7,14 @@ import { TulsiSprig, GoldDivider } from "@/components/AyurvedaArt";
 export default function About() {
   return (
     <div data-testid="about-page" className="bg-white">
-      <section className="bg-cream relative overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl pointer-events-none" />
-        <div className="container-drj relative py-24 lg:py-32">
-          <div className="flex items-center gap-3 mb-6">
-            <TulsiSprig size={36} />
-            <span className="text-overline text-gold">About Us</span>
-          </div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight leading-tight text-forest">
-            Rooted in Tradition.<br /><span className="shimmer-text italic">Awakened for Today.</span>
-          </h1>
-          <p className="text-[var(--drj-ink-muted)] mt-6 max-w-2xl font-light text-lg">A quiet rebellion against shortcuts — Dharmaraj Ayurveda exists to bring the original Ayurvedic intelligence to a generation that needs it most.</p>
-        </div>
-      </section>
+      
 
       <section className="section">
         <div className="container-drj grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <div className="gold-frame">
               <div className="aspect-[4/5] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1506452305024-9d3f02d1c9b5?w=1600&q=85" alt="Forest" className="w-full h-full object-cover"/>
+                <img src="/images/father.jpeg" alt="Forest" className="w-full h-full object-cover"/>
               </div>
             </div>
           </div>

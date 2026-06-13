@@ -24,14 +24,7 @@ export default function Contact() {
 
   return (
     <div data-testid="contact-page" className="bg-white">
-      <section className="bg-cream relative overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
-        <div className="container-drj py-24 lg:py-32 relative">
-          <div className="text-overline text-gold mb-3">Connect</div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">We're listening.</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Questions about your ritual? Wholesale enquiries? A friendly hello? Our wellness desk is here for you.</p>
-        </div>
-      </section>
+      
 
       <section className="section">
         <div className="container-drj grid lg:grid-cols-12 gap-12">
@@ -77,18 +70,15 @@ export default function Contact() {
           </form>
         </div>
       </section>
-
-      <section className="bg-white border-t border-[var(--drj-line)]">
-        <div className="container-drj py-12">
-          <iframe
-            title="Dharmaraj Ayurveda Surat Map"
-            data-testid="contact-map"
-            className="w-full h-[420px] grayscale hover:grayscale-0 transition duration-500 border border-[var(--drj-line)]"
-            src="https://www.google.com/maps?q=Varachha+Road+Surat+Gujarat&output=embed"
-            loading="lazy"
-          />
+      <section className="bg-cream relative overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
+        <div className="container-drj py-6 lg:py-10 relative">
+          <div className="text-overline text-gold mb-3">Connect</div>
+          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">We're listening.</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Questions about your ritual? Wholesale enquiries? A friendly hello? Our wellness desk is here for you.</p>
         </div>
       </section>
+    
     </div>
   );
 }

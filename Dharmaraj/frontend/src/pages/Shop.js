@@ -48,15 +48,16 @@ export default function Shop() {
 
   return (
     <div data-testid="shop-page" className="bg-white min-h-screen">
-      <section className="bg-cream text-forest relative overflow-hidden">
+      {/* <section className="bg-cream text-forest relative overflow-hidden">
         <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
         <div className="container-drj py-20 lg:py-28 relative">
           <div className="text-overline text-gold">{t.shop.eyebrow}</div>
           <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
           <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
         </div>
-      </section>
+      </section> */}
 
+ <div className="container-drj py-2 lg:py-2 relative"></div>
       <section className="border-b border-[var(--drj-line)] bg-white sticky top-[73px] z-20">
         <div className="container-drj py-5 flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex items-center gap-2 border-b border-[var(--drj-line)] flex-1 max-w-md">

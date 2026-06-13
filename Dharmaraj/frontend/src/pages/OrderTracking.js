@@ -46,7 +46,7 @@ export default function OrderTracking() {
     <div data-testid="track-page" className="bg-white min-h-screen">
       <section className="bg-cream relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
-        <div className="container-drj py-20 lg:py-28 relative">
+        <div className="container-drj py-6 lg:py-10 relative">
           <div className="text-overline text-gold">Status</div>
           <h1 className="font-serif text-5xl lg:text-6xl mt-3 tracking-tight text-forest">Track Your Order</h1>
           <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">Enter your order number and the mobile used at checkout to see where your ritual is.</p>
