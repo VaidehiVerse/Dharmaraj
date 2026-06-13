@@ -32,7 +32,7 @@ export default function About() {
           </div>
           <div className="lg:col-span-7">
             <div className="drj-divider text-overline mb-4">Our Story</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight leading-tight">From Surat, with reverence.</h2>
+            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight leading-tight">Selfless Service and Nature’s Blessing: A Father’s Journey</h2>
             <p className="text-[var(--drj-ink-muted)] mt-6 leading-relaxed font-light">
               Dharmaraj Ayurveda was born from a single, stubborn belief: that the wisdom of the ancients
               deserves not a museum, but a living seat at the modern table. In a market crowded with watered-down
@@ -55,7 +55,7 @@ export default function About() {
       {/* FOUNDER */}
       <FounderCard compact />
 
-      <section className="section bg-cream">
+      <section className="py-1 section bg-cream">
         <div className="container-drj">
           <div className="text-center mb-12">
             <GoldDivider />
@@ -65,7 +65,7 @@ export default function About() {
             {[
               { icon: Leaf, t: "Mission", d: "To restore the integrity of Ayurvedic formulation — pure herbs, classical wisdom, modern standardization." },
               { icon: Sparkles, t: "Vision", d: "An India where every household has at least one Ayurvedic ritual that grandparents would proudly recognize." },
-              { icon: ShieldCheck, t: "Promise", d: "Every batch is third-party tested. If your bottle doesn't honour our promise, we replace it. No questions." },
+              { icon: ShieldCheck, t: "Promise", d: "Every bottle is a promise of pure, potent benefits, verified by rigorous third-party tests." },
             ].map((b) => (
               <div key={b.t} className="bg-white border border-[var(--drj-line)] p-10 hover:border-gold transition" data-testid={`about-${b.t.toLowerCase()}`}>
                 <span className="w-12 h-12 flex items-center justify-center bg-[var(--drj-gold-soft)] border border-[var(--drj-gold)] text-gold">

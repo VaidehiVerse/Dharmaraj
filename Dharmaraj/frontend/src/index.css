@@ -21,13 +21,13 @@
   --drj-gold-soft: #f7ecc6;
   --drj-shadow-warm: 0 24px 50px -24px rgba(212, 175, 55, 0.25);
 
-  /* Home page vertical rhythm — change these to tighten or loosen section gaps */
-  --home-section-py: 4rem;       /* 64px between major blocks (mobile/tablet) */
-  --home-section-py-lg: 6rem;    /* 96px on large screens */
-  --home-hero-py: 4rem;          /* hero top/bottom (was py-16) */
-  --home-hero-py-lg: 6.5rem;     /* hero on desktop (was py-28 / 7rem) */
-  --home-trust-py: 2rem;         /* trust strip vertical padding (was py-10) */
-  --home-trust-gap: 1rem;        /* gap between trust cards (was gap-5) */
+  
+  --home-section-py: 4rem;      
+  --home-section-py-lg: 6rem;   
+  --home-hero-py: 4rem;          
+  --home-hero-py-lg: 6.5rem;     
+  --home-trust-py: 2rem;        
+  --home-trust-gap: 1rem;       
 }
 
 @layer base {

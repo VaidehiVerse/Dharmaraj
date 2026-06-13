@@ -14,7 +14,7 @@ import TrustStrip from "@/components/TrustStrip";
 const HOW_IT_WORKS = [
   { icon: Beaker, title: "Standardized Extracts", desc: "We use HPLC-verified extracts (5% Withanolides, 95% Curcuminoids) instead of raw powders — guaranteeing precise potency in every capsule." },
   { icon: FlaskConical, title: "Synergistic Blending", desc: "Trikatu (Ginger + Piper) is paired with Ashwagandha & Shatavari to multiply absorption (up to 2000% via piperine) and balance Vata-Pitta-Kapha." },
-  { icon: Sun, title: "Daily Rasayana Ritual", desc: "Two capsules with warm milk activate dormant Ojas. Over 30 days, immunity, stamina and clarity build quietly from within." },
+  { icon: Sun, title: "Daily Rasayana Ritual", desc: "Two capsules per day activate dormant Ojas. Over 30 days, immunity, stamina and clarity build quietly from within." },
 ];
 
 export default function Product() {
@@ -190,32 +190,44 @@ export default function Product() {
 
       <TrustStrip />
 
-      {/* PRODUCT STORY — large bottle with description around */}
       <section className="section bg-sand relative overflow-hidden" data-testid="product-story-section">
-        <div className="container-drj">
-          <div className="text-center mb-12">
-            <div className="drj-divider text-overline mb-4">The Vajra Story</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">A formula whispered through generations.</h2>
-          </div>
-          <div className="grid lg:grid-cols-3 gap-8 items-center">
-            <div className="space-y-8 lg:text-right">
-              <Highlight title="Ashwagandha 300mg" body="The classical adaptogen. Standardized to 5% Withanolides, it gently lowers cortisol and rebuilds stamina." align="right" />
-              <Highlight title="White Musli 200mg" body="Saponin-rich Chlorophytum revered as the 'divine ginseng' of India — for vitality and endurance." align="right" />
-              <Highlight title="Giloy 150mg" body="Tinospora's bitter wisdom — kindles immunity at the cellular level." align="right" />
-            </div>
-            <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center order-first lg:order-none">
-              <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-50" />
-              <div className="absolute inset-4 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-40 animate-[ringRotate_60s_linear_infinite]" />
-              <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 max-h-[70%]" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.45))" }} />
-            </div>
-            <div className="space-y-8">
-              <Highlight title="Shatavari 150mg" body="The 'queen of herbs' — nourishment, hormonal balance, and feminine vitality." align="left" />
-              <Highlight title="Curcumin 50mg" body="95% standardized Curcuminoids paired with Piperine for joint mobility and anti-oxidation." align="left" />
-              <Highlight title="Trikatu 50mg" body="Ginger, Black Pepper, Long Pepper — Ayurveda's classical fire for digestion and absorption." align="left" />
-            </div>
-          </div>
+  <div className="container-drj">
+    <div className="text-center mb-12">
+      <div className="drj-divider text-overline mb-4">The Vajra Story</div>
+      <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">A formula whispered through generations.</h2>
+    </div>
+
+    {/* Main layout: Central bottle, ingredients around */}
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+      {/* Left Column (3 items) */}
+      <div className="space-y-8 lg:w-1/3">
+        <Highlight title="Ashwagandha Extract 30 gms" body="The classical adaptogen. Standardized to 5% Withanolides, it gently lowers cortisol and rebuilds stamina." align="right" />
+        <Highlight title="White Musli Extract 20 gms" body="Saponin-rich Chlorophytum revered as the 'divine ginseng' of India — for vitality and endurance." align="right" />
+        <Highlight title="Giloy Extract 15 gms" body="Tinospora's bitter wisdom — kindles immunity at the cellular level." align="right" />
+      </div>
+
+      {/* Center Column (Bottle + Amla below) */}
+      <div className="flex flex-col items-center gap-8 lg:w-1/3">
+        <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center w-full max-w-[400px]">
+          <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-50" />
+          <div className="absolute inset-4 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-40 animate-[ringRotate_60s_linear_infinite]" />
+          <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 max-h-[70%]" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.45))" }} />
         </div>
-      </section>
+        {/* Amla moved below the bottle */}
+        <div className="w-full">
+          <Highlight title="Amla Extract 10 gms" body="The ultimate rejuvenator. Vitamin-C rich tonic for cellular vitality and systemic detoxification." align="center" />
+        </div>
+      </div>
+
+      {/* Right Column (3 items) */}
+      <div className="space-y-8 lg:w-1/3">
+        <Highlight title="Shatavari Extract 15 gms" body="The 'queen of herbs' — nourishment, hormonal balance, and feminine vitality." align="left" />
+        <Highlight title="Curcumin Extract 5 gms" body="95% standardized Curcuminoids paired with Piperine for joint mobility and anti-oxidation." align="left" />
+        <Highlight title="Trikatu Extract 5 gms" body="Ginger, Black Pepper, Long Pepper — Ayurveda's classical fire for digestion and absorption." align="left" />
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* HOW IT WORKS */}
       <section className="section bg-cream" data-testid="how-it-works-section">

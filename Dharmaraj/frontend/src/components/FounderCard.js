@@ -12,7 +12,7 @@ import { useI18n } from "@/context/I18nContext";
 export default function FounderCard({ compact = false }) {
   const { t } = useI18n();
   return (
-    <section className="section bg-white relative overflow-hidden" data-testid="founder-section">
+    <section className="section !py-2 bg-white relative overflow-hidden" data-testid="founder-section">
       <div className="absolute -top-32 -right-32 w-[480px] h-[480px] bg-[var(--drj-gold-soft)] opacity-40 rounded-full blur-3xl pointer-events-none" />
       <div className="container-drj relative">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">

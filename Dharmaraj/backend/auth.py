@@ -40,7 +40,7 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 
 def _secret() -> str:
-    return os.environ["JWT_SECRET"]
+    return os.environ.get("JWT_SECRET", "super_secret_key_change_me_in_production")
 
 
 def create_access_token(user_id: str, email: str, role: str) -> str:
@@ -248,7 +248,6 @@ def get_auth_dependencies(db):
                 "used": False,
                 "created_at": _now().isoformat(),
             })
-            # In a real app we'd send via Resend/SendGrid. For MVP we log the link.
             import logging
             logging.getLogger(__name__).info(f"[PASSWORD RESET] {email}: token={token}")
         return {"ok": True, "message": "If that email exists, a reset link has been sent."}

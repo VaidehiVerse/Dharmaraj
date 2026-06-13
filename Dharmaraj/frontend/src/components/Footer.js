@@ -41,7 +41,7 @@ export default function Footer() {
               of reverence to a 5,000-year-old science of wellness.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {["Udyam Certification", "FSSAI Licensed", "ISO Certified", "GST Registered"].map((b) => (
+              {["Udyam Certified", "FSSAI Licensed", "ISO Certified", "GST Registered"].map((b) => (
                 <span key={b} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-[var(--drj-gold)] text-xs text-forest">
                   <BadgeCheck size={12} className="text-gold" /> {b}
                 </span>

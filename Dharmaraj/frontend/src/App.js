@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "@/App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
@@ -51,6 +51,13 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  // Automatically configure runtime api pointers before layout initialization
+  useEffect(() => {
+    const targetUrl = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+    window.__API_URL__ = targetUrl;
+    localStorage.setItem("api_url", targetUrl);
+  }, []);
+
   return (
     <div className="App">
       <I18nProvider>
