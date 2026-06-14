@@ -13,7 +13,7 @@ export const BRAND = {
   /** Black-label bottle — home hero circle only */
   heroProductImage: "/images/vajra-bottle-transparent.png",
   productLabel: "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
-  productChakras: "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
+  // productChakras: "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
   founder: {
     name: "Jignesh Mehta",
     title: "Founder · Dharmaraj Ayurveda",

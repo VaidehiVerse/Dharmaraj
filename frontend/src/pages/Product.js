@@ -86,20 +86,22 @@ export default function Product() {
       {/* HERO PRODUCT */}
       <section className="bg-cream relative overflow-hidden">
         <div className="absolute top-10 right-10 w-72 h-72 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
-        <div className="container-drj py-10 lg:py-16 grid lg:grid-cols-2 gap-12 relative">
+        <div className="container-drj py-2 lg:py-6 grid lg:grid-cols-2 gap-12 relative">
           <div>
             <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center overflow-hidden" data-testid="product-main-image">
               <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-40" />
               <motion.img
-                key={active}
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-                src={product.images[active]}
-                alt={product.name}
-                className="relative z-10 max-h-[78%] max-w-[78%] object-contain"
-                style={{ filter: "drop-shadow(0 28px 50px rgba(212,175,55,0.4))" }}
-              />
+  key={active}
+  initial={{ opacity: 0, scale: 1.04 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.4 }}
+  src={product.images[active]}
+  alt={product.name}
+  className={`relative z-10 object-contain ${
+    active === 1 ? "max-h-[95%] max-w-[95%]" : "max-h-[78%] max-w-[78%]"
+  }`}
+  style={{ filter: "drop-shadow(0 28px 50px rgba(212,175,55,0.4))" }}
+/>
               <span className="absolute top-5 left-5 bg-gold text-white px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold z-20">Flagship</span>
             </div>
             <div className="grid grid-cols-4 gap-3 mt-4">
@@ -188,10 +190,7 @@ export default function Product() {
         </div>
       </section>
 
-    
-
-   <section className="section bg-sand relative overflow-hidden" data-testid="product-story-section">
-  <div className="container-drj">
+<section className="py-12 bg-sand relative overflow-hidden" data-testid="product-story-section">  <div className="container-drj">
     <div className="text-center mb-12">
       <div className="drj-divider text-overline mb-4">The Vajra Story</div>
       <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">A formula whispered through generations.</h2>
@@ -201,9 +200,9 @@ export default function Product() {
     <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
       {/* Left Column (3 items) */}
       <div className="space-y-8 lg:w-1/3">
-        <Highlight title="Ashwagandha Extract 30 gms" body="The classical adaptogen. Standardized to 5% Withanolides, it gently lowers cortisol and rebuilds stamina." align="right" />
-        <Highlight title="White Musli Extract 20 gms" body="Saponin-rich Chlorophytum revered as the 'divine ginseng' of India — for vitality and endurance." align="right" />
-        <Highlight title="Giloy Extract 15 gms" body="Tinospora's bitter wisdom — kindles immunity at the cellular level." align="right" />
+        <Highlight title="Ashwagandha Extract 30 grams" body="The classical adaptogen. Standardized to 5% Withanolides, it gently lowers cortisol and rebuilds stamina." align="right" />
+        <Highlight title="White Musli Extract 20 grams" body="Saponin-rich Chlorophytum revered as the 'divine ginseng' of India — for vitality and endurance." align="right" />
+        <Highlight title="Giloy Extract 15 grams" body="Tinospora's bitter wisdom — kindles immunity at the cellular level." align="right" />
       </div>
 
       {/* Center Column (Bottle + Amla below) */}
@@ -215,22 +214,22 @@ export default function Product() {
         </div>
         {/* Amla moved below the bottle */}
         <div className="w-full">
-          <Highlight title="Amla Extract 10 gms" body="The ultimate rejuvenator. Vitamin-C rich tonic for cellular vitality and systemic detoxification." align="center" />
+          <Highlight title="Amla Extract 10 grams" body="The ultimate rejuvenator. Vitamin-C rich tonic for cellular vitality and systemic detoxification." align="center" />
         </div>
       </div>
 
       {/* Right Column (3 items) */}
       <div className="space-y-8 lg:w-1/3">
-        <Highlight title="Shatavari Extract 15 gms" body="The 'queen of herbs' — nourishment, hormonal balance, and feminine vitality." align="left" />
-        <Highlight title="Curcumin Extract 5 gms" body="95% standardized Curcuminoids paired with Piperine for joint mobility and anti-oxidation." align="left" />
-        <Highlight title="Trikatu Extract 5 gms" body="Ginger, Black Pepper, Long Pepper — Ayurveda's classical fire for digestion and absorption." align="left" />
+        <Highlight title="Shatavari Extract 15 grams" body="The 'queen of herbs' — nourishment, hormonal balance, and feminine vitality." align="left" />
+        <Highlight title="Curcumin Extract 5 grams" body="95% standardized Curcuminoids paired with Piperine for joint mobility and anti-oxidation." align="left" />
+        <Highlight title="Trikatu Extract 5 grams" body="Ginger, Black Pepper, Long Pepper — Ayurveda's classical fire for digestion and absorption." align="left" />
       </div>
     </div>
   </div>
 </section>
-
       {/* HOW IT WORKS */}
-      <section className="section bg-cream" data-testid="how-it-works-section">
+      
+<section className="py-10 bg-cream" data-testid="how-it-works-section">
         <div className="container-drj">
           <div className="text-center mb-12">
             <div className="drj-divider text-overline mb-4">How It Works</div>
@@ -263,7 +262,7 @@ export default function Product() {
 
       {/* TABS */}
       <section className="bg-white border-t border-[var(--drj-line)]">
-        <div className="container-drj py-16 lg:py-24">
+        <div className="container-drj py-4 lg:py-6">
           <div className="flex gap-8 border-b border-[var(--drj-line)] overflow-x-auto no-scrollbar">
             {[
               ["description", "Description"],
