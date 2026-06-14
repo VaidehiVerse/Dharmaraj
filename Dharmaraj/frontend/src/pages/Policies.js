@@ -46,8 +46,8 @@ const POLICIES = {
     title: "Refund Policy",
     subtitle: "Our 30-Day Wellness Promise.",
     sections: [
-      { h: "30-Day Money-Back Guarantee", p: "If you are unsatisfied with your purchase, contact us within 30 days of delivery for a refund or replacement. Unopened, unused products qualify for a full refund." },
-      { h: "Opened Products", p: "For opened bottles, we evaluate refunds on a case-by-case basis. Our intent is fairness — we have rarely refused a sincere request." },
+{ 
+  h: "7-Day Return Policy", p: "You may initiate a return request within 7 days of delivery. To be eligible, the product must be in its original, unopened, and unused packaging. Our team will verify the condition of the product upon request to determine eligibility for a return or replacement."},      { h: "Opened Products", p: "For opened bottles, we evaluate refunds on a case-by-case basis. Our intent is fairness — we have rarely refused a sincere request." },
       { h: "How to Initiate a Refund", p: `Email ${BRAND.email} or WhatsApp ${BRAND.phone} with your order number and reason. Our team will respond within 24 hours with next steps.` },
       { h: "Refund Timeline", p: "Once approved and the product is received back (if applicable), refunds are processed within 5–7 working days to your original payment method." },
       { h: "Non-Refundable", p: "Shipping fees and COD handling charges (if any) are non-refundable. Promotional gifts and bundle discount items cannot be partially refunded." },

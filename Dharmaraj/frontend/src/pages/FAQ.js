@@ -15,7 +15,7 @@ const FAQS = [
   { cat: "Delivery", q: "Do you offer Cash on Delivery?", a: "Yes — COD is available across India. A small handling fee may apply for very remote pincodes." },
   { cat: "Payments", q: "Which payment methods do you support?", a: "UPI (GPay, PhonePe, Paytm), credit & debit cards, net banking, wallets, and Cash on Delivery." },
   { cat: "Payments", q: "Are online payments secure?", a: "Yes. We use industry-standard encryption for all online transactions. We never store card details." },
-  { cat: "Refunds", q: "What is your refund policy?", a: "We offer a 30-day money-back promise on unopened products. For opened bottles, please reach out via WhatsApp — we'll always find a fair resolution." },
+  { cat: "Refunds", q: "What is your refund policy?", a: "We offer a 7-Day Return Policy on unopened products. For opened bottles, please reach out via WhatsApp — we'll always find a fair resolution." },
   { cat: "Refunds", q: "How long do refunds take?", a: "Once approved, refunds are processed within 5–7 working days to your original payment method." },
   { cat: "Returns", q: "Can I exchange a product?", a: "Yes. Within 7 days of delivery for damaged or incorrect items. Contact our wellness desk on WhatsApp." },
 ];

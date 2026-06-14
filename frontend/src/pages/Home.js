@@ -180,7 +180,7 @@ export default function Home() {
             </div>
             <Link to="/shop" className="btn-outline" data-testid="shop-all-cta">View All <ArrowRight size={16}/></Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6" data-testid="coming-soon-grid">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" data-testid="coming-soon-grid">
             {customProducts.map((p) => (
               <Link key={p.id} to={p.link} className="group block bg-white border border-[var(--drj-line)] hover:border-gold transition" data-testid={`coming-soon-${p.slug}`}>
                 <div className="aspect-[4/5] overflow-hidden relative bg-cream flex items-center justify-center">

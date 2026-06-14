@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { apiClient } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { useI18n } from "@/context/I18nContext";
+import { getCustomName } from "@/lib/productConfig"; // 1. Added import
 
 export default function Shop() {
   const { t } = useI18n();
@@ -48,16 +49,8 @@ export default function Shop() {
 
   return (
     <div data-testid="shop-page" className="bg-white min-h-screen">
-      {/* <section className="bg-cream text-forest relative overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
-        <div className="container-drj py-20 lg:py-28 relative">
-          <div className="text-overline text-gold">{t.shop.eyebrow}</div>
-          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
-        </div>
-      </section> */}
-
- <div className="container-drj py-2 lg:py-2 relative"></div>
+      
+      {/* Sticky Filter Bar */}
       <section className="border-b border-[var(--drj-line)] bg-white sticky top-[73px] z-20">
         <div className="container-drj py-5 flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex items-center gap-2 border-b border-[var(--drj-line)] flex-1 max-w-md">
@@ -95,15 +88,32 @@ export default function Shop() {
         </div>
       </section>
 
+      {/* Product Grid */}
       <section className="container-drj py-12 lg:py-16">
         <div className="text-overline text-[var(--drj-ink-muted)] mb-6" data-testid="shop-count">{filtered.length} {t.shop.products}</div>
         {filtered.length === 0 ? (
           <div className="text-center py-20 font-light text-[var(--drj-ink-muted)]">{t.shop.no_results}</div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" data-testid="shop-grid">
-            {filtered.map((p, i) => (<ProductCard key={p.id} product={p} index={i}/>))}
+            {filtered.map((p, i) => (
+              <ProductCard 
+                key={p.id} 
+                product={{ ...p, name: getCustomName(p.name) }} // 2. Applied custom name
+                index={i}
+              />
+            ))}
           </div>
         )}
+      </section>
+
+      {/* Banner Section moved to bottom */}
+      <section className="bg-cream text-forest relative overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
+        <div className="container-drj py-20 lg:py-28 relative">
+          <div className="text-overline text-gold">{t.shop.eyebrow}</div>
+          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
+        </div>
       </section>
     </div>
   );
