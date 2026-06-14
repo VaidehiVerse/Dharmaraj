@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Sparkles, BadgeCheck } from "lucide-react";
+import { ArrowRight, Star, Sparkles } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { apiClient, inr } from "@/lib/api";
+import { apiClient } from "@/lib/api";
 import { BRAND, whatsappLink } from "@/lib/brand";
-import { useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
 import TrustStrip from "@/components/TrustStrip";
-import RadialBenefits from "@/components/RadialBenefits";
 import FounderCard from "@/components/FounderCard";
 import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig, GoldDivider } from "@/components/AyurvedaArt";
 
@@ -20,15 +18,66 @@ const faqs = [
   { q: "Where do you ship and how long does it take?", a: "We ship across India. Metro cities receive orders in 2–4 working days; other locations in 4–7 working days. Free shipping above ₹999." },
 ];
 
+// Custom localized product array adjusted with .jpeg paths and max-h-[95%] for Awakening Soon
+const customProducts = [
+  {
+    id: "1-vajra",
+    slug: "1-vajra",
+    name: "1 Vajra",
+    tagline: "Ojas & Vitality Rasayana",
+    image: "/images/ai-bottle-1.jpeg", // 👈 Keeps your new .jpeg image ONLY for this grid item card
+    status: "Available",
+    link: "/product/1-vajra",
+    sizeClass: "max-h-[95%] w-auto object-contain p-2" 
+  },
+  {
+    id: "prod-2",
+    slug: "product-2",
+    name: "Tejas Elixir",
+    tagline: "Skin & Aura Glow",
+    image: "/images/ai-bottle-2.jpeg", 
+    status: "Soon",
+    link: "#",
+    sizeClass: "max-h-[95%] w-auto object-contain p-2" 
+  },
+  {
+    id: "prod-3",
+    slug: "product-3",
+    name: "Prana Herbs",
+    tagline: "Respiratory & Immunity",
+    image: "/images/ai-bottle-3.jpeg", 
+    status: "Soon",
+    link: "#",
+    sizeClass: "max-h-[95%] w-auto object-contain p-2" 
+  },
+  {
+    id: "prod-4",
+    slug: "product-4",
+    name: "Soma Oil",
+    tagline: "Tranquility & Sleep Blend",
+    image: "/images/ai-bottle-4.jpeg", 
+    status: "Soon",
+    link: "#",
+    sizeClass: "max-h-[95%] w-auto object-contain p-2" 
+  },
+  {
+    id: "prod-5",
+    slug: "product-5",
+    name: "Medha Ghrutam",
+    tagline: "Cognitive Focus & Memory",
+    image: "/images/ai-bottle-5.jpeg", 
+    status: "Soon",
+    link: "#",
+    sizeClass: "max-h-[95%] w-auto object-contain p-2" 
+  }
+];
+
 export default function Home() {
   const [vajra, setVajra] = useState(null);
-  const [products, setProducts] = useState([]);
-  const { addItem } = useCart();
   const { t } = useI18n();
 
   useEffect(() => {
     apiClient.get("/products/1-vajra").then((r) => setVajra(r.data)).catch(() => {});
-    apiClient.get("/products", { params: { coming_soon: true } }).then((r) => setProducts(r.data)).catch(() => {});
   }, []);
 
   return (
@@ -62,14 +111,12 @@ export default function Home() {
               <Link to="/product/1-vajra" className="btn-gold" data-testid="hero-buy-now">
                 {t.hero.buy} <ArrowRight size={16} />
               </Link>
-              <a href="#benefits" className="btn-outline" data-testid="hero-explore-benefits">
+              <Link to="/shop" className="btn-outline" data-testid="hero-explore-benefits">
                 {t.hero.explore}
-              </a>
+              </Link>
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-6 text-xs text-[var(--drj-ink-muted)] uppercase tracking-[0.2em]">
               <span className="flex items-center gap-2 text-forest"><Star size={14} className="fill-gold text-gold" /> {t.hero.reviews}</span>
-              
-              
             </div>
 
             {/* Founder mini badge */}
@@ -85,15 +132,14 @@ export default function Home() {
 
           <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.15 }} className="relative z-10">
             <div className="relative aspect-square max-w-lg mx-auto flex items-center justify-center">
-  
-  <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--drj-gold-soft)] to-transparent opacity-70" />
-  <div className="absolute inset-6 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-60 animate-[ringRotate_60s_linear_infinite]" />
+              <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--drj-gold-soft)] to-transparent opacity-70" />
+              <div className="absolute inset-6 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-60 animate-[ringRotate_60s_linear_infinite]" />
 
-  <img
-    src={BRAND.heroProductImage}
-    alt="Dharmaraj Ayurveda Vajra health supplement bottle"
-    className="relative z-10 max-h-[80%] w-auto object-contain mx-auto drop-shadow-xl"
-  />
+              <img
+                src={BRAND.heroProductImage} // 👈 Restored to original so the bottle inside the circle stays safe and untouched!
+                alt="Dharmaraj Ayurveda Vajra health supplement bottle"
+                className="relative z-10 max-h-[80%] w-auto object-contain mx-auto drop-shadow-xl"
+              />
               <div className="absolute -bottom-4 -right-4 bg-white border border-[var(--drj-gold)] p-5 shadow-xl">
                 <div className="text-overline text-gold">From</div>
                 <div className="font-serif text-3xl text-forest leading-none mt-1">₹999</div>
@@ -109,144 +155,22 @@ export default function Home() {
       {/* TRUST STRIP */}
       <TrustStrip />
 
-      {/* WHY AYURVEDA */}
-      <section className="section bg-sand">
-        <div className="container-drj grid lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5">
-            <div className="gold-frame">
-              <div className="aspect-[4/5] overflow-hidden">
-                <img src="https://images.pexels.com/photos/37589314/pexels-photo-37589314.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Meditating in nature" className="w-full h-full object-cover" />
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-7">
-            <div className="drj-divider text-overline mb-6">Why Ayurveda</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight leading-tight">
-              A 5,000-year-old science of harmony — distilled into a daily ritual.
-            </h2>
-            <p className="text-[var(--drj-ink-muted)] mt-6 leading-relaxed text-lg font-light">
-              Ayurveda doesn't isolate symptoms — it nourishes the source. Standardized botanical
-              extracts work in concert with your body's intelligence, building strength quietly
-              from within. No stimulants. No crashes. Just deep, durable wellness.
-            </p>
-            <div className="grid sm:grid-cols-3 gap-6 mt-10">
-              {[
-                { num: "60", label: "Veg Capsules" },
-                { num: "2 Daily ", label: "(1 Morning, 1 Night)" },
-                { num: "30-Day", label: "Wellness Cycle" },
-              ].map((s) => (
-                <div key={s.label} className="border-l-2 border-gold pl-4">
-                  <div className="font-serif text-4xl text-forest">{s.num}</div>
-                  <div className="text-overline text-[var(--drj-ink-muted)] mt-1">{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* RADIAL BENEFITS (with anchor) */}
-      <div id="benefits"><RadialBenefits /></div>
-
-      {/* INGREDIENTS DEEP DIVE */}
-      {vajra && (
-        <section className="section bg-cream relative overflow-hidden">
-          <div className="container-drj relative">
-            <div className="grid lg:grid-cols-12 gap-12 items-start">
-              <div className="lg:col-span-4 lg:sticky lg:top-32">
-                <div className="text-overline text-gold mb-4">The Formula</div>
-                <h2 className="font-serif text-4xl lg:text-5xl tracking-tight leading-tight text-forest">
-                  Nine herbs.<br />One quiet revolution.
-                </h2>
-                <p className="text-[var(--drj-ink-muted)] mt-6 leading-relaxed font-light">
-                  Each capsule of 1 Vajra is a precision blend of standardized botanicals.
-                  Not raw powder — extracts measured for potency the way classical
-                  Rasashastra demanded.
-                </p>
-                <Link to="/product/1-vajra" className="btn-primary mt-8" data-testid="ingredients-cta">
-                  Explore Full Formula <ArrowRight size={16} />
-                </Link>
-              </div>
-              <div className="lg:col-span-8 grid sm:grid-cols-2 gap-3">
-                {vajra.ingredients.map((ing, i) => (
-                  <motion.div
-                    key={ing.name}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.04 }}
-                    className="bg-white border border-[var(--drj-line)] p-6 hover:border-gold transition-all"
-                    data-testid={`ingredient-${ing.name.toLowerCase().replace(/\s+/g, "-")}`}
-                  >
-                    <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="font-serif text-2xl text-forest">{ing.name}</h3>
-                      <span className="text-overline text-gold whitespace-nowrap">{ing.qty}</span>
-                    </div>
-                    <div className="text-xs italic text-[var(--drj-ink-muted)] mt-1">{ing.botanical}</div>
-                    <div className="text-xs text-gold mt-3">{ing.std}</div>
-                    <p className="text-sm text-[var(--drj-ink-muted)] mt-2">{ing.benefit}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* FOUNDER */}
       <FounderCard />
 
-      {/* FEATURED PRODUCT */}
-      {vajra && (
-        <section className="section bg-sand">
-          <div className="container-drj grid lg:grid-cols-2 gap-16 items-center">
-            <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-12 rounded-full bg-[var(--drj-gold-soft)] opacity-50" />
-              <img src={vajra.images[0]} alt="1 Vajra" className="relative z-10 w-3/4 h-auto" style={{ filter: "drop-shadow(0 24px 50px rgba(212,175,55,0.4))" }} />
-              <span className="absolute top-6 left-6 bg-gold text-white px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold">Flagship</span>
-            </div>
-            <div>
-              <div className="text-overline text-gold mb-3">Featured Product</div>
-              <h2 className="font-serif text-5xl lg:text-6xl text-forest tracking-tight">1 Vajra</h2>
-              <p className="text-overline text-[var(--drj-ink-muted)] mt-3">{vajra.tagline}</p>
-              <div className="flex items-center gap-2 mt-5 text-sm">
-                <div className="flex">{[1,2,3,4,5].map((s)=>(<Star key={s} size={14} className="fill-gold text-gold"/>))}</div>
-                <span className="font-medium text-forest">{vajra.rating}</span>
-                <span className="text-[var(--drj-ink-muted)]">· {vajra.review_count} verified reviews</span>
-              </div>
-              <p className="text-[var(--drj-ink-muted)] mt-6 leading-relaxed font-light">{vajra.short_description}</p>
-              <div className="flex items-baseline gap-3 mt-8">
-                <span className="font-serif text-4xl text-forest">{inr(vajra.price)}</span>
-                <span className="text-lg line-through text-[var(--drj-ink-muted)]">{inr(vajra.mrp)}</span>
-                <span className="text-xs px-2 py-1 bg-[var(--drj-gold-soft)] text-forest border border-[var(--drj-gold)]">SAVE {Math.round((1-vajra.price/vajra.mrp)*100)}%</span>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <button onClick={() => addItem(vajra, 1)} className="btn-primary" data-testid="featured-add-to-cart">
-                  {t.cta.add_to_cart} <ArrowRight size={16}/>
-                </button>
-                <Link to="/product/1-vajra" className="btn-outline" data-testid="featured-view-details">{t.cta.details}</Link>
-                <a href={whatsappLink()} target="_blank" rel="noreferrer" className="btn-outline-gold" data-testid="featured-whatsapp">
-                  <i className="fa-brands fa-whatsapp"></i> WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* TESTIMONIALS */}
-      <section className="section bg-white">
-        <div className="container-drj">
-          <div className="text-center mb-12">
-            <GoldDivider className="mb-4" />
-            <div className="drj-divider text-overline mb-4">Voices from the Circle</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">Trusted across India.</h2>
-          </div>
-          <Testimonials />
-        </div>
-      </section>
-
-      {/* COMING SOON */}
+      <section className="py-1 bg-white">
+  <div className="container-drj">
+    {/* 2. Reduce 'mb-12' to 'mb-8' to bring the heading closer to the cards */}
+    <div className="text-center mb-8">
+      <GoldDivider className="mb-4" />
+      <div className="drj-divider text-overline mb-4">Voices from the Circle</div>
+      <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">Trusted across India.</h2>
+    </div>
+    <Testimonials vajra={vajra} />
+  </div>
+</section>
+      {/* AWAKENING SOON */}
       <section className="section bg-cream">
         <div className="container-drj">
           <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
@@ -257,11 +181,17 @@ export default function Home() {
             <Link to="/shop" className="btn-outline" data-testid="shop-all-cta">View All <ArrowRight size={16}/></Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6" data-testid="coming-soon-grid">
-            {products.map((p) => (
-              <Link key={p.id} to="#" className="group block bg-white border border-[var(--drj-line)] hover:border-gold transition" data-testid={`coming-soon-${p.slug}`}>
-                <div className="aspect-[4/5] overflow-hidden relative bg-cream">
-                  <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <span className="absolute top-3 left-3 bg-forest text-[var(--drj-gold-bright)] px-2 py-1 text-[9px] tracking-[0.2em] uppercase">Soon</span>
+            {customProducts.map((p) => (
+              <Link key={p.id} to={p.link} className="group block bg-white border border-[var(--drj-line)] hover:border-gold transition" data-testid={`coming-soon-${p.slug}`}>
+                <div className="aspect-[4/5] overflow-hidden relative bg-cream flex items-center justify-center">
+                  <img 
+                    src={p.image} 
+                    alt={p.name} 
+                    className={`group-hover:scale-105 transition-transform duration-700 ${p.sizeClass}`} 
+                  />
+                  <span className="absolute top-3 left-3 bg-forest text-[var(--drj-gold-bright)] px-2 py-1 text-[9px] tracking-[0.2em] uppercase">
+                    {p.status}
+                  </span>
                 </div>
                 <div className="p-5">
                   <div className="font-serif text-lg text-forest leading-tight">{p.name}</div>
@@ -347,13 +277,18 @@ export default function Home() {
   );
 }
 
-const Testimonials = () => {
+const Testimonials = ({ vajra }) => {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-    apiClient.get("/products/1-vajra").then((r) => {
-      apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data.slice(0, 6)));
-    }).catch(()=>{});
-  }, []);
+    if (vajra?.id) {
+      apiClient.get(`/reviews/${vajra.id}`).then((rev) => setReviews(rev.data.slice(0, 6))).catch(() => {});
+    } else {
+      apiClient.get("/products/1-vajra").then((r) => {
+        apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data.slice(0, 6)));
+      }).catch(() => {});
+    }
+  }, [vajra]);
+
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="testimonials-grid">
       {reviews.map((r) => (

@@ -7,7 +7,6 @@ import { TulsiSprig, GoldDivider } from "@/components/AyurvedaArt";
 export default function About() {
   return (
     <div data-testid="about-page" className="bg-white">
-      
 
       <section className="section">
         <div className="container-drj grid lg:grid-cols-12 gap-12 items-center">

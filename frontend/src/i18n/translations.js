@@ -142,7 +142,7 @@ export const TRANSLATIONS = {
       vision_t: "Vision",
       vision_d: "An India where every household has at least one Ayurvedic ritual that grandparents would proudly recognize.",
       promise_t: "Promise",
-      promise_d: "Every batch is third-party tested. If your bottle doesn't honour our promise, we replace it. No questions.",
+      promise_d: "Every bottle is a promise of pure, potent benefits, verified by rigorous third-party tests.",
     },
     blog: {
       eyebrow: "Journal",

@@ -48,14 +48,7 @@ export default function Shop() {
 
   return (
     <div data-testid="shop-page" className="bg-white min-h-screen">
-      <section className="bg-cream text-forest relative overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
-        <div className="container-drj py-20 lg:py-28 relative">
-          <div className="text-overline text-gold">{t.shop.eyebrow}</div>
-          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
-        </div>
-      </section>
+      
 
       <section className="border-b border-[var(--drj-line)] bg-white sticky top-[73px] z-20">
         <div className="container-drj py-5 flex flex-col md:flex-row md:items-center gap-4">
@@ -94,8 +87,8 @@ export default function Shop() {
         </div>
       </section>
 
-      <section className="container-drj py-12 lg:py-16">
-        <div className="text-overline text-[var(--drj-ink-muted)] mb-6" data-testid="shop-count">{filtered.length} {t.shop.products}</div>
+      <section className="container-drj py-6 lg:py-8">
+        <div className="text-overline text-[var(--drj-ink-muted)] mb-2" data-testid="shop-count">{filtered.length} {t.shop.products}</div>
         {filtered.length === 0 ? (
           <div className="text-center py-20 font-light text-[var(--drj-ink-muted)]">{t.shop.no_results}</div>
         ) : (
@@ -103,6 +96,15 @@ export default function Shop() {
             {filtered.map((p, i) => (<ProductCard key={p.id} product={p} index={i}/>))}
           </div>
         )}
+      </section>
+
+<section className="bg-cream text-forest relative overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[460px] h-[460px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
+        <div className="container-drj py-3 lg:py-5 relative">
+          <div className="text-overline text-gold">{t.shop.eyebrow}</div>
+          <h1 className="font-serif text-5xl lg:text-7xl mt-3 tracking-tight">{t.shop.title}</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">{t.shop.desc}</p>
+        </div>
       </section>
     </div>
   );

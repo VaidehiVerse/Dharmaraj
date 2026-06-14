@@ -44,16 +44,15 @@ export default function OrderTracking() {
 
   return (
     <div data-testid="track-page" className="bg-white min-h-screen">
-      <section className="bg-cream relative overflow-hidden">
+<section className="bg-cream relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
-        <div className="container-drj py-20 lg:py-28 relative">
+        <div className="container-drj py-6 lg:py-12 relative">
           <div className="text-overline text-gold">Status</div>
           <h1 className="font-serif text-5xl lg:text-6xl mt-3 tracking-tight text-forest">Track Your Order</h1>
           <p className="text-[var(--drj-ink-muted)] mt-4 max-w-xl font-light">Enter your order number and the mobile used at checkout to see where your ritual is.</p>
         </div>
       </section>
-
-      <div className="container-drj py-12 lg:py-20 grid lg:grid-cols-3 gap-10">
+      <div className="container-drj py-6 lg:py-10 grid lg:grid-cols-3 gap-10">
         <form onSubmit={track} className="bg-white border border-[var(--drj-line)] p-8 lg:col-span-1 self-start space-y-6" data-testid="track-form">
           <div>
             <div className="text-overline text-[var(--drj-ink-muted)] mb-1">Order ID</div>
@@ -75,12 +74,13 @@ export default function OrderTracking() {
                   <h2 className="font-serif text-3xl text-forest mt-2">For {order.address.full_name}</h2>
                   <div className="text-xs text-[var(--drj-ink-muted)] mt-1">Placed {new Date(order.created_at).toLocaleString("en-IN")}</div>
                 </div>
+
                 <div className="text-right">
                   <div className="text-overline text-[var(--drj-ink-muted)]">Total</div>
                   <div className="font-serif text-3xl text-forest" data-testid="track-total">{inr(order.total)}</div>
                 </div>
               </div>
-
+      
               <div className="mt-10 relative" data-testid="track-timeline">
                 {ALL_STATUSES.map((s, i) => {
                   const reached = i <= Math.max(currentIdx, 0);

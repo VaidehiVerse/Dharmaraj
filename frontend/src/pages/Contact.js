@@ -24,15 +24,7 @@ export default function Contact() {
 
   return (
     <div data-testid="contact-page" className="bg-white">
-      <section className="bg-cream relative overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
-        <div className="container-drj py-24 lg:py-32 relative">
-          <div className="text-overline text-gold mb-3">Connect</div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">We're listening.</h1>
-          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Questions about your ritual? Wholesale enquiries? A friendly hello? Our wellness desk is here for you.</p>
-        </div>
-      </section>
-
+     
       <section className="section">
         <div className="container-drj grid lg:grid-cols-12 gap-12">
           <div className="lg:col-span-5 space-y-8">
@@ -58,9 +50,9 @@ export default function Contact() {
             </div>
           </div>
 
-          <form onSubmit={submit} className="lg:col-span-7 bg-white border border-[var(--drj-line)] p-8 lg:p-12 space-y-6" data-testid="contact-form">
+          <form onSubmit={submit} className="lg:col-span-7 bg-white border border-[var(--drj-line)] p-2 lg:p-5 space-y-0" data-testid="contact-form">
             <div>
-              <div className="drj-divider text-overline mb-3">Send a Message</div>
+              <div className="drj-divider text-overline mb-0">Send a Message</div>
               <h2 className="font-serif text-3xl text-forest">We respond within 24 hours.</h2>
             </div>
             <div className="grid sm:grid-cols-2 gap-6">
@@ -78,17 +70,15 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="bg-white border-t border-[var(--drj-line)]">
-        <div className="container-drj py-12">
-          <iframe
-            title="Dharmaraj Ayurveda Surat Map"
-            data-testid="contact-map"
-            className="w-full h-[420px] grayscale hover:grayscale-0 transition duration-500 border border-[var(--drj-line)]"
-            src="https://www.google.com/maps?q=Varachha+Road+Surat+Gujarat&output=embed"
-            loading="lazy"
-          />
+       <section className="bg-cream relative overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
+        <div className="container-drj py-10 lg:py-14 relative">
+          <div className="text-overline text-gold mb-3">Connect</div>
+          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight text-forest">We're listening.</h1>
+          <p className="text-[var(--drj-ink-muted)] mt-5 max-w-xl font-light text-lg">Questions about your ritual? Wholesale enquiries? A friendly hello? Our wellness desk is here for you.</p>
         </div>
       </section>
+
     </div>
   );
 }

@@ -7,36 +7,23 @@ import { TulsiSprig, GoldDivider } from "@/components/AyurvedaArt";
 export default function About() {
   return (
     <div data-testid="about-page" className="bg-white">
-      <section className="bg-cream relative overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl pointer-events-none" />
-        <div className="container-drj relative py-24 lg:py-32">
-          <div className="flex items-center gap-3 mb-6">
-            <TulsiSprig size={36} />
-            <span className="text-overline text-gold">About Us</span>
-          </div>
-          <h1 className="font-serif text-5xl lg:text-7xl tracking-tight leading-tight text-forest">
-            Rooted in Tradition.<br /><span className="shimmer-text italic">Awakened for Today.</span>
-          </h1>
-          <p className="text-[var(--drj-ink-muted)] mt-6 max-w-2xl font-light text-lg">A quiet rebellion against shortcuts — Dharmaraj Ayurveda exists to bring the original Ayurvedic intelligence to a generation that needs it most.</p>
-        </div>
-      </section>
 
       <section className="section">
         <div className="container-drj grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <div className="gold-frame">
               <div className="aspect-[4/5] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1506452305024-9d3f02d1c9b5?w=1600&q=85" alt="Forest" className="w-full h-full object-cover"/>
+                <img src="/images/father.jpeg" alt="Forest" className="w-full h-full object-cover"/>
               </div>
             </div>
           </div>
           <div className="lg:col-span-7">
             <div className="drj-divider text-overline mb-4">Our Story</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight leading-tight">From Surat, with reverence.</h2>
+            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight leading-tight">Selfless Service and Nature’s Blessing: A Father’s Journey</h2>
             <p className="text-[var(--drj-ink-muted)] mt-6 leading-relaxed font-light">
-              Dharmaraj Ayurveda was born from a single, stubborn belief: that the wisdom of the ancients
-              deserves not a museum, but a living seat at the modern table. In a market crowded with watered-down
-              herbal blends and stimulant-laced "wellness", we set out to build something honest.
+              Instead of resting after retirement, my father began an inspiring journey. For 15 years, he served the needy for free, combining Ayurvedic herbs and therapies. Witnessing thousands of patients heal gave him profound insight into the human body. Seeing their agony, he asked, "Why wait until we are ill to heal? Can we make the body strong enough to prevent disease?" This curiosity led him to ancient texts.
+
+Combining years of clinical experience, he crafted unique Ayurvedic formulas using world-class herbal extracts. These formulas focus on five pillars: building ironclad stamina and immunity, regulating metabolic systems for heart and diabetes health, ensuring mental peace, and preventing severe diseases like cancer through cellular purification. With precise dosages and deep dedication, his work is now a beacon of hope, proving that true humanity lies in building a disease-free society.
             </p>
             <p className="text-[var(--drj-ink-muted)] mt-4 leading-relaxed font-light">
               Each formulation begins with classical Vaidyas in Gujarat — physicians who have spent decades
@@ -64,8 +51,8 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: Leaf, t: "Mission", d: "To restore the integrity of Ayurvedic formulation — pure herbs, classical wisdom, modern standardization." },
-              { icon: Sparkles, t: "Vision", d: "An India where every household has at least one Ayurvedic ritual that grandparents would proudly recognize." },
-              { icon: ShieldCheck, t: "Promise", d: "Every batch is third-party tested. If your bottle doesn't honour our promise, we replace it. No questions." },
+              { icon: Sparkles, t: "Vision", d: "An India where every household has at least onEverye Ayurvedic ritual that grandparents would proudly recognize." },
+              { icon: ShieldCheck, t: "Promise", d: "Every bottle is a promise of pure, potent benefits, verified by rigorous third-party tests." },
             ].map((b) => (
               <div key={b.t} className="bg-white border border-[var(--drj-line)] p-10 hover:border-gold transition" data-testid={`about-${b.t.toLowerCase()}`}>
                 <span className="w-12 h-12 flex items-center justify-center bg-[var(--drj-gold-soft)] border border-[var(--drj-gold)] text-gold">

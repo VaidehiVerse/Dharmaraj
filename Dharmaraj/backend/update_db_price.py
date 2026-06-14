@@ -19,9 +19,8 @@ res = db.products.update_one(
         "price": 999,
         "images": [
             "/images/vajra-bottle-transparent.png",
-            "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
-            "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
-            "https://images.unsplash.com/photo-1716816211590-c15a328a5ff0?crop=entropy&cs=srgb&fm=jpg&w=1200&q=85"
+            # "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
+            # "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
         ]
     }}
 )
