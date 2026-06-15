@@ -45,98 +45,22 @@ export default function Checkout() {
     );
   }
 
-  const tryCoupon = async () => {
-    if (!coupon) return;
-    try {
-      const { data } = await apiClient.post("/coupons/validate", { code: coupon, subtotal });
-      setAppliedCoupon(data);
-      toast.success(`Applied ${data.code}`);
-    } catch (e) {
-      toast.error(e?.response?.data?.detail || "Invalid coupon");
-    }
-  };
-
-  const loadRazorpayScript = () => {
-    return new Promise((resolve, reject) => {
-      if (window.Razorpay) {
-        return resolve(true);
-      }
-      const script = document.createElement("script");
-      script.src = RAZORPAY_CHECKOUT_URL;
-      script.onload = () => resolve(true);
-      script.onerror = () => reject(new Error("Could not load Razorpay SDK"));
-      document.body.appendChild(script);
-    });
-  };
-
+  // --- DEMO MODE PLACE ORDER ---
   const placeOrder = async (e) => {
     e.preventDefault();
     setPlacing(true);
-    try {
-      if (payment === "cod") {
-        const { data } = await apiClient.post("/orders", {
-          items,
-          address,
-          coupon_code: appliedCoupon?.code,
-          payment_method: payment,
-          notes: "",
-        });
-        clear();
-        navigate(`/order-confirmation/${data.order_id}`, { state: { mobile: address.mobile } });
-        return;
-      }
-
-      const { data: razorpayOrder } = await apiClient.post("/razorpay/create-order", {
-        items,
-        address,
-        coupon_code: appliedCoupon?.code,
-        payment_method: payment,
-        notes: "",
-      });
-
-      await loadRazorpayScript();
-
-      const options = {
-        key: razorpayOrder.key_id,
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
-        name: razorpayOrder.name,
-        description: razorpayOrder.description,
-        order_id: razorpayOrder.razorpay_order_id,
-        prefill: {
-          name: address.full_name,
-          email: address.email,
-          contact: address.mobile,
-        },
-        handler: async (response) => {
-          try {
-            const { data: verification } = await apiClient.post("/razorpay/verify-payment", {
-              app_order_id: razorpayOrder.app_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-            clear();
-            toast.success("Payment successful!");
-            navigate(`/order-confirmation/${verification.order_id}`, { state: { mobile: address.mobile } });
-          } catch (verifyError) {
-            toast.error(verifyError?.response?.data?.detail || "Payment verification failed");
-          }
-        },
-        modal: {
-          ondismiss: () => {
-            toast.error("Payment cancelled");
-          },
-        },
-      };
-
-      new window.Razorpay(options).open();
-    } catch (e) {
-      toast.error(e?.response?.data?.detail || "Could not place order");
-    } finally {
+    
+    console.log("Demo Mode: Skipping backend API calls for presentation.");
+    
+    // Simulate API delay
+    setTimeout(() => {
+      clear();
+      toast.success("Order placed successfully (Demo Mode)");
+      navigate(`/order-confirmation/DEMO-ORDER-123`, { state: { mobile: address.mobile } });
       setPlacing(false);
-    }
+    }, 1500);
   };
+  // -----------------------------
 
   return (
     <div data-testid="checkout-page" className="bg-cream min-h-screen">
@@ -185,7 +109,7 @@ export default function Checkout() {
               </div>
               <div className="mt-6 flex items-center gap-2 text-xs text-[var(--drj-ink-muted)]">
                 <ShieldCheck size={14} className="text-forest"/>
-                <span>Payments are processed securely. For this demo, online payments are confirmed instantly without charge.</span>
+                <span>Payments are processed securely. Demo mode enabled for presentation.</span>
               </div>
             </section>
           </div>
@@ -202,13 +126,8 @@ export default function Checkout() {
                 ))}
               </div>
               <div className="border-t border-[var(--drj-line)] my-5"></div>
-              <div className="flex items-end gap-2 border-b border-[var(--drj-line)] mb-5">
-                <input value={coupon} onChange={(e) => setCoupon(e.target.value.toUpperCase())} className="input-luxe border-0 py-2 flex-1 uppercase" placeholder="Coupon code" data-testid="checkout-coupon-input"/>
-                <button type="button" onClick={tryCoupon} className="text-overline text-forest pb-2" data-testid="checkout-apply-coupon">Apply</button>
-              </div>
               <div className="space-y-2 text-sm">
                 <Row label="Subtotal" value={inr(subtotal)}/>
-                {totals.discount > 0 && <Row label={`Discount`} value={`− ${inr(totals.discount)}`} accent/>}
                 <Row label="Shipping" value={totals.shipping === 0 ? "Free" : inr(totals.shipping)}/>
                 <Row label="GST (5%)" value={inr(totals.tax)}/>
               </div>
@@ -219,7 +138,6 @@ export default function Checkout() {
               <button type="submit" disabled={placing} className="btn-primary w-full justify-center mt-6" data-testid="place-order-button">
                 {placing ? "Placing..." : t.checkout.place_order} <ArrowRight size={16}/>
               </button>
-              <p className="text-[10px] text-[var(--drj-ink-muted)] text-center mt-3">{t.checkout.terms}</p>
             </div>
           </div>
         </form>
