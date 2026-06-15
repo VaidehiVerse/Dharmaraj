@@ -18,7 +18,7 @@ const faqs = [
   { q: "Where do you ship and how long does it take?", a: "We ship across India. Metro cities receive orders in 2–4 working days; other locations in 4–7 working days. Free shipping above ₹999." },
 ];
 
-// Custom localized product array adjusted with .jpeg paths and max-h-[95%] for Awakening Soon
+// Awakening Soon
 const customProducts = [
   {
     id: "1-vajra",

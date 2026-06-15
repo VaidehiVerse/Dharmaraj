@@ -4,7 +4,7 @@ import { apiClient } from "@/lib/api";
 import { ArrowRight } from "lucide-react";
 import { useI18n } from "@/context/I18nContext";
 
-const CATEGORIES = ["All", "Ayurveda", "Immunity", "Digestion", "Fitness", "Herbal Medicine", "Lifestyle"];
+const CATEGORIES = ["All", "Ayurveda", "Immunity", "Digestion", "Fitness", "Herbal Supplements", "Lifestyle"];
 
 export default function Blog() {
   const { t } = useI18n();

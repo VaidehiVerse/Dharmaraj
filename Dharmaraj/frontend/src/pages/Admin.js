@@ -419,7 +419,7 @@ const BlogForm = ({ initial, onSave, onClose }) => {
           <div>
             <div className="text-overline text-[var(--drj-ink-muted)] mb-1">Category</div>
             <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className="input-luxe" data-testid="bf-category">
-              {["Ayurveda","Immunity","Digestion","Fitness","Herbal Medicine","Lifestyle"].map(c => (<option key={c}>{c}</option>))}
+              {["Ayurveda","Immunity","Digestion","Fitness","Herbal Supplements","Lifestyle"].map(c => (<option key={c}>{c}</option>))}
             </select>
           </div>
           <In label="Cover Image URL" v={form.cover_image} on={(v) => setForm({...form, cover_image: v})} wide testId="bf-cover"/>

@@ -1,19 +1,37 @@
 // src/lib/productConfig.js
 
-// This mapping provides consistent naming across the application.
-// Key = Original API Name, Value = Custom Display Name
 export const CUSTOM_NAME_MAP = {
-  "Vajra": "Dharmaraj Chyawanprash",
-  "Tejas Elixir": "Dharmaraj Triphala",
-  "Prana Herbs": "Brahmi Mind",
-  "Soma Oil": "Shilajit Gold",
-  "Medha Ghrutam": "Ashwagandha Pure"
+  "Dharmaraj Chyawanprash": "Tejas Elixir",
+  "Dharmaraj Triphala": "Prana Herbs",
+  "Brahmi Mind": "Soma Oil",
+  "Shilajit Gold": "Medha Ghrutam"
 };
 
-/**
- * Helper to get the custom name for a product.
- * Falls back to the original name if no mapping is found.
- */
-export const getCustomName = (apiName) => {
-  return CUSTOM_NAME_MAP[apiName] || apiName;
+export const TAGLINE_MAP = {
+  "Dharmaraj Chyawanprash": "Radiance & Vitality",
+  "Dharmaraj Triphala": "Nourish Your Energy",
+  "Brahmi Mind": "Soothe & Rejuvenate",
+  "Shilajit Gold": "Mental Clarity & Focus"
+};
+
+export const DESCRIPTION_MAP = {
+  "Dharmaraj Chyawanprash": "A revitalizing blend designed to enhance your natural radiance and inner vitality.",
+  "Dharmaraj Triphala": "Pure, potent botanical extracts formulated to nourish your energy and daily well-being.",
+  "Brahmi Mind": "A deeply restorative infusion crafted to soothe the senses and support physical rejuvenation.",
+  "Shilajit Gold": "An ancient, clarified butter formulation traditionally used to support mental clarity and focus."
+};
+
+export const getCustomName = (name) => {
+  const cleanName = name ? name.trim() : "";
+  return CUSTOM_NAME_MAP[cleanName] || name;
+};
+
+export const getCustomTagline = (name, original) => {
+  const cleanName = name ? name.trim() : "";
+  return TAGLINE_MAP[cleanName] || original;
+};
+
+export const getCustomDescription = (name, original) => {
+  const cleanName = name ? name.trim() : "";
+  return DESCRIPTION_MAP[cleanName] || original;
 };

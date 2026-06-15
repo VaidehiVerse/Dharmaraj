@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Star } from "lucide-react";
 import { inr } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
-import { Star } from "lucide-react";
 
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCart();
@@ -10,12 +10,11 @@ export default function ProductCard({ product, index = 0 }) {
   
   return (
     <div
-      className="group bg-white border border-[var(--drj-line)] flex flex-col transition-all duration-500 hover:border-gold"
+      className="group bg-white border border-[var(--drj-line)] flex flex-col transition-all duration-500 hover:border-gold hover:shadow-xl"
       style={{ animationDelay: `${index * 80}ms` }}
       data-testid={`product-card-${product.slug}`}
     >
-      {/* Updated aspect ratio to 3/4 for a larger, more balanced card shape */}
-      <Link to={comingSoon ? "#" : `/product/${product.slug}`} className="relative block overflow-hidden bg-[var(--drj-bg)] aspect-[3/4]">
+      <Link to={comingSoon ? "#" : `/product/${product.slug}`} className="relative block overflow-hidden bg-[var(--drj-bg)] aspect-[4/5]">
         <img 
           src={product.images[0]} 
           alt={product.name} 
@@ -23,40 +22,50 @@ export default function ProductCard({ product, index = 0 }) {
           loading="lazy" 
         />
         {comingSoon && (
-          <span className="absolute top-4 left-4 bg-obsidian text-gold px-3 py-1 text-[10px] tracking-[0.2em] uppercase">
+          <span className="absolute top-4 left-4 bg-obsidian text-gold px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase">
             Coming Soon
           </span>
         )}
         {!comingSoon && product.is_featured && (
-          <span className="absolute top-4 left-4 bg-[var(--drj-gold)] text-obsidian px-3 py-1 text-[10px] tracking-[0.2em] uppercase font-semibold">
+          <span className="absolute top-4 left-4 bg-[var(--drj-gold)] text-obsidian px-4 py-1.5 text-[11px] tracking-[0.2em] uppercase font-semibold">
             Flagship
           </span>
         )}
       </Link>
       
-      {/* Increased padding slightly to feel more 'luxe' */}
-      <div className="p-8 flex-1 flex flex-col">
-        <div className="text-overline text-gold mb-2">{product.tagline}</div>
-        <h3 className="font-serif text-2xl text-forest leading-tight mb-2">{product.name}</h3>
-        <p className="text-sm text-[var(--drj-ink-muted)] mt-2 line-clamp-2 flex-1 mb-4">{product.short_description}</p>
+      <div className="p-10 flex-1 flex flex-col">
+        {/* Tagline from Database */}
+        <div className="text-[11px] uppercase tracking-[0.2em] text-gold mb-3">
+          {product.tagline}
+        </div>
         
-        <div className="flex items-center gap-1 mb-4 text-xs">
-          <Star size={12} className="fill-gold text-gold" />
+        {/* Name from Database */}
+        <h3 className="font-serif text-3xl text-forest leading-tight mb-3">
+          {product.name}
+        </h3>
+        
+        {/* Description from Database */}
+        <p className="text-base text-[var(--drj-ink-muted)] mt-2 line-clamp-3 flex-1 mb-6">
+          {product.short_description}
+        </p>
+        
+        <div className="flex items-center gap-1 mb-6 text-sm">
+          <Star size={14} className="fill-gold text-gold" />
           <span className="text-forest font-medium">{product.rating}</span>
           <span className="text-[var(--drj-ink-muted)]">({product.review_count} reviews)</span>
         </div>
         
-        <div className="flex items-end justify-between mt-auto border-t border-[var(--drj-line)] pt-5">
+        <div className="flex items-end justify-between mt-auto border-t border-[var(--drj-line)] pt-6">
           <div>
-            <span className="font-serif text-2xl text-forest">{inr(product.price)}</span>
+            <span className="font-serif text-3xl text-forest">{inr(product.price)}</span>
             {product.mrp > product.price && (
-              <span className="ml-2 text-sm line-through text-[var(--drj-ink-muted)]">{inr(product.mrp)}</span>
+              <span className="ml-3 text-base line-through text-[var(--drj-ink-muted)]">{inr(product.mrp)}</span>
             )}
           </div>
           {comingSoon ? (
             <button
               disabled
-              className="text-xs tracking-[0.18em] uppercase text-[var(--drj-ink-muted)] cursor-not-allowed"
+              className="text-sm tracking-[0.18em] uppercase text-[var(--drj-ink-muted)] cursor-not-allowed"
               data-testid={`notify-${product.slug}`}
             >
               Notify Me
@@ -64,7 +73,7 @@ export default function ProductCard({ product, index = 0 }) {
           ) : (
             <button
               onClick={() => addItem(product, 1)}
-              className="text-xs tracking-[0.18em] uppercase text-forest hover:text-gold transition font-bold"
+              className="text-sm tracking-[0.18em] uppercase text-forest hover:text-gold transition font-bold"
               data-testid={`add-${product.slug}`}
             >
               Add → Cart
