@@ -1,9 +1,7 @@
 /**
- * Translations dictionary for Dharmaraj Ayurveda.
- *
- * English is the canonical source; `hi` (Hindi) and `gu` (Gujarati) override
- * keys consumed across all pages. Missing keys fall back to English at the
- * useI18n() consumer level via deep-merge — see I18nContext.
+ * Legacy JS dictionary — used only by `node scripts/build-locales.mjs`
+ * to generate JSON under `public/locales/` and `src/i18n/locales/`.
+ * Edit runtime translations in those JSON files (English is canonical).
  */
 export const TRANSLATIONS = {
   en: {

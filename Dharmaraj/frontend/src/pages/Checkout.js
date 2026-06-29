@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Smartphone, Wallet, Banknote, Building2, ArrowRight, ShieldCheck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { apiClient, inr } from "@/lib/api";
+import { apiClient, inr, formatApiError } from "@/lib/api";
+import { startRazorpayCheckout } from "@/lib/razorpay";
 import { toast } from "sonner";
 import { useI18n } from "@/context/I18nContext";
 
@@ -34,6 +35,17 @@ export default function Checkout() {
     return { shipping: sh, discount: disc, tax: tx, total: taxable + sh + tx };
   }, [subtotal, appliedCoupon]);
 
+  const checkoutPayload = useCallback(
+    () => ({
+      items,
+      address,
+      coupon_code: appliedCoupon?.code,
+      payment_method: payment,
+      notes: "",
+    }),
+    [items, address, appliedCoupon, payment],
+  );
+
   if (items.length === 0) {
     return (
       <div className="container-drj section text-center">
@@ -50,7 +62,7 @@ export default function Checkout() {
       setAppliedCoupon(data);
       toast.success(`Applied ${data.code}`);
     } catch (e) {
-      toast.error(e?.response?.data?.detail || "Invalid coupon");
+      toast.error(formatApiError(e?.response?.data?.detail) || "Invalid coupon");
     }
   };
 
@@ -58,13 +70,20 @@ export default function Checkout() {
     e.preventDefault();
     setPlacing(true);
     try {
-      const { data } = await apiClient.post("/orders", {
-        items, address, coupon_code: appliedCoupon?.code, payment_method: payment, notes: "",
-      });
+      let orderId;
+
+      if (payment === "cod") {
+        const { data } = await apiClient.post("/orders", { ...checkoutPayload(), payment_method: "cod" });
+        orderId = data.order_id;
+      } else {
+        orderId = await startRazorpayCheckout({ checkoutPayload: checkoutPayload(), address });
+      }
+
       clear();
-      navigate(`/order-confirmation/${data.order_id}`, { state: { mobile: address.mobile } });
+      navigate(`/order-confirmation/${orderId}`, { state: { mobile: address.mobile } });
+      toast.success("Order placed successfully");
     } catch (e) {
-      toast.error(e?.response?.data?.detail || "Could not place order");
+      toast.error(formatApiError(e?.response?.data?.detail) || e?.message || "Could not place order");
     } finally {
       setPlacing(false);
     }
@@ -117,7 +136,11 @@ export default function Checkout() {
               </div>
               <div className="mt-6 flex items-center gap-2 text-xs text-[var(--drj-ink-muted)]">
                 <ShieldCheck size={14} className="text-forest"/>
-                <span>Payments are processed securely. For this demo, online payments are confirmed instantly without charge.</span>
+                <span>
+                  {payment === "cod"
+                    ? "Pay cash when your order is delivered."
+                    : "Secure payment powered by Razorpay. You will complete payment in the Razorpay checkout."}
+                </span>
               </div>
             </section>
           </div>
@@ -140,7 +163,7 @@ export default function Checkout() {
               </div>
               <div className="space-y-2 text-sm">
                 <Row label="Subtotal" value={inr(subtotal)}/>
-                {totals.discount > 0 && <Row label={`Discount`} value={`− ${inr(totals.discount)}`} accent/>}
+                {totals.discount > 0 && <Row label="Discount" value={`− ${inr(totals.discount)}`} accent/>}
                 <Row label="Shipping" value={totals.shipping === 0 ? "Free" : inr(totals.shipping)}/>
                 <Row label="GST (5%)" value={inr(totals.tax)}/>
               </div>
@@ -149,7 +172,7 @@ export default function Checkout() {
                 <span className="font-serif text-3xl text-forest" data-testid="checkout-total">{inr(totals.total)}</span>
               </div>
               <button type="submit" disabled={placing} className="btn-primary w-full justify-center mt-6" data-testid="place-order-button">
-                {placing ? "Placing..." : t.checkout.place_order} <ArrowRight size={16}/>
+                {placing ? "Processing..." : payment === "cod" ? t.checkout.place_order : "Pay securely"} <ArrowRight size={16}/>
               </button>
               <p className="text-[10px] text-[var(--drj-ink-muted)] text-center mt-3">{t.checkout.terms}</p>
             </div>

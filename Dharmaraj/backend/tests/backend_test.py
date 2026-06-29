@@ -138,7 +138,7 @@ class TestOrders:
         return r.json()
 
     def test_order_created(self, order):
-        assert order["order_id"].startswith("DRJ")
+        assert order["order_id"].startswith("DA")
         assert order["discount"] == 99
         assert order["payment_status"] == "paid"
         assert order["status"] == "confirmed"
@@ -171,7 +171,7 @@ class TestOrders:
         assert r.status_code == 403
 
     def test_track_unknown_order(self, session):
-        r = session.get(f"{API}/orders/track", params={"order_id": "DRJ00000000", "mobile": "9999999999"})
+        r = session.get(f"{API}/orders/track", params={"order_id": "DA00000000", "mobile": "9999999999"})
         assert r.status_code == 404
 
 

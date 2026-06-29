@@ -39,8 +39,6 @@ export default function Header() {
     <>
       <div className="bg-forest text-white text-[11px] tracking-[0.18em] uppercase py-2 text-center font-sans" data-testid="announcement-bar">
         <span className="text-[var(--drj-gold-bright)]">{t.announce.shipping}</span>
-        <span className="opacity-90 block sm:inline">{t.announce.cert}</span>
-        <span className="opacity-90 hidden sm:inline">{t.announce.city}</span>
       </div>
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
@@ -138,7 +136,7 @@ export default function Header() {
           <div className="lg:hidden border-t border-[var(--drj-line)] bg-white" data-testid="mobile-nav">
             <div className="container-drj py-4 flex flex-col gap-1">
               <div className="pb-4 mb-2 border-b border-[var(--drj-line)] sm:hidden">
-                <div className="text-overline text-[var(--drj-ink-muted)] mb-2">Language</div>
+                <div className="text-overline text-[var(--drj-ink-muted)] mb-2">{t.common.language}</div>
                 <LangSwitcher className="flex w-full max-w-xs" />
               </div>
               {navItems.map((n) => (

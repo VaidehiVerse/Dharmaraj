@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Sparkles } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { apiClient } from "@/lib/api";
 import { BRAND, whatsappLink } from "@/lib/brand";
 import { useI18n } from "@/context/I18nContext";
 import TrustStrip from "@/components/TrustStrip";
 import FounderCard from "@/components/FounderCard";
-import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig, GoldDivider } from "@/components/AyurvedaArt";
+import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig } from "@/components/AyurvedaArt";
 
 const faqs = [
   { q: "How long until I feel the benefits of 1 Vajra?", a: "Most customers report noticeable energy and digestion improvements within 14–21 days. For deeper Rasayana effects, we recommend a continuous 60–90 day cycle." },
@@ -73,12 +72,7 @@ const customProducts = [
 ];
 
 export default function Home() {
-  const [vajra, setVajra] = useState(null);
   const { t } = useI18n();
-
-  useEffect(() => {
-    apiClient.get("/products/1-vajra").then((r) => setVajra(r.data)).catch(() => {});
-  }, []);
 
   return (
     <div data-testid="home-page">
@@ -131,16 +125,15 @@ export default function Home() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.15 }} className="relative z-10">
-            <div className="relative aspect-square max-w-lg mx-auto flex items-center justify-center">
-              <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--drj-gold-soft)] to-transparent opacity-70" />
-              <div className="absolute inset-6 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-60 animate-[ringRotate_60s_linear_infinite]" />
-
+            <div className="hero-bottle-stage">
+              <div className="hero-bottle-ring hero-bottle-ring--glow" aria-hidden />
+              <div className="hero-bottle-ring hero-bottle-ring--dashed" aria-hidden />
               <img
-                src={BRAND.heroProductImage} 
+                src={BRAND.heroProductImage}
                 alt="Dharmaraj Ayurveda Vajra health supplement bottle"
-                className="relative z-10 max-h-[80%] w-auto object-contain mx-auto drop-shadow-xl"
+                className="hero-bottle-photo"
               />
-              <div className="absolute -bottom-4 -right-4 bg-white border border-[var(--drj-gold)] p-5 shadow-xl">
+              <div className="absolute -bottom-4 -right-4 bg-white border border-[var(--drj-gold)] p-5 shadow-xl z-20">
                 <div className="text-overline text-gold">From</div>
                 <div className="font-serif text-3xl text-forest leading-none mt-1">₹999</div>
                 <div className="text-xs text-[var(--drj-ink-muted)] mt-1">60 caps · 30 days</div>
@@ -157,19 +150,6 @@ export default function Home() {
 
       {/* FOUNDER */}
       <FounderCard />
-
-      {/* TESTIMONIALS (VOICES FROM THE CIRCLE) */}
-      <section className="mb-2 mb-4 bg-white">
-        <div className="container-drj">
-          {/* 🛠️ Tightened margin bottom from mb-12 to mb-8 */}
-          <div className="text-center mb-8">
-            <GoldDivider className="mb-4" />
-            <div className="drj-divider text-overline mb-4">Voices from the Circle</div>
-            <h2 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">Trusted across India.</h2>
-          </div>
-          <Testimonials vajra={vajra} />
-        </div>
-      </section>
 
       {/* AWAKENING SOON */}
       <section className="section bg-cream">
@@ -277,32 +257,3 @@ export default function Home() {
     </div>
   );
 }
-
-const Testimonials = ({ vajra }) => {
-  const [reviews, setReviews] = useState([]);
-  useEffect(() => {
-    if (vajra?.id) {
-      apiClient.get(`/reviews/${vajra.id}`).then((rev) => setReviews(rev.data.slice(0, 6))).catch(() => {});
-    } else {
-      apiClient.get("/products/1-vajra").then((r) => {
-        apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data.slice(0, 6)));
-      }).catch(() => {});
-    }
-  }, [vajra]);
-
-  return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="testimonials-grid">
-      {reviews.map((r) => (
-        <div key={r.id} className="bg-cream border border-[var(--drj-line)] p-8 hover:border-gold transition" data-testid={`testimonial-${r.id}`}>
-          <div className="flex text-gold mb-4">{Array.from({length: r.rating}).map((_,i)=>(<Star key={i} size={14} className="fill-gold text-gold"/>))}</div>
-          <h3 className="font-serif text-xl text-forest mb-3">{r.title}</h3>
-          <p className="text-sm text-[var(--drj-ink-muted)] leading-relaxed font-light">"{r.comment}"</p>
-          <div className="mt-6 pt-4 border-t border-[var(--drj-line)] text-xs">
-            <div className="font-medium text-forest">{r.name}</div>
-            <div className="text-[var(--drj-ink-muted)] mt-1">{r.location} · Verified Buyer</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};

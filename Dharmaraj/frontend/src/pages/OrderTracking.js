@@ -57,7 +57,7 @@ export default function OrderTracking() {
         <form onSubmit={track} className="bg-white border border-[var(--drj-line)] p-8 lg:col-span-1 self-start space-y-6" data-testid="track-form">
           <div>
             <div className="text-overline text-[var(--drj-ink-muted)] mb-1">Order ID</div>
-            <input className="input-luxe uppercase" required placeholder="DRJ12345678" value={orderId} onChange={(e) => setOrderId(e.target.value.toUpperCase())} data-testid="track-order-id"/>
+            <input className="input-luxe uppercase" required placeholder="DA12345678" value={orderId} onChange={(e) => setOrderId(e.target.value.toUpperCase())} data-testid="track-order-id"/>
           </div>
           <div>
             <div className="text-overline text-[var(--drj-ink-muted)] mb-1">Mobile Number</div>

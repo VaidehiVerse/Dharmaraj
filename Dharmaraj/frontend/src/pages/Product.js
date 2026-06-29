@@ -52,8 +52,8 @@ export default function Product() {
   useEffect(() => {
     apiClient.get(`/products/${slug}`).then((r) => {
       setProduct(r.data);
-      apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data));
-    });
+      apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data)).catch(() => setReviews([]));
+    }).catch(() => setProduct(null));
   }, [slug]);
 
   const submitReview = async (e) => {
@@ -97,7 +97,7 @@ export default function Product() {
                 transition={{ duration: 0.4 }}
                 src={product.images[active]}
                 alt={product.name}
-                className="relative z-10 max-h-[78%] max-w-[78%] object-contain"
+                className="relative z-10 max-h-[90%] max-w-[90%] object-contain"
                 style={{ filter: "drop-shadow(0 28px 50px rgba(212,175,55,0.4))" }}
               />
               <span className="absolute top-5 left-5 bg-gold text-white px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold z-20">Flagship</span>
@@ -211,7 +211,7 @@ export default function Product() {
         <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center w-full max-w-[400px]">
           <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-50" />
           <div className="absolute inset-4 rounded-full border-2 border-dashed border-[var(--drj-gold)] opacity-40 animate-[ringRotate_60s_linear_infinite]" />
-          <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 max-h-[70%]" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.45))" }} />
+          <img src={BRAND.productImage} alt="1 Vajra" className="relative z-10 max-h-[100%]" style={{ filter: "drop-shadow(0 30px 60px rgba(212,175,55,0.45))" }} />
         </div>
         {/* Amla moved below the bottle */}
         <div className="w-full">

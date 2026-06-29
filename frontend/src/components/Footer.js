@@ -3,11 +3,19 @@ import { Link } from "react-router-dom";
 import { Instagram, Phone, Mail, MapPin, Send, BadgeCheck } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { apiClient } from "@/lib/api";
+import { useI18n } from "@/context/I18nContext";
 import { toast } from "sonner";
 
 export default function Footer() {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const badges = [
+    t.common.badges.udyam,
+    t.common.badges.fssai,
+    t.common.badges.iso,
+    t.common.badges.gst,
+  ];
 
   const subscribe = async (e) => {
     e.preventDefault();
@@ -15,10 +23,10 @@ export default function Footer() {
     setLoading(true);
     try {
       const { data } = await apiClient.post("/newsletter", { email });
-      toast.success(data.message || "Subscribed!");
+      toast.success(data.message || t.footer.subscribed);
       setEmail("");
     } catch (err) {
-      toast.error(err?.response?.data?.detail || "Could not subscribe");
+      toast.error(err?.response?.data?.detail || t.footer.subscribe_error);
     } finally {
       setLoading(false);
     }
@@ -37,23 +45,22 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-[var(--drj-ink-muted)] max-w-md leading-relaxed font-light">
-              Pure Ayurvedic formulations crafted in the heart of Gujarat. Every capsule is a quiet act
-              of reverence to a 5,000-year-old science of wellness.
+              {t.common.footer_desc}
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {["Udyam Certified", "FSSAI Licensed", "ISO Certified", "GST Registered"].map((b) => (
+              {badges.map((b) => (
                 <span key={b} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-[var(--drj-gold)] text-xs text-forest">
                   <BadgeCheck size={12} className="text-gold" /> {b}
                 </span>
               ))}
             </div>
             <form onSubmit={subscribe} className="mt-8 max-w-md" data-testid="newsletter-form">
-              <div className="text-overline text-gold mb-3">Join the Dharmaraj Circle</div>
+              <div className="text-overline text-gold mb-3">{t.footer.newsletter}</div>
               <div className="flex items-end gap-3 border-b border-[var(--drj-line-strong)]">
                 <input
                   type="email"
                   required
-                  placeholder="Your email"
+                  placeholder={t.footer.email_placeholder}
                   className="input-luxe flex-1"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -67,29 +74,29 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="text-overline text-gold mb-5">Discover</div>
+            <div className="text-overline text-gold mb-5">{t.footer.discover}</div>
             <ul className="space-y-3 text-sm text-[var(--drj-ink-muted)]">
-              <li><Link to="/shop" data-testid="footer-shop-link" className="hover:text-gold transition">Shop</Link></li>
-              <li><Link to="/product/1-vajra" data-testid="footer-vajra-link" className="hover:text-gold transition">1 Vajra</Link></li>
-              <li><Link to="/about" data-testid="footer-about-link" className="hover:text-gold transition">Our Story</Link></li>
-              <li><Link to="/track" data-testid="footer-track-link" className="hover:text-gold transition">Track Order</Link></li>
+              <li><Link to="/shop" data-testid="footer-shop-link" className="hover:text-gold transition">{t.nav.shop}</Link></li>
+              <li><Link to="/product/1-vajra" data-testid="footer-vajra-link" className="hover:text-gold transition">{t.nav.product}</Link></li>
+              <li><Link to="/about" data-testid="footer-about-link" className="hover:text-gold transition">{t.footer.our_story}</Link></li>
+              <li><Link to="/track" data-testid="footer-track-link" className="hover:text-gold transition">{t.nav.track}</Link></li>
             </ul>
           </div>
 
           <div className="lg:col-span-2">
-            <div className="text-overline text-gold mb-5">Care</div>
+            <div className="text-overline text-gold mb-5">{t.footer.care}</div>
             <ul className="space-y-3 text-sm text-[var(--drj-ink-muted)]">
-              <li><Link to="/contact" data-testid="footer-contact-link" className="hover:text-gold transition">Contact</Link></li>
-              <li><Link to="/faq" data-testid="footer-faq-link" className="hover:text-gold transition">FAQs</Link></li>
-              <li><Link to="/policy/shipping" data-testid="footer-shipping-link" className="hover:text-gold transition">Shipping</Link></li>
-              <li><Link to="/policy/refund" data-testid="footer-refund-link" className="hover:text-gold transition">Refunds</Link></li>
-              <li><Link to="/policy/terms" data-testid="footer-terms-link" className="hover:text-gold transition">Terms</Link></li>
-              <li><Link to="/policy/privacy" data-testid="footer-privacy-link" className="hover:text-gold transition">Privacy</Link></li>
+              <li><Link to="/contact" data-testid="footer-contact-link" className="hover:text-gold transition">{t.nav.contact}</Link></li>
+              <li><Link to="/faq" data-testid="footer-faq-link" className="hover:text-gold transition">{t.footer.faqs}</Link></li>
+              <li><Link to="/policy/shipping" data-testid="footer-shipping-link" className="hover:text-gold transition">{t.footer.shipping}</Link></li>
+              <li><Link to="/policy/refund" data-testid="footer-refund-link" className="hover:text-gold transition">{t.footer.refunds}</Link></li>
+              <li><Link to="/policy/terms" data-testid="footer-terms-link" className="hover:text-gold transition">{t.footer.terms}</Link></li>
+              <li><Link to="/policy/privacy" data-testid="footer-privacy-link" className="hover:text-gold transition">{t.footer.privacy}</Link></li>
             </ul>
           </div>
 
           <div className="lg:col-span-3">
-            <div className="text-overline text-gold mb-5">Visit</div>
+            <div className="text-overline text-gold mb-5">{t.footer.visit}</div>
             <ul className="space-y-4 text-sm text-[var(--drj-ink-muted)]">
               <li className="flex gap-3"><MapPin size={16} className="text-gold mt-0.5 shrink-0" /><span>{BRAND.address}</span></li>
               <li className="flex gap-3"><Phone size={16} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${BRAND.phone}`} className="hover:text-gold transition" data-testid="footer-phone">{BRAND.phone}</a></li>
@@ -109,11 +116,10 @@ export default function Footer() {
       </div>
       <div className="border-t border-[var(--drj-line)] bg-white">
         <div className="container-drj py-5 flex flex-col md:flex-row gap-3 items-center justify-between text-xs text-[var(--drj-ink-muted)]">
-          <div>© {new Date().getFullYear()} Dharmaraj Ayurveda™ · All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Dharmaraj Ayurveda™ · {t.common.rights}</div>
           <div className="flex items-center gap-4">
-           
             <span className="opacity-30">|</span>
-            <span>Made with reverence in Surat, India</span>
+            <span>{t.common.made_in}</span>
           </div>
         </div>
       </div>

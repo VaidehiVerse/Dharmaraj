@@ -4,7 +4,7 @@ import { apiClient, setAccessToken, clearAccessToken, getAccessToken } from "@/l
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // null = not authed; undefined = checking
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
@@ -34,21 +34,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await apiClient.post("/auth/login", { email, password });
-    if (data?.access_token) {
-      setAccessToken(data.access_token);
-      const refreshedUser = await refresh();
-      return refreshedUser || data;
-    }
+    if (data?.access_token) setAccessToken(data.access_token);
+    setUser(data);
+    setLoading(false);
     return data;
   };
 
   const register = async ({ email, password, name, mobile }) => {
     const { data } = await apiClient.post("/auth/register", { email, password, name, mobile });
-    if (data?.access_token) {
-      setAccessToken(data.access_token);
-      const refreshedUser = await refresh();
-      return refreshedUser || data;
-    }
+    if (data?.access_token) setAccessToken(data.access_token);
+    setUser(data);
+    setLoading(false);
     return data;
   };
 

@@ -24,10 +24,15 @@
   /* Home page vertical rhythm — change these to tighten or loosen section gaps */
   --home-section-py: 4rem;       /* 64px between major blocks (mobile/tablet) */
   --home-section-py-lg: 6rem;    /* 96px on large screens */
-  --home-hero-py: 4rem;          /* hero top/bottom (was py-16) */
-  --home-hero-py-lg: 6.5rem;     /* hero on desktop (was py-28 / 7rem) */
+  --home-hero-py: 2rem;
+  --home-hero-py-lg: 3rem;
   --home-trust-py: 2rem;         /* trust strip vertical padding (was py-10) */
   --home-trust-gap: 1rem;        /* gap between trust cards (was gap-5) */
+
+  /* Fixed chrome above page content (announcement + nav) */
+  --site-announce-h: 2.25rem;
+  --site-header-h: 4.25rem;
+  --site-top-offset: calc(var(--site-announce-h) + var(--site-header-h));
 }
 
 @layer base {
@@ -218,14 +223,24 @@ h1, h2, h3, h4, .font-serif {
   }
 }
 
+[data-testid="home-page"] .home-hero-section {
+  min-height: calc(100svh - var(--site-top-offset));
+  min-height: calc(100dvh - var(--site-top-offset));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 [data-testid="home-page"] .home-hero-inner {
-  padding-top: var(--home-hero-py);
-  padding-bottom: var(--home-hero-py);
+  flex: 1;
+  align-content: center;
+  padding-top: 1rem;
+  padding-bottom: 4.5rem;
 }
 @media (min-width: 1024px) {
   [data-testid="home-page"] .home-hero-inner {
-    padding-top: var(--home-hero-py-lg);
-    padding-bottom: var(--home-hero-py-lg);
+    padding-top: 1.5rem;
+    padding-bottom: 5rem;
   }
 }
 
@@ -244,6 +259,29 @@ h1, h2, h3, h4, .font-serif {
   .container-drj { padding: 0 48px; }
 }
 
+/* Shared first-section rhythm (below site header) */
+.page-lead {
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+@media (min-width: 1024px) {
+  .page-lead {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+}
+
+.page-content {
+  padding-top: 1.75rem;
+  padding-bottom: 3rem;
+}
+@media (min-width: 1024px) {
+  .page-content {
+    padding-top: 2rem;
+    padding-bottom: 3.5rem;
+  }
+}
+
 .bg-cream { background: var(--drj-bg-cream); }
 .bg-sand { background: var(--drj-bg-sand); }
 .bg-forest { background: var(--drj-forest); color: #ffffff; }
@@ -254,7 +292,7 @@ h1, h2, h3, h4, .font-serif {
 
 /* Home hero — transparent PNG bottle (no blend hacks) */
 .hero-bottle-photo {
-  width: min(78%, 280px);
+  width: min(90%, 280px);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 24px 48px rgba(45, 94, 62, 0.22));
@@ -375,12 +413,19 @@ h1, h2, h3, h4, .font-serif {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 38%;
+  width: 56%;
+  height: 56%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 10;
 }
 .radial-center img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
+  max-width: 108%;
+  object-fit: contain;
+  object-position: center;
   filter: drop-shadow(0 24px 60px rgba(212,175,55,0.35));
   animation: bottleFloat 6s ease-in-out infinite;
 }
@@ -501,3 +546,67 @@ h1, h2, h3, h4, .font-serif {
   animation: fadeUp 0.9s ease-out forwards;
 }
 @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+/* Review ticker — Voices Across India */
+.review-ticker {
+  overflow: hidden;
+  width: 100%;
+  border-top: 1px solid var(--drj-line);
+  border-bottom: 1px solid var(--drj-line);
+  background: var(--drj-bg, #faf8f4);
+  padding: 1rem 0;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.review-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  animation: reviewTicker 45s linear infinite;
+  will-change: transform;
+}
+
+.review-ticker:hover .review-ticker-track {
+  animation-play-state: paused;
+}
+
+.review-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  font-size: 0.9375rem;
+  color: var(--drj-ink-muted);
+  padding-right: 3rem;
+}
+
+.review-ticker-text {
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.review-ticker-item .fill-gold + .review-ticker-text,
+.review-ticker-text {
+  color: var(--drj-ink);
+}
+
+@keyframes reviewTicker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-ticker-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 1rem 2rem;
+  }
+  .review-ticker {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}

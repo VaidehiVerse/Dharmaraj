@@ -25,7 +25,7 @@ export default function Shop() {
   const [q, setQ] = useState("");
 
   useEffect(() => {
-    apiClient.get("/products").then((r) => setItems(r.data));
+    apiClient.get("/products").then((r) => setItems(r.data)).catch(() => setItems([]));
   }, []);
 
   const filtered = useMemo(() => {

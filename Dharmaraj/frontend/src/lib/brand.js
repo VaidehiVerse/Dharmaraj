@@ -11,7 +11,7 @@ export const BRAND = {
   logo: "https://customer-assets.emergentagent.com/job_dfedb237-de5f-45c8-8144-ca6a1913adba/artifacts/z1q1t35r_image.png",
   productImage: "/images/vajra-bottle-transparent.png",
   /** Black-label bottle — home hero circle only */
-  heroProductImage: "/images/vajra-bottle-transparent.png",
+  heroProductImage: "/images/vajra-hero-bottle.png?v=4",
   productLabel: "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
   // productChakras: "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
   founder: {

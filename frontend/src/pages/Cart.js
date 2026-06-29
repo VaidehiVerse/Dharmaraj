@@ -13,11 +13,8 @@ export default function Cart() {
   const [coupon, setCoupon] = useState("");
   const [applied, setApplied] = useState(null);
 
-  const shipping = subtotal >= 999 || items.length === 0 ? 0 : 49;
   const discount = applied?.discount || 0;
-  const taxable = Math.max(subtotal - discount, 0);
-  const tax = Math.round(taxable * 0.05);
-  const total = taxable + shipping + tax;
+  const total = Math.max(subtotal - discount, 0);
 
   const applyCoupon = async () => {
     if (!coupon.trim()) return;
@@ -32,66 +29,77 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <div className="container-drj section text-center" data-testid="empty-cart">
-        <div className="text-6xl text-gold mb-6">☘</div>
-        <h1 className="font-serif text-4xl text-forest">{t.cart.empty_title}</h1>
-        <p className="text-[var(--drj-ink-muted)] mt-4 font-light">{t.cart.empty_desc}</p>
-        <Link to="/product/1-vajra" className="btn-primary mt-8 inline-flex" data-testid="empty-cart-cta">{t.cart.empty_cta}</Link>
+      <div data-testid="empty-cart" className="bg-cream">
+        <section className="border-b border-[var(--drj-line)]">
+          <div className="container-drj page-lead">
+            <div className="text-overline text-gold mb-1">{t.cart.eyebrow}</div>
+            <h1 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">{t.cart.empty_title}</h1>
+          </div>
+        </section>
+        <div className="container-drj page-content text-center">
+          <div className="text-6xl text-gold mb-6">☘</div>
+          <p className="text-[var(--drj-ink-muted)] font-light">{t.cart.empty_desc}</p>
+          <Link to="/product/1-vajra" className="btn-primary mt-8 inline-flex" data-testid="empty-cart-cta">{t.cart.empty_cta}</Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div data-testid="cart-page" className="bg-cream min-h-screen">
-      <div className="container-drj py-12 lg:py-20">
-        <div className="text-overline text-gold mb-2">{t.cart.eyebrow}</div>
-        <h1 className="font-serif text-5xl text-forest tracking-tight">{t.cart.title}</h1>
-        <div className="grid lg:grid-cols-3 gap-10 mt-12">
-          <div className="lg:col-span-2 space-y-px bg-[var(--drj-line)] border border-[var(--drj-line)]">
+    <div data-testid="cart-page" className="bg-cream">
+      <section className="border-b border-[var(--drj-line)]">
+        <div className="container-drj page-lead">
+          <div className="text-overline text-gold mb-1">{t.cart.eyebrow}</div>
+          <h1 className="font-serif text-4xl lg:text-5xl text-forest tracking-tight">{t.cart.title}</h1>
+        </div>
+      </section>
+
+      <div className="container-drj page-content">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-10 items-start">
+          <div className="lg:col-span-2 border border-[var(--drj-line)] divide-y divide-[var(--drj-line)] bg-white">
             {items.map((it) => (
-              <div key={it.product_id} className="bg-white p-6 flex gap-6" data-testid={`cart-row-${it.product_id}`}>
-                <div className="w-28 h-32 bg-[var(--drj-bg)] flex items-center justify-center overflow-hidden shrink-0">
-                  {it.image && <img src={it.image} alt={it.name} className="w-full h-full object-cover"/>}
+              <div key={it.product_id} className="p-5 lg:p-6 flex gap-5 lg:gap-6 items-center" data-testid={`cart-row-${it.product_id}`}>
+                <div className="w-24 h-24 sm:w-28 sm:h-28 bg-cream flex items-center justify-center shrink-0">
+                  {it.image && <img src={it.image} alt={it.name} className="max-h-[88%] max-w-[88%] object-contain"/>}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-serif text-2xl text-forest">{it.name}</h3>
-                  <div className="text-overline text-gold mt-1">{inr(it.price)} each</div>
-                  <div className="flex items-center gap-4 mt-4">
+                  <h3 className="font-serif text-xl lg:text-2xl text-forest leading-tight">{it.name}</h3>
+                  <div className="text-overline text-gold mt-1">{inr(it.price)} {t.common.each}</div>
+                  <div className="flex flex-wrap items-center gap-4 mt-3">
                     <div className="flex items-center border border-[var(--drj-line)]">
                       <button onClick={() => updateQty(it.product_id, it.quantity - 1)} className="px-3 py-2 text-forest"><Minus size={14}/></button>
                       <span className="px-4 text-sm">{it.quantity}</span>
                       <button onClick={() => updateQty(it.product_id, it.quantity + 1)} className="px-3 py-2 text-forest"><Plus size={14}/></button>
                     </div>
                     <button onClick={() => removeItem(it.product_id)} className="text-[var(--drj-ink-muted)] hover:text-red-700 text-xs flex items-center gap-2 uppercase tracking-[0.18em]" data-testid={`remove-${it.product_id}`}>
-                      <Trash2 size={14}/> Remove
+                      <Trash2 size={14}/> {t.cart.remove}
                     </button>
                   </div>
                 </div>
-                <div className="font-serif text-2xl text-forest whitespace-nowrap" data-testid={`line-total-${it.product_id}`}>{inr(it.price * it.quantity)}</div>
+                <div className="font-serif text-xl lg:text-2xl text-forest whitespace-nowrap" data-testid={`line-total-${it.product_id}`}>{inr(it.price * it.quantity)}</div>
               </div>
             ))}
           </div>
 
-          <div className="space-y-6">
-            <div className="bg-white border border-[var(--drj-line)] p-7">
+          <div className="space-y-5 lg:sticky lg:top-28">
+            <div className="bg-white border border-[var(--drj-line)] p-6 lg:p-7">
               <h3 className="font-serif text-2xl text-forest">{t.cart.summary}</h3>
-              <div className="space-y-3 mt-6 text-sm">
+              <div className="space-y-3 mt-5 text-sm">
                 <Row label={t.cart.subtotal} value={inr(subtotal)} testId="summary-subtotal"/>
                 {discount > 0 && <Row label={`${t.cart.discount} (${applied.code})`} value={`− ${inr(discount)}`} accent testId="summary-discount"/>}
-                <Row label={t.cart.shipping} value={shipping === 0 ? t.cart.free : inr(shipping)} testId="summary-shipping"/>
-                <Row label={t.cart.tax} value={inr(tax)} testId="summary-tax"/>
                 <div className="border-t border-[var(--drj-line)] pt-4 flex justify-between items-baseline">
                   <span className="text-overline text-forest">{t.cart.total}</span>
                   <span className="font-serif text-3xl text-forest" data-testid="summary-total">{inr(total)}</span>
                 </div>
+                <p className="text-xs text-[var(--drj-ink-muted)] font-light pt-1">{t.product.inclusive_taxes} · {t.cart.free} {t.cart.shipping}</p>
               </div>
-              <button onClick={() => navigate("/checkout")} className="btn-primary w-full justify-center mt-8" data-testid="cart-proceed-checkout">
+              <button onClick={() => navigate("/checkout")} className="btn-primary w-full justify-center mt-6" data-testid="cart-proceed-checkout">
                 {t.cart.proceed} <ArrowRight size={16}/>
               </button>
               <p className="text-xs text-[var(--drj-ink-muted)] text-center mt-3">{t.cart.secure}</p>
             </div>
 
-            <div className="bg-white border border-[var(--drj-line)] p-7">
+            <div className="bg-white border border-[var(--drj-line)] p-6 lg:p-7">
               <div className="flex items-center gap-2 text-overline text-gold mb-3"><Tag size={14}/> {t.cart.coupon}</div>
               <div className="flex gap-2 items-end border-b border-[var(--drj-line)]">
                 <input className="input-luxe border-0 py-3 flex-1 uppercase" placeholder="WELCOME10" value={coupon} onChange={(e) => setCoupon(e.target.value.toUpperCase())} data-testid="coupon-input"/>

@@ -63,13 +63,20 @@ def create_refresh_token(user_id: str) -> str:
     return jwt.encode(payload, _secret(), algorithm=JWT_ALGORITHM)
 
 
+def _is_local_dev() -> bool:
+    url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+    return "localhost" in url or "127.0.0.1" in url
+
+
 def _set_cookies(response: Response, access: str, refresh: str) -> None:
+    secure = not _is_local_dev()
+    samesite = "lax" if _is_local_dev() else "none"
     response.set_cookie(
-        COOKIE_NAME_ACCESS, access, httponly=True, secure=True, samesite="none",
+        COOKIE_NAME_ACCESS, access, httponly=True, secure=secure, samesite=samesite,
         max_age=ACCESS_TTL_MINUTES * 60, path="/",
     )
     response.set_cookie(
-        COOKIE_NAME_REFRESH, refresh, httponly=True, secure=True, samesite="none",
+        COOKIE_NAME_REFRESH, refresh, httponly=True, secure=secure, samesite=samesite,
         max_age=REFRESH_TTL_DAYS * 86400, path="/",
     )
 
@@ -109,6 +116,10 @@ class UserOut(BaseModel):
     role: str
     mobile: Optional[str] = None
     created_at: str
+
+
+class AuthResponse(UserOut):
+    access_token: str
 
 
 class ForgotIn(BaseModel):
@@ -154,7 +165,7 @@ def get_auth_dependencies(db):
 
     router = APIRouter(prefix="/auth")
 
-    @router.post("/register", response_model=UserOut)
+    @router.post("/register", response_model=AuthResponse)
     async def register(payload: RegisterIn, response: Response):
         email = payload.email.lower().strip()
         exists = await db.users.find_one({"email": email})
@@ -176,9 +187,10 @@ def get_auth_dependencies(db):
         refresh = create_refresh_token(user_doc["id"])
         _set_cookies(response, access, refresh)
         user_doc.pop("password_hash", None)
-        return UserOut(**user_doc)
+        user_doc.pop("_id", None)
+        return AuthResponse(**user_doc, access_token=access)
 
-    @router.post("/login", response_model=UserOut)
+    @router.post("/login", response_model=AuthResponse)
     async def login(payload: LoginIn, request: Request, response: Response):
         email = payload.email.lower().strip()
         ip = request.client.host if request.client else "unknown"
@@ -205,7 +217,7 @@ def get_auth_dependencies(db):
         _set_cookies(response, access, refresh)
         user.pop("password_hash", None)
         user.pop("_id", None)
-        return UserOut(**user)
+        return AuthResponse(**user, access_token=access)
 
     @router.post("/logout")
     async def logout(response: Response):

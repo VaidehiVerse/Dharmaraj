@@ -12,7 +12,7 @@ export default function Blog() {
   const [cat, setCat] = useState("All");
 
   useEffect(() => {
-    apiClient.get("/blogs", { params: cat !== "All" ? { category: cat } : {} }).then((r) => setPosts(r.data));
+    apiClient.get("/blogs", { params: cat !== "All" ? { category: cat } : {} }).then((r) => setPosts(r.data)).catch(() => setPosts([]));
   }, [cat]);
 
   return (

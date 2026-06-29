@@ -2,12 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useCart } from "@/context/CartContext";
+import { useI18n } from "@/context/I18nContext";
 import { inr } from "@/lib/api";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
 
 export default function CartDrawer() {
   const { items, drawerOpen, setDrawerOpen, updateQty, removeItem, subtotal } = useCart();
+  const { t } = useI18n();
   const navigate = useNavigate();
+  const itemLabel = items.length === 1 ? t.common.item : t.common.items;
 
   return (
     <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -17,9 +20,9 @@ export default function CartDrawer() {
         data-testid="cart-drawer"
       >
         <SheetHeader className="px-6 pt-6 pb-4 border-b border-[var(--drj-line)]">
-          <SheetTitle className="font-serif text-2xl text-forest">Your Ritual Cart</SheetTitle>
+          <SheetTitle className="font-serif text-2xl text-forest">{t.drawer.title}</SheetTitle>
           <SheetDescription className="text-xs text-[var(--drj-ink-muted)]">
-            {items.length === 0 ? "Empty for now" : `${items.length} item${items.length > 1 ? "s" : ""}`}
+            {items.length === 0 ? t.drawer.empty_count : `${items.length} ${itemLabel}`}
           </SheetDescription>
         </SheetHeader>
 
@@ -27,15 +30,15 @@ export default function CartDrawer() {
           {items.length === 0 ? (
             <div className="text-center py-16">
               <div className="text-5xl text-gold mb-4">☘</div>
-              <h3 className="font-serif text-2xl text-forest mb-2">Your cart awaits</h3>
-              <p className="text-sm text-[var(--drj-ink-muted)] mb-6">Begin with our flagship 1 Vajra.</p>
+              <h3 className="font-serif text-2xl text-forest mb-2">{t.drawer.empty_title}</h3>
+              <p className="text-sm text-[var(--drj-ink-muted)] mb-6">{t.drawer.empty_desc}</p>
               <Link
                 to="/product/1-vajra"
                 onClick={() => setDrawerOpen(false)}
                 className="btn-primary"
                 data-testid="cart-empty-shop-button"
               >
-                Discover 1 Vajra
+                {t.drawer.empty_cta}
               </Link>
             </div>
           ) : (
@@ -46,7 +49,7 @@ export default function CartDrawer() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-serif text-lg text-forest leading-tight">{it.name}</div>
-                  <div className="text-xs text-gold mt-1">{inr(it.price)} each</div>
+                  <div className="text-xs text-gold mt-1">{inr(it.price)} {t.common.each}</div>
                   <div className="flex items-center justify-between mt-3">
                     <div className="flex items-center border border-[var(--drj-line)]">
                       <button
@@ -85,10 +88,10 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="border-t border-[var(--drj-line)] px-6 py-6 space-y-4 bg-[var(--drj-bg)]">
             <div className="flex justify-between text-sm">
-              <span className="text-[var(--drj-ink-muted)]">Subtotal</span>
+              <span className="text-[var(--drj-ink-muted)]">{t.cart.subtotal}</span>
               <span className="font-medium text-forest" data-testid="cart-subtotal">{inr(subtotal)}</span>
             </div>
-            <p className="text-xs text-[var(--drj-ink-muted)]">Shipping, taxes & coupons calculated at checkout.</p>
+            <p className="text-xs text-[var(--drj-ink-muted)]">{t.drawer.shipping_note}</p>
             <button
               onClick={() => {
                 setDrawerOpen(false);
@@ -97,7 +100,7 @@ export default function CartDrawer() {
               className="btn-outline w-full justify-center"
               data-testid="cart-view-button"
             >
-              View Cart
+              {t.cta.view_cart}
             </button>
             <button
               onClick={() => {
@@ -107,7 +110,7 @@ export default function CartDrawer() {
               className="btn-primary w-full justify-center"
               data-testid="cart-checkout-button"
             >
-              Checkout <ArrowRight size={16} />
+              {t.cta.checkout} <ArrowRight size={16} />
             </button>
           </div>
         )}

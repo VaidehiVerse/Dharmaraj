@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000";
-export const API = `${BACKEND_URL}/api`;
+const BACKEND_ORIGIN = (process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/api\/?$/, "");
+export const API = `${BACKEND_ORIGIN}/api`;
 const ACCESS_TOKEN_STORAGE_KEY = "dharmaraj_access_token";
 
 const getStoredToken = () => {

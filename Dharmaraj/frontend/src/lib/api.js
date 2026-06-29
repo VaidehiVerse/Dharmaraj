@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// 1. Point directly to your local FastAPI backend server (port 8000)
-const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000") + "/api";
-// Remove the mandatory "/api" append so endpoints point to straight paths like /auth/login
-export const API = BACKEND_URL; 
+const BACKEND_ORIGIN = (process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/api\/?$/, "");
+export const API = `${BACKEND_ORIGIN}/api`; 
 
 const ACCESS_TOKEN_STORAGE_KEY = "dharmaraj_access_token";
 

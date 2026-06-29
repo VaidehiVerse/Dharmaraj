@@ -32,10 +32,10 @@ export default function FounderCard({ compact = false }) {
                   data-testid="founder-photo"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[rgba(45,94,62,0.85)] to-transparent p-6 text-white">
-                  <div className="text-overline text-[var(--drj-gold-bright)]">Founder</div>
+                  <div className="text-overline text-[var(--drj-gold-bright)]">{t.founder.role}</div>
                   <div className="font-serif text-3xl mt-1" data-testid="founder-name">{BRAND.founder.name}</div>
                   <div className="text-xs opacity-90 mt-1 flex items-center gap-1.5">
-                    <MapPin size={12} /> Surat, Gujarat · India
+                    <MapPin size={12} /> {t.founder.location}
                   </div>
                 </div>
               </div>
@@ -57,7 +57,7 @@ export default function FounderCard({ compact = false }) {
             <div className="mt-8 relative">
               <span className="absolute -top-4 -left-2 font-serif text-7xl text-[var(--drj-gold)] opacity-30 leading-none">"</span>
               <p className="text-[var(--drj-ink)] text-lg font-light leading-relaxed italic pl-6 border-l-2 border-[var(--drj-gold)]" data-testid="founder-message">
-                {BRAND.founder.message}
+                {t.founder.message}
               </p>
             </div>
 
@@ -70,10 +70,10 @@ export default function FounderCard({ compact = false }) {
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-3 max-w-md">
-              <Badge icon={BadgeCheck} text="Udyam Certified" />
-              <Badge icon={BadgeCheck} text="FSSAI Licensed" />
-              <Badge icon={BadgeCheck} text="ISO Certified" />
-              <Badge icon={BadgeCheck} text="GST Registered" />
+              <Badge icon={BadgeCheck} text={t.common.badges.udyam} />
+              <Badge icon={BadgeCheck} text={t.common.badges.fssai} />
+              <Badge icon={BadgeCheck} text={t.common.badges.iso} />
+              <Badge icon={BadgeCheck} text={t.common.badges.gst} />
             </div>
 
             {!compact && (

@@ -200,32 +200,32 @@ def build_admin_router(db, require_admin) -> APIRouter:
         await db.coupons.delete_one({"code": code.upper()})
         return {"ok": True}
 
-    # # ---------------- Blogs ----------------
-    # @router.get("/blogs")
-    # async def list_blogs_admin():
-    #     return await db.blogs.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    # ---------------- Blogs ----------------
+    @router.get("/blogs")
+    async def list_blogs_admin():
+        return await db.blogs.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
 
-    # @router.post("/blogs")
-    # async def create_blog(payload: BlogIn):
-    #     if await db.blogs.find_one({"slug": payload.slug}):
-    #         raise HTTPException(400, "Slug already exists")
-    #     doc = payload.model_dump()
-    #     doc.update({"id": str(uuid.uuid4()), "created_at": _now_iso()})
-    #     await db.blogs.insert_one(doc)
-    #     doc.pop("_id", None)
-    #     return doc
+    @router.post("/blogs")
+    async def create_blog(payload: BlogIn):
+        if await db.blogs.find_one({"slug": payload.slug}):
+            raise HTTPException(400, "Slug already exists")
+        doc = payload.model_dump()
+        doc.update({"id": str(uuid.uuid4()), "created_at": _now_iso()})
+        await db.blogs.insert_one(doc)
+        doc.pop("_id", None)
+        return doc
 
-    # @router.put("/blogs/{blog_id}")
-    # async def update_blog(blog_id: str, payload: BlogIn):
-    #     res = await db.blogs.update_one({"id": blog_id}, {"$set": payload.model_dump()})
-    #     if res.matched_count == 0:
-    #         raise HTTPException(404, "Blog not found")
-    #     return {"ok": True}
+    @router.put("/blogs/{blog_id}")
+    async def update_blog(blog_id: str, payload: BlogIn):
+        res = await db.blogs.update_one({"id": blog_id}, {"$set": payload.model_dump()})
+        if res.matched_count == 0:
+            raise HTTPException(404, "Blog not found")
+        return {"ok": True}
 
-    # @router.delete("/blogs/{blog_id}")
-    # async def delete_blog(blog_id: str):
-    #     await db.blogs.delete_one({"id": blog_id})
-    #     return {"ok": True}
+    @router.delete("/blogs/{blog_id}")
+    async def delete_blog(blog_id: str):
+        await db.blogs.delete_one({"id": blog_id})
+        return {"ok": True}
 
     # ---------------- Customers / Inbox ----------------
     @router.get("/customers")

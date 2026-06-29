@@ -8,7 +8,7 @@ export default function BlogPost() {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    apiClient.get(`/blogs/${slug}`).then((r) => setPost(r.data));
+    apiClient.get(`/blogs/${slug}`).then((r) => setPost(r.data)).catch(() => setPost(null));
   }, [slug]);
 
   if (!post) return <div className="container-drj section text-center text-[var(--drj-ink-muted)]">Loading...</div>;

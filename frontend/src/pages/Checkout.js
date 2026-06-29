@@ -1,12 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Smartphone, Wallet, Banknote, Building2, ArrowRight, ShieldCheck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { apiClient, inr } from "@/lib/api";
+import { apiClient, inr, formatApiError } from "@/lib/api";
+import { startRazorpayCheckout } from "@/lib/razorpay";
 import { toast } from "sonner";
 import { useI18n } from "@/context/I18nContext";
-
-const RAZORPAY_CHECKOUT_URL = "https://checkout.razorpay.com/v1/checkout.js";
 
 const PAYMENT_METHODS = [
   { id: "upi", label: "UPI", icon: Smartphone, note: "GPay · PhonePe · Paytm" },
@@ -29,12 +28,21 @@ export default function Checkout() {
   const navigate = useNavigate();
 
   const totals = useMemo(() => {
-    const sh = subtotal >= 999 ? 0 : 49;
     const disc = appliedCoupon?.discount || 0;
-    const taxable = Math.max(subtotal - disc, 0);
-    const tx = Math.round(taxable * 0.05);
-    return { shipping: sh, discount: disc, tax: tx, total: taxable + sh + tx };
+    const total = Math.max(subtotal - disc, 0);
+    return { discount: disc, total };
   }, [subtotal, appliedCoupon]);
+
+  const checkoutPayload = useCallback(
+    () => ({
+      items,
+      address,
+      coupon_code: appliedCoupon?.code,
+      payment_method: payment,
+      notes: "",
+    }),
+    [items, address, appliedCoupon, payment],
+  );
 
   if (items.length === 0) {
     return (
@@ -45,22 +53,39 @@ export default function Checkout() {
     );
   }
 
-  // --- DEMO MODE PLACE ORDER ---
+  const tryCoupon = async () => {
+    if (!coupon) return;
+    try {
+      const { data } = await apiClient.post("/coupons/validate", { code: coupon, subtotal });
+      setAppliedCoupon(data);
+      toast.success(`Applied ${data.code}`);
+    } catch (e) {
+      toast.error(formatApiError(e?.response?.data?.detail) || "Invalid coupon");
+    }
+  };
+
   const placeOrder = async (e) => {
     e.preventDefault();
     setPlacing(true);
-    
-    console.log("Demo Mode: Skipping backend API calls for presentation.");
-    
-    // Simulate API delay
-    setTimeout(() => {
+    try {
+      let orderId;
+
+      if (payment === "cod") {
+        const { data } = await apiClient.post("/orders", { ...checkoutPayload(), payment_method: "cod" });
+        orderId = data.order_id;
+      } else {
+        orderId = await startRazorpayCheckout({ checkoutPayload: checkoutPayload(), address });
+      }
+
       clear();
-      toast.success("Order placed successfully (Demo Mode)");
-      navigate(`/order-confirmation/DEMO-ORDER-123`, { state: { mobile: address.mobile } });
+      navigate(`/order-confirmation/${orderId}`, { state: { mobile: address.mobile } });
+      toast.success("Order placed successfully");
+    } catch (e) {
+      toast.error(formatApiError(e?.response?.data?.detail) || e?.message || "Could not place order");
+    } finally {
       setPlacing(false);
-    }, 1500);
+    }
   };
-  // -----------------------------
 
   return (
     <div data-testid="checkout-page" className="bg-cream min-h-screen">
@@ -109,7 +134,11 @@ export default function Checkout() {
               </div>
               <div className="mt-6 flex items-center gap-2 text-xs text-[var(--drj-ink-muted)]">
                 <ShieldCheck size={14} className="text-forest"/>
-                <span>Payments are processed securely. Demo mode enabled for presentation.</span>
+                <span>
+                  {payment === "cod"
+                    ? "Pay cash when your order is delivered."
+                    : "Secure payment powered by Razorpay. You will complete payment in the Razorpay checkout."}
+                </span>
               </div>
             </section>
           </div>
@@ -126,18 +155,23 @@ export default function Checkout() {
                 ))}
               </div>
               <div className="border-t border-[var(--drj-line)] my-5"></div>
+              <div className="flex items-end gap-2 border-b border-[var(--drj-line)] mb-5">
+                <input value={coupon} onChange={(e) => setCoupon(e.target.value.toUpperCase())} className="input-luxe border-0 py-2 flex-1 uppercase" placeholder="Coupon code" data-testid="checkout-coupon-input"/>
+                <button type="button" onClick={tryCoupon} className="text-overline text-forest pb-2" data-testid="checkout-apply-coupon">Apply</button>
+              </div>
               <div className="space-y-2 text-sm">
-                <Row label="Subtotal" value={inr(subtotal)}/>
-                <Row label="Shipping" value={totals.shipping === 0 ? "Free" : inr(totals.shipping)}/>
-                <Row label="GST (5%)" value={inr(totals.tax)}/>
+                <Row label={t.cart.subtotal} value={inr(subtotal)}/>
+                {totals.discount > 0 && <Row label={t.cart.discount} value={`− ${inr(totals.discount)}`} accent/>}
               </div>
               <div className="border-t border-[var(--drj-line)] mt-4 pt-4 flex justify-between items-baseline">
-                <span className="text-overline text-forest">Total</span>
+                <span className="text-overline text-forest">{t.cart.total}</span>
                 <span className="font-serif text-3xl text-forest" data-testid="checkout-total">{inr(totals.total)}</span>
               </div>
+              <p className="text-xs text-[var(--drj-ink-muted)] font-light mt-2">{t.product.inclusive_taxes} · {t.cart.free} {t.cart.shipping}</p>
               <button type="submit" disabled={placing} className="btn-primary w-full justify-center mt-6" data-testid="place-order-button">
-                {placing ? "Placing..." : t.checkout.place_order} <ArrowRight size={16}/>
+                {placing ? "Processing..." : payment === "cod" ? t.checkout.place_order : "Pay securely"} <ArrowRight size={16}/>
               </button>
+              <p className="text-[10px] text-[var(--drj-ink-muted)] text-center mt-3">{t.checkout.terms}</p>
             </div>
           </div>
         </form>

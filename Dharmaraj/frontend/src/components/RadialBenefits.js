@@ -53,7 +53,7 @@ export default function RadialBenefits() {
             <div className="radial-ring" />
             <div className="radial-ring-inner" />
             <div className="radial-center" data-testid="radial-bottle">
-              <img src={BRAND.productImage} alt="1 Vajra" loading="lazy" style={{ width: '85%', height: 'auto', margin: '0 auto' }} />
+              <img src={BRAND.productImage} alt="1 Vajra" loading="lazy" />
             </div>
             {benefits.map((b, i) => (
               <div
@@ -82,7 +82,7 @@ export default function RadialBenefits() {
         {/* MOBILE / TABLET GRID with bottle on top */}
         <div className="lg:hidden">
           <div className="flex justify-center mb-10">
-            <img src={BRAND.productImage} alt="1 Vajra" className="w-36 h-auto" style={{ filter: "drop-shadow(0 18px 40px rgba(212,175,55,0.35))" }} />
+            <img src={BRAND.productImage} alt="1 Vajra" className="w-100 h-auto" style={{ filter: "drop-shadow(0 18px 40px rgba(212,175,55,0.35))" }} />
           </div>
           <div className="grid grid-cols-2 gap-3" data-testid="radial-benefits-mobile">
             {benefits.map((b) => (

@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { BRAND } from "@/lib/brand";
+import { useI18n } from "@/context/I18nContext";
 
 const POLICIES = {
   privacy: {
@@ -58,6 +59,7 @@ const POLICIES = {
 
 export default function Policies() {
   const { kind } = useParams();
+  const { t } = useI18n();
   const policy = POLICIES[kind];
   if (!policy) return <Navigate to="/" replace />;
 
@@ -66,7 +68,7 @@ export default function Policies() {
       <section className="bg-cream relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl"/>
         <div className="container-drj py-6 lg:py-10 relative">
-          <div className="text-overline text-gold mb-3">Legal</div>
+          <div className="text-overline text-gold mb-3">{t.policies_page.legal}</div>
           <h1 className="font-serif text-5xl lg:text-6xl tracking-tight text-forest">{policy.title}</h1>
           <p className="text-[var(--drj-ink-muted)] mt-4 max-w-2xl font-light text-lg">{policy.subtitle}</p>
         </div>
@@ -74,7 +76,7 @@ export default function Policies() {
 
       <section className="container-drj py-16 lg:py-24 grid lg:grid-cols-12 gap-12">
         <aside className="lg:col-span-3">
-          <div className="text-overline text-gold mb-3">All Policies</div>
+          <div className="text-overline text-gold mb-3">{t.policies_page.all_policies}</div>
           <ul className="space-y-3 text-sm">
             {Object.entries(POLICIES).map(([k, p]) => (
               <li key={k}>
@@ -93,7 +95,7 @@ export default function Policies() {
             </div>
           ))}
           <div className="pt-8 border-t border-[var(--drj-line)] text-xs text-[var(--drj-ink-muted)]">
-            Last updated: {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} · For questions: <a href={`mailto:${BRAND.email}`} className="text-forest underline">{BRAND.email}</a>
+            {t.policies_page.last_updated} {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} · {t.policies_page.questions} <a href={`mailto:${BRAND.email}`} className="text-forest underline">{BRAND.email}</a>
           </div>
         </article>
       </section>

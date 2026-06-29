@@ -40,8 +40,6 @@ export default function Header() {
     <>
       <div className="bg-forest text-white text-[11px] tracking-[0.18em] uppercase py-2 text-center font-sans" data-testid="announcement-bar">
         <span className="text-[var(--drj-gold-bright)]">{t.announce.shipping}</span>
-        <span className="opacity-90 block sm:inline">{t.announce.cert}</span>
-        <span className="opacity-90 hidden sm:inline">{t.announce.city}</span>
       </div>
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${

@@ -28,7 +28,7 @@ export default function CartDrawer() {
             <div className="text-center py-16">
               <div className="text-5xl text-gold mb-4">☘</div>
               <h3 className="font-serif text-2xl text-forest mb-2">Your cart awaits</h3>
-              <p className="text-sm text-[var(--drj-ink-muted)] mb-6">Begin with our flagship 1 Vajra.</p>
+              <p className="text-sm text-[var(--drj-ink-muted)] mb-6">Begin with our available 1 Vajra.</p>
               <Link
                 to="/product/1-vajra"
                 onClick={() => setDrawerOpen(false)}
