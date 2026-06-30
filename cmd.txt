@@ -1,4 +1,4 @@
 cd backend
 source .venv/bin/activate
-pip install -r requirements.txt debugpy
+pip install -r requirements.txt debugpy (optional)
 uvicorn server:app --reload --port 8000

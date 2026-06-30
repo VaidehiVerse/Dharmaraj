@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { inr } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
 import { useI18n } from "@/context/I18nContext";
+import { getShopProductImage } from "@/lib/productConfig";
 
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCart();
   const { t } = useI18n();
   const comingSoon = product.is_coming_soon;
-  const imagePath = `/images/ai-bottle-${(index % 6) + 1}.jpeg`;
+  const imagePath = getShopProductImage(product);
 
   return (
     <div

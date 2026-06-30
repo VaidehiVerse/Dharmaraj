@@ -9,8 +9,8 @@ import TrustStrip from "@/components/TrustStrip";
 import FounderCard from "@/components/FounderCard";
 import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig } from "@/components/AyurvedaArt";
 
-const PRODUCT_IMAGES = {
-  "1-vajra": "/images/ai-bottle-1.jpeg",
+const HOME_PRODUCT_IMAGES = {
+  "1-vajra": "/images/vajra-bottle-transparent.png",
   "prod-2": "/images/ai-bottle-2.jpeg",
   "prod-3": "/images/ai-bottle-3.jpeg",
   "prod-4": "/images/ai-bottle-4.jpeg",
@@ -21,7 +21,7 @@ export default function Home() {
   const { t } = useI18n();
   const homeProducts = (t.home?.products || []).map((p) => ({
     ...p,
-    image: PRODUCT_IMAGES[p.id] || "/images/ai-bottle-1.jpeg",
+    image: HOME_PRODUCT_IMAGES[p.id] || "/images/vajra-bottle-transparent.png",
     status: p.available ? t.home.status_available : t.home.status_soon,
     sizeClass: "max-h-[95%] w-auto object-contain p-2",
   }));

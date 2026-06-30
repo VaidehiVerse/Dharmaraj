@@ -12,17 +12,12 @@ db_name = os.environ["DB_NAME"]
 client = MongoClient(mongo_url)
 db = client[db_name]
 
-# Update product price and set the primary image to transparent bottle
+# Update product price and set the primary image to ai-bottle catalog art
 res = db.products.update_one(
     {"slug": "1-vajra"},
     {"$set": {
         "price": 999,
-        "images": [
-            "/images/vajra-bottle-transparent.png",
-            # "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/ytzrcecm_image.png",
-            # "https://customer-assets.emergentagent.com/job_vajra-ayurveda/artifacts/2chn5yjn_image.png",
-            
-        ]
+        "images": ["/images/ai-bottle-1.jpeg"],
     }}
 )
 print("Updated product '1-vajra' modified count:", res.modified_count)

@@ -28,6 +28,20 @@ COMING_SOON = [
     ("brahmind-focus", "Brahmind Focus", "Clarity & focus"),
 ]
 
+PRODUCT_IMAGES = {
+    "1-vajra": "/images/ai-bottle-1.jpeg",
+    "drj-chyawanprash": "/images/ai-bottle-2.jpeg",
+    "drj-triphala": "/images/ai-bottle-3.jpeg",
+    "drj-brahmi-mind": "/images/ai-bottle-4.jpeg",
+    "drj-shilajit-gold": "/images/ai-bottle-5.jpeg",
+    "drj-ashwagandha-pure": "/images/ai-bottle-6.jpeg",
+    "prana-elixir": "/images/ai-bottle-2.jpeg",
+    "ojas-gold": "/images/ai-bottle-3.jpeg",
+    "agni-digest": "/images/ai-bottle-4.jpeg",
+    "shanti-sleep": "/images/ai-bottle-5.jpeg",
+    "brahmind-focus": "/images/ai-bottle-6.jpeg",
+}
+
 
 def _product(pid: str, slug: str, name: str, tagline: str, price: int, mrp: int, featured: bool, coming: bool) -> dict:
     return {
@@ -39,7 +53,7 @@ def _product(pid: str, slug: str, name: str, tagline: str, price: int, mrp: int,
         "description": f"{name} — crafted by Dharmaraj Ayurveda, Surat.",
         "price": price,
         "mrp": mrp,
-        "images": ["/images/vajra-hero-bottle.png" if slug == "1-vajra" else "/images/product-placeholder.png"],
+        "images": [PRODUCT_IMAGES.get(slug, "/images/ai-bottle-1.jpeg")],
         "ingredients": VAJRA_INGREDIENTS if slug == "1-vajra" else [],
         "benefits": ["Immunity", "Energy", "Stamina"] if slug == "1-vajra" else [],
         "dosage": "2 capsules daily with water.",
@@ -73,6 +87,15 @@ async def seed_catalog(db: AsyncIOMotorDatabase) -> None:
             products.append(_product(f"prod-{slug}", slug, name, tag, 1299, 1999, False, True))
         await db.products.insert_many(products)
         print("[Seed] 6 products")
+
+    for slug, image in PRODUCT_IMAGES.items():
+        await db.products.update_one({"slug": slug}, {"$set": {"images": [image]}})
+
+    async for doc in db.products.find({"images.0": {"$regex": r"^https?://"}}):
+        slug = doc.get("slug", "")
+        image = PRODUCT_IMAGES.get(slug, "/images/ai-bottle-1.jpeg")
+        await db.products.update_one({"_id": doc["_id"]}, {"$set": {"images": [image]}})
+        print(f"[Seed] replaced remote image for {slug} → {image}")
 
     if await db.coupons.count_documents({}) == 0:
         await db.coupons.insert_many([

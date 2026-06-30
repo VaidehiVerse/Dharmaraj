@@ -10,16 +10,21 @@ import { whatsappLink, BRAND } from "@/lib/brand";
 import { toast } from "sonner";
 import { useI18n } from "@/context/I18nContext";
 import RadialBenefits from "@/components/RadialBenefits";
+import ProductImageGallery from "@/components/ProductImageGallery";
 
 const STEP_ICONS = [Beaker, FlaskConical, Sun];
 
-/** Source files with extra padding need a boost so the bottle matches photo 2. */
-const PRODUCT_IMAGE_SCALES = {
-  "/images/black-bottle1.jpeg": 1.2,
-};
+const VAJRA_GALLERY_IMAGES = [
+  "/images/new-image-1.jpg",
+  "/images/new-image-3.jpg",
+  "/images/new-image-4.jpg",
+];
 
-function productImageScale(src) {
-  return PRODUCT_IMAGE_SCALES[src] ?? 1;
+function productDisplayImages(product) {
+  if (product.slug === "1-vajra") {
+    return VAJRA_GALLERY_IMAGES;
+  }
+  return product.images?.length ? product.images : [BRAND.productImage];
 }
 
 export default function Product() {
@@ -27,7 +32,6 @@ export default function Product() {
   const { t, tKey } = useI18n();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [active, setActive] = useState(0);
   const [qty, setQty] = useState(1);
   const [tab, setTab] = useState("description");
   const [reviewForm, setReviewForm] = useState({ name: "", rating: 5, title: "", comment: "" });
@@ -57,7 +61,8 @@ export default function Product() {
 
   useEffect(() => {
     apiClient.get(`/products/${slug}`).then((r) => {
-      setProduct(r.data);
+      const data = { ...r.data, images: productDisplayImages(r.data) };
+      setProduct(data);
       apiClient.get(`/reviews/${r.data.id}`).then((rev) => setReviews(rev.data)).catch(() => setReviews([]));
     }).catch(() => setProduct(null));
   }, [slug]);
@@ -114,44 +119,7 @@ export default function Product() {
         <div className="absolute top-10 right-10 w-72 h-72 bg-[var(--drj-gold-soft)] opacity-50 rounded-full blur-3xl" />
         <div className="container-drj py-2 lg:py-6 grid lg:grid-cols-2 gap-12 relative">
           <div>
-            <div className="relative aspect-square bg-white border border-[var(--drj-gold)] flex items-center justify-center overflow-hidden" data-testid="product-main-image">
-              <div className="absolute inset-10 rounded-full bg-[var(--drj-gold-soft)] opacity-40" />
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, scale: 1.02 }}
-                animate={{ opacity: 1, scale: productImageScale(product.images[active]) }}
-                transition={{ duration: 0.4 }}
-                className="relative z-10 flex h-[90%] w-[90%] items-center justify-center"
-              >
-                <img
-                  src={product.images[active]}
-                  alt={product.name}
-                  className="h-full w-full object-contain"
-                  style={{ filter: "drop-shadow(0 28px 50px rgba(212,175,55,0.4))" }}
-                />
-              </motion.div>
-              <span className="absolute top-5 left-5 bg-gold text-white px-3 py-1 text-[10px] tracking-[0.22em] uppercase font-semibold z-20"></span>
-            </div>
-            <div
-              className="grid gap-3 mt-4"
-              style={{ gridTemplateColumns: `repeat(${product.images.length}, minmax(0, 1fr))` }}
-            >
-              {product.images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`aspect-square overflow-hidden border flex items-center justify-center ${active === i ? "border-gold" : "border-[var(--drj-line)]"} bg-cream`}
-                  data-testid={`product-thumb-${i}`}
-                >
-                  <img
-                    src={img}
-                    alt=""
-                    className="h-[85%] w-[85%] object-contain"
-                    style={{ transform: `scale(${productImageScale(img)})` }}
-                  />
-                </button>
-              ))}
-            </div>
+            <ProductImageGallery images={product.images} productName={product.name} />
           </div>
 
           <div className="lg:sticky lg:top-32 self-start">
