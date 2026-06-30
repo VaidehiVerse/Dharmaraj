@@ -29,7 +29,7 @@ export const I18nProvider = ({ children }) => {
       },
       tKey: (key, options) => i18nInstance.t(key, options),
     };
-  }, [i18nInstance, i18nInstance.language]);
+  }, [i18nInstance]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };

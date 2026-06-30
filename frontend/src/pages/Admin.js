@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiClient, inr } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -138,8 +138,11 @@ const Loading = () => <div className="py-20 text-center text-[var(--drj-ink-mute
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("");
-  const load = () => apiClient.get("/admin/orders", { params: filter ? { status: filter } : {} }).then((r) => setOrders(r.data));
-  useEffect(() => { load(); }, [filter]);
+  const load = useCallback(
+    () => apiClient.get("/admin/orders", { params: filter ? { status: filter } : {} }).then((r) => setOrders(r.data)),
+    [filter],
+  );
+  useEffect(() => { load(); }, [load]);
 
   const updateStatus = async (orderId, status) => {
     try {

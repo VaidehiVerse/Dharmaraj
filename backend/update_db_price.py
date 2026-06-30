@@ -1,15 +1,18 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from pymongo import MongoClient
+
+from db_client import create_sync_client
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
-mongo_url = os.environ["MONGO_URL"]
+mongo_url = os.getenv("MONGO_URI") or os.getenv("MONGO_URL")
+if not mongo_url:
+    raise RuntimeError("MONGO_URI / MONGO_URL is required in backend/.env")
 db_name = os.environ["DB_NAME"]
 
-client = MongoClient(mongo_url)
+client = create_sync_client(mongo_url)
 db = client[db_name]
 
 # Update product price and set the primary image to ai-bottle catalog art

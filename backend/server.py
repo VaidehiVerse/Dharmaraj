@@ -8,9 +8,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
-from motor.motor_asyncio import AsyncIOMotorClient
 import razorpay
 from dotenv import load_dotenv
+
+from db_client import create_async_client
 
 from auth import get_auth_dependencies
 from admin_routes import build_admin_router
@@ -54,7 +55,7 @@ razorpay_client = None
 if RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET:
     razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
-client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+client = create_async_client(MONGO_URI)
 db = client[DB_NAME]
 
 auth_router, get_current_user, get_optional_user, require_admin, seed_admin = get_auth_dependencies(db)
@@ -175,6 +176,12 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api")
 app.include_router(build_admin_router(db, require_admin), prefix="/api")
 app.include_router(store_router, prefix="/api")
+
+
+@app.get("/api/health")
+async def health():
+    await db.command("ping")
+    return {"status": "ok", "db": DB_NAME}
 
 
 # ==========================================
