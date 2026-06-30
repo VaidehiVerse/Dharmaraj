@@ -4,13 +4,14 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Sparkles } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BRAND, whatsappLink } from "@/lib/brand";
+import { getShopProductImage } from "@/lib/productConfig";
 import { useI18n } from "@/context/I18nContext";
 import TrustStrip from "@/components/TrustStrip";
 import FounderCard from "@/components/FounderCard";
 import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig } from "@/components/AyurvedaArt";
 
 const HOME_PRODUCT_IMAGES = {
-  "1-vajra": "/images/vajra-bottle-transparent.png",
+  "1-vajra": getShopProductImage({ slug: "1-vajra" }),
   "prod-2": "/images/ai-bottle-2.jpeg",
   "prod-3": "/images/ai-bottle-3.jpeg",
   "prod-4": "/images/ai-bottle-4.jpeg",
