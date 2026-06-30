@@ -1,1 +1,0 @@
-<span className="flex items-center gap-2 text-forest"><Star size={14} className="fill-gold text-gold" /> {t.hero.reviews}</span>

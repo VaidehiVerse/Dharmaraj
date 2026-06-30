@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "dharmaraj-frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "Dharmaraj Ayurveda storefront — React SPA",
   "dependencies": {
     "@hookform/resolvers": "5.0.1",
     "@radix-ui/react-accordion": "1.2.8",
@@ -37,7 +38,6 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "cmdk": "1.1.1",
-    "cra-template": "1.2.0",
     "date-fns": "4.1.0",
     "dayjs": "1.11.13",
     "embla-carousel-react": "8.6.0",
@@ -67,6 +67,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "build:locales": "node scripts/build-locales.mjs",
     "test": "craco test"
   },
   "browserslist": {
