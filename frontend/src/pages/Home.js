@@ -4,14 +4,13 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star, Sparkles } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { BRAND, whatsappLink } from "@/lib/brand";
-import { getShopProductImage } from "@/lib/productConfig";
 import { useI18n } from "@/context/I18nContext";
 import TrustStrip from "@/components/TrustStrip";
 import FounderCard from "@/components/FounderCard";
 import { SunRays, Mountains, WaterWave, FloatingLeaf, GoldParticles, TulsiSprig } from "@/components/AyurvedaArt";
 
 const HOME_PRODUCT_IMAGES = {
-  "1-vajra": getShopProductImage({ slug: "1-vajra" }),
+  "1-vajra": "/images/ai-bottle-1.jpeg",
   "prod-2": "/images/ai-bottle-2.jpeg",
   "prod-3": "/images/ai-bottle-3.jpeg",
   "prod-4": "/images/ai-bottle-4.jpeg",
@@ -22,9 +21,11 @@ export default function Home() {
   const { t } = useI18n();
   const homeProducts = (t.home?.products || []).map((p) => ({
     ...p,
-    image: HOME_PRODUCT_IMAGES[p.id] || "/images/vajra-bottle-transparent.png",
+    image:
+      p.id === "1-vajra" || p.slug === "1-vajra"
+        ? "/images/ai-bottle-1.jpeg"
+        : HOME_PRODUCT_IMAGES[p.id] || "/images/vajra-bottle-transparent.png",
     status: p.available ? t.home.status_available : t.home.status_soon,
-    sizeClass: "max-h-[95%] w-auto object-contain p-2",
   }));
   const faqs = t.home?.faqs || [];
 
@@ -114,11 +115,19 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" data-testid="coming-soon-grid">
             {homeProducts.map((p) => (
               <Link key={p.id} to={p.link} className="group block bg-white border border-[var(--drj-line)] hover:border-gold transition" data-testid={`coming-soon-${p.slug}`}>
-                <div className="aspect-[4/5] overflow-hidden relative bg-cream flex items-center justify-center">
+                <div
+                  className={`aspect-[4/5] overflow-hidden relative bg-[var(--drj-bg)]${
+                    p.id !== "1-vajra" ? " flex items-center justify-center" : ""
+                  }`}
+                >
                   <img
                     src={p.image}
                     alt={p.name}
-                    className={`group-hover:scale-105 transition-transform duration-700 ${p.sizeClass}`}
+                    className={
+                      p.id === "1-vajra"
+                        ? "w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        : "max-h-[95%] w-auto object-contain p-2 mx-auto group-hover:scale-105 transition-transform duration-700"
+                    }
                   />
                   <span className="absolute top-3 left-3 bg-forest text-[var(--drj-gold-bright)] px-2 py-1 text-[9px] tracking-[0.2em] uppercase">
                     {p.status}
